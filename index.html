@@ -65,6 +65,7 @@ li.done span{color:var(--mute);text-decoration:line-through}
 .big{font-size:2rem;font-weight:700;margin:8px 0 0;line-height:1.2}.big small{font-size:.9rem;font-weight:400;color:var(--mute)}
 section.warn .big{color:var(--gold)}
 .acct{display:flex;align-items:center;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-bottom:12px;font-size:.8rem;color:var(--mute)}
+.btn.gear{font-size:1.1rem;line-height:1;padding:6px 10px}
 @media (prefers-reduced-motion:reduce){.bar i{transition:none}}
 </style>
 </head>
@@ -72,18 +73,18 @@ section.warn .big{color:var(--gold)}
 <main>
 <h1>Checklist Wuthering Waves</h1>
 <p class="sub">Marque o que já fez. Cada lista zera sozinha no reset diário, semanal e mensal.</p>
-<div class="acct"><span id="sync"></span><span id="who" hidden></span><button class="btn" id="login" hidden>Entrar com Google</button><button class="btn" id="logout" hidden>Sair</button></div>
+<div class="acct"><span id="sync"></span><span id="who" hidden></span><button class="btn" id="login" hidden>Entrar com Google</button><button class="btn" id="logout" hidden>Sair</button><button class="btn gear" id="gear" title="Configurações" aria-label="Configurações">&#9881;&#xFE0E;</button></div>
 <nav class="tabs"><button data-tab="today" class="on">Hoje</button><button data-tab="hist">Histórico</button><button data-tab="perm">Sem prazo</button></nav>
-<section id="lun"></section>
+<section id="lun" hidden></section>
 <div id="app"></div>
 <div id="perm" hidden></div>
 <div id="hist" hidden></div>
-<section id="cfgsec">
+<section id="cfgsec" hidden>
 <div class="cfg">
 <label style="flex:none;padding:0;gap:8px">Hora do reset (seu horário)
 <input type="number" id="rh" min="0" max="23"></label>
 <span>Servidor América: 4h do servidor = 6h em Brasília.</span>
-<button class="btn" id="def">Restaurar tarefas padrão</button>
+<button class="btn" id="exp">Exportar dados</button><button class="btn" id="imp">Importar dados</button><input type="file" id="impf" accept=".json,application/json" hidden><button class="btn" id="def">Restaurar tarefas padrão</button>
 </div>
 </section>
 </main>
@@ -154,8 +155,19 @@ var yb=ys.map(function(y){return'<button class="btn'+(y===yr?" on":"")+'" data-y
 var mo=MN.map(function(m,i){return"<div><b>"+mc[i]+"</b>"+m+"</div>"}).join("");
 el.innerHTML='<section><h2>'+yk.length+' dias com atividade em '+yr+'</h2><div class="hmw"><div class="wd">'+wd+'</div><div class="hm" style="grid-template-columns:repeat('+cols+',12px)">'+g+'</div></div><div class="leg">Menos <i class="c"></i><i class="c l1"></i><i class="c l2"></i><i class="c l3"></i><i class="c l4"></i> Mais</div><p class="reset">Verde mais forte: fez todas as diárias do dia. Mais fraco: fez só parte.</p><div class="stats"><div><b>'+ks.length+'</b><span>dias no total</span></div><div><b>'+full+'</b><span>dias com todas as diárias</span></div><div><b>'+st[0]+'</b><span>sequência atual</span></div><div><b>'+st[1]+'</b><span>maior sequência</span></div></div><div class="mo">'+mo+'</div><div class="yrs">'+yb+'</div>'+(ks.length?"":'<p class="reset">O histórico começa a ser gravado agora. Marque uma diária na aba Hoje.</p>')+'</section>';
 var wr=el.querySelector(".hmw");if(yr===ty)wr.scrollLeft=Math.max(0,tc*15-wr.clientWidth/2)}
-function tab(t){document.getElementById("app").hidden=document.getElementById("cfgsec").hidden=document.getElementById("lun").hidden=t!=="today";document.getElementById("hist").hidden=t!=="hist";document.getElementById("perm").hidden=t!=="perm";
-[].forEach.call(document.querySelectorAll(".tabs button"),function(b){b.classList.toggle("on",b.dataset.tab===t)});if(t==="hist")renderHist();if(t==="perm")renderPerm()}
+function tab(t){var v={today:["app"],hist:["hist"],perm:["perm"],cfg:["lun","cfgsec"]};
+for(var k in v)v[k].forEach(function(id){document.getElementById(id).hidden=k!==t});
+[].forEach.call(document.querySelectorAll(".tabs button"),function(b){b.classList.toggle("on",b.dataset.tab===t)});
+document.getElementById("gear").classList.toggle("on",t==="cfg");
+if(t==="hist")renderHist();if(t==="perm")renderPerm()}
+document.getElementById("gear").onclick=function(){tab(document.getElementById("cfgsec").hidden?"cfg":"today")};
+function exportData(){var b=new Blob([JSON.stringify(S,null,1)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="wuwa-checklist-"+dk(new Date())+".json";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)}
+function importData(f){var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(!d||!d.tasks||!d.tasks.daily||!d.tasks.weekly||!d.tasks.monthly||!d.done)throw 0;
+if(!confirm("Importar vai substituir os dados atuais. Continuar?"))return;
+d.n=d.n||1000;d.rh=d.rh===undefined?6:d.rh;applyRemote(d);save();alert("Dados importados.")}catch(e){alert("Arquivo inválido.")}};r.readAsText(f)}
+document.getElementById("exp").onclick=exportData;
+document.getElementById("imp").onclick=function(){document.getElementById("impf").click()};
+document.getElementById("impf").onchange=function(e){if(e.target.files[0])importData(e.target.files[0]);e.target.value=""};
 document.querySelector(".tabs").addEventListener("click",function(e){if(e.target.dataset.tab)tab(e.target.dataset.tab)});
 document.getElementById("hist").addEventListener("click",function(e){var y=e.target.dataset.y;if(y){yr=+y;renderHist()}});
 
