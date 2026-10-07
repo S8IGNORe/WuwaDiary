@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Checklist WuWa</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap">
+<style>
+:root{--bg:#eef3f5;--card:#fff;--ink:#12202b;--mute:#5d7280;--line:#d3dee4;--acc:#1f8f86;--gold:#a87a1f;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1620;--card:#142230;--ink:#dbe7ec;--mute:#8aa0ae;--line:#25394a;--acc:#5fd0c4;--gold:#e3c37a}}
+:root[data-theme="dark"]{--bg:#0d1620;--card:#142230;--ink:#dbe7ec;--mute:#8aa0ae;--line:#25394a;--acc:#5fd0c4;--gold:#e3c37a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*:before,*:after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 Sora,system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:640px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:1.5rem;margin:0 0 4px;font-weight:700}
+.sub{color:var(--mute);margin:0 0 24px;font-size:.9rem}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px}
+.head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+h2{font-size:1.1rem;margin:0;font-weight:600}
+.reset{color:var(--mute);font-size:.8rem}
+.bar{height:4px;background:var(--line);border-radius:2px;margin:10px 0 8px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--acc);transition:width .25s}
+section.full .bar i{background:var(--gold)}
+ul{list-style:none;margin:0;padding:0}
+li{display:flex;align-items:center;gap:4px;border-bottom:1px solid var(--line)}
+li:last-child{border-bottom:0}
+label{flex:1;display:flex;align-items:center;gap:12px;padding:10px 0;cursor:pointer;min-width:0}
+input[type=checkbox]{appearance:none;width:22px;height:22px;border:2px solid var(--mute);border-radius:6px;margin:0;flex:none;cursor:pointer;display:grid;place-content:center}
+input[type=checkbox]:checked{background:var(--acc);border-color:var(--acc)}
+input[type=checkbox]:checked:after{content:"";width:6px;height:11px;border:solid var(--bg);border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+input:focus-visible,button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+li.done span{color:var(--mute);text-decoration:line-through}
+.del{background:none;border:0;color:var(--mute);font:inherit;font-size:1.2rem;cursor:pointer;padding:6px 10px;border-radius:6px}
+.del:hover{color:var(--ink)}
+.add{display:flex;gap:8px;margin-top:10px}
+.add input{flex:1;min-width:0;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;font-size:.9rem}
+.btn{padding:8px 14px;border:1px solid var(--line);border-radius:8px;background:none;color:var(--ink);font:inherit;font-size:.9rem;cursor:pointer}
+.btn:hover{border-color:var(--acc)}
+.cfg{display:flex;gap:12px;align-items:center;flex-wrap:wrap;color:var(--mute);font-size:.85rem}
+.cfg input{width:64px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+.tabs{display:flex;gap:8px;margin-bottom:16px}
+.tabs button{flex:1;padding:10px;border:1px solid var(--line);border-radius:10px;background:none;color:var(--mute);font:inherit;font-weight:600;cursor:pointer}
+.tabs button.on{background:var(--card);color:var(--ink);border-color:var(--acc)}
+:root{--l0:#dde7ec;--l1:#bfe5df;--l2:#85cfc5;--l3:#3fa89c;--l4:#0f6f66}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--l0:#1b2d3c;--l1:#16443f;--l2:#1f7a72;--l3:#35b0a3;--l4:#7ff0e0}}
+:root[data-theme="dark"]{--l0:#1b2d3c;--l1:#16443f;--l2:#1f7a72;--l3:#35b0a3;--l4:#7ff0e0}
+.hmw{display:flex;gap:6px;overflow-x:auto;padding:8px 0 6px}
+.hm,.wd{display:grid;grid-template-rows:14px repeat(7,12px);gap:3px}
+.hm{grid-auto-flow:column}
+.wd{font-size:10px;color:var(--mute);line-height:12px}
+.ml{font-size:10px;color:var(--mute);font-weight:400;white-space:nowrap;line-height:14px}
+.c{display:block;width:12px;height:12px;border-radius:3px;background:var(--l0)}
+.c.l1{background:var(--l1)}.c.l2{background:var(--l2)}.c.l3{background:var(--l3)}.c.l4{background:var(--l4)}
+.c.fut{opacity:.35}.c.now{outline:1px solid var(--ink);outline-offset:1px}
+.leg{display:flex;align-items:center;gap:4px;font-size:.75rem;color:var(--mute);justify-content:flex-end}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin:16px 0}
+.stats b{display:block;font-size:1.4rem;line-height:1.2}.stats span{font-size:.8rem;color:var(--mute)}
+.mo{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}
+.mo div{border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:.8rem;color:var(--mute)}
+.mo b{display:block;color:var(--ink);font-size:1rem}
+.yrs{display:flex;gap:6px;flex-wrap:wrap;margin-top:16px}
+.btn.on{background:var(--acc);color:var(--bg);border-color:var(--acc)}
+.big{font-size:2rem;font-weight:700;margin:8px 0 0;line-height:1.2}.big small{font-size:.9rem;font-weight:400;color:var(--mute)}
+section.warn .big{color:var(--gold)}
+.acct{display:flex;align-items:center;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-bottom:12px;font-size:.8rem;color:var(--mute)}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+<main>
+<h1>Checklist Wuthering Waves</h1>
+<p class="sub">Marque o que já fez. Cada lista zera sozinha no reset diário, semanal e mensal.</p>
+<div class="acct"><span id="sync"></span><span id="who" hidden></span><button class="btn" id="login" hidden>Entrar com Google</button><button class="btn" id="logout" hidden>Sair</button></div>
+<nav class="tabs"><button data-tab="today" class="on">Hoje</button><button data-tab="hist">Histórico</button><button data-tab="perm">Sem prazo</button></nav>
+<section id="lun"></section>
+<div id="app"></div>
+<div id="perm" hidden></div>
+<div id="hist" hidden></div>
+<section id="cfgsec">
+<div class="cfg">
+<label style="flex:none;padding:0;gap:8px">Hora do reset (seu horário)
+<input type="number" id="rh" min="0" max="23"></label>
+<span>Servidor América: 4h do servidor = 6h em Brasília.</span>
+<button class="btn" id="def">Restaurar tarefas padrão</button>
+</div>
+</section>
+</main>
+<script>
+var TYPES=[["daily","Diárias"],["weekly","Semanais"],["monthly","Mensais"]];
+var DEF={daily:["Missões diárias (100 pts de atividade)","Resgatar recompensas de atividade","Passe de batalha: diárias","Evento de login","Ninho de Pesadelo","Gastar Waveplates"],
+weekly:["Passe de batalha: semanais","Chefe semanal","Desafio semanal"],
+monthly:["Loja mensal","Evento do mês"]};
+var mem=null;
+function load(){try{var s=localStorage.getItem("wuwa-check");if(s)return JSON.parse(s)}catch(e){}return mem}
+function save(){record();S.ts=Date.now();mem=S;try{localStorage.setItem("wuwa-check",JSON.stringify(S))}catch(e){}if(window.onSaved)window.onSaved()}
+function fresh(){var t={},n=0;TYPES.forEach(function(x){t[x[0]]=DEF[x[0]].map(function(name){return{id:"t"+(n++),name:name}})});return{rh:6,n:n,tasks:t,done:{},hist:{}}}
+var S=load()||fresh();if(!S.hist)S.hist={};
+if(!S.perm)S.perm=[{id:"pd1",name:"Explorar o mapa (todas as regiões)",d:false},{id:"pd2",name:"Completar a história principal",d:false},{id:"pd3",name:"Abrir todos os baús do mapa",d:false}];
+function p2(n){return(n<10?"0":"")+n}
+function shifted(){return new Date(Date.now()-S.rh*3600000)}
+function key(type){var d=shifted(),y=d.getFullYear(),m=d.getMonth(),day=d.getDate();
+if(type==="monthly")return y+"-"+p2(m+1);
+if(type==="weekly"){var w=new Date(y,m,day-((d.getDay()+6)%7));return"w"+w.getFullYear()+"-"+p2(w.getMonth()+1)+"-"+p2(w.getDate())}
+return y+"-"+p2(m+1)+"-"+p2(day)}
+function nextReset(type){var d=shifted(),y=d.getFullYear(),m=d.getMonth(),day=d.getDate(),h=S.rh;
+if(type==="monthly")return new Date(y,m+1,1,h);
+if(type==="weekly")return new Date(y,m,day-((d.getDay()+6)%7)+7,h);
+return new Date(y,m,day+1,h)}
+function left(type){var ms=nextReset(type)-Date.now();if(ms<0)ms=0;var min=Math.floor(ms/60000),d=Math.floor(min/1440),h=Math.floor(min%1440/60),m=min%60;
+return(d?d+"d ":"")+h+"h "+p2(m)+"min"}
+function esc(s){return s.replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function render(){var app=document.getElementById("app"),html="";
+TYPES.forEach(function(x){var t=x[0],k=key(t),list=S.tasks[t],c=list.filter(function(i){return S.done[i.id]===k}).length,pct=list.length?Math.round(c*100/list.length):0;
+html+='<section class="'+(list.length&&c===list.length?"full":"")+'"><div class="head"><h2>'+x[1]+' <span class="reset">'+c+'/'+list.length+'</span></h2><span class="reset" data-left="'+t+'">Reseta em '+left(t)+'</span></div><div class="bar"><i style="width:'+pct+'%"></i></div><ul>';
+list.forEach(function(i){var d=S.done[i.id]===k;
+html+='<li class="'+(d?"done":"")+'"><label><input type="checkbox" data-id="'+i.id+'" data-t="'+t+'"'+(d?" checked":"")+'><span>'+esc(i.name)+'</span></label><button class="del" data-del="'+i.id+'" data-t="'+t+'" aria-label="Remover '+esc(i.name)+'">&times;</button></li>'});
+html+='</ul><div class="add"><input data-new="'+t+'" placeholder="Nova tarefa" maxlength="60"><button class="btn" data-add="'+t+'">Adicionar</button></div></section>'});
+app.innerHTML=html}
+document.getElementById("app").addEventListener("click",function(e){var el=e.target;
+if(el.dataset.id){var k=key(el.dataset.t);if(el.checked)S.done[el.dataset.id]=k;else delete S.done[el.dataset.id];save();render()}
+else if(el.dataset.del){S.tasks[el.dataset.t]=S.tasks[el.dataset.t].filter(function(i){return i.id!==el.dataset.del});delete S.done[el.dataset.del];save();render()}
+else if(el.dataset.add)addTask(el.dataset.add)});
+document.getElementById("app").addEventListener("keydown",function(e){if(e.key==="Enter"&&e.target.dataset.new)addTask(e.target.dataset.new)});
+function addTask(t){var inp=document.querySelector('[data-new="'+t+'"]'),v=inp.value.trim();if(!v)return;S.tasks[t].push({id:"t"+(S.n++),name:v});save();render();document.querySelector('[data-new="'+t+'"]').focus()}
+var rh=document.getElementById("rh");rh.value=S.rh;
+rh.addEventListener("change",function(){var v=parseInt(rh.value,10);if(isNaN(v)||v<0||v>23){rh.value=S.rh;return}S.rh=v;save();render()});
+document.getElementById("def").addEventListener("click",function(){if(!confirm("Restaurar as tarefas padrão? Suas tarefas personalizadas serão removidas."))return;var rhv=S.rh,hv=S.hist,pv=S.perm,lv=S.lun;S=fresh();S.rh=rhv;S.hist=hv;S.perm=pv;S.lun=lv;save();render()});
+setInterval(function(){tickLun();var a=document.querySelectorAll("[data-left]");for(var i=0;i<a.length;i++)a[i].textContent="Reseta em "+left(a[i].dataset.left);
+var ae=document.activeElement;if(!ae||!ae.dataset||!ae.dataset["new"])checkRollover()},30000);
+
+function record(){var k=key("daily"),l=S.tasks.daily,c=l.filter(function(i){return S.done[i.id]===k}).length;if(c)S.hist[k]={c:c,t:l.length};else delete S.hist[k]}
+var yr=null,MN=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+function lvl(h){if(!h)return 0;if(h.c>=h.t)return 4;var r=h.c/h.t;return r<.34?1:r<.67?2:3}
+function dk(d){return d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate())}
+function dn(k){var a=k.split("-");return Date.UTC(+a[0],+a[1]-1,+a[2])/864e5}
+function streaks(){var ks=Object.keys(S.hist).sort(),best=0,run=0,prev=null;
+ks.forEach(function(k){var n=dn(k);run=(prev!==null&&n-prev===1)?run+1:1;if(run>best)best=run;prev=n});
+var t=dn(key("daily"));return[prev!==null&&(prev===t||prev===t-1)?run:0,best]}
+function renderHist(){var el=document.getElementById("hist"),ks=Object.keys(S.hist),today=key("daily"),ty=+today.slice(0,4),ys=[ty];
+ks.forEach(function(k){var y=+k.slice(0,4);if(ys.indexOf(y)<0)ys.push(y)});
+ys.sort(function(a,b){return b-a});if(yr===null||ys.indexOf(yr)<0)yr=ty;
+var yk=ks.filter(function(k){return+k.slice(0,4)===yr}),full=ks.filter(function(k){return S.hist[k].c>=S.hist[k].t}).length,st=streaks();
+var jan=new Date(yr,0,1),off=jan.getDay(),days=Math.round((new Date(yr,11,31)-jan)/864e5)+1,cols=Math.ceil((off+days)/7),g="",tc=0,mc=[0,0,0,0,0,0,0,0,0,0,0,0];
+yk.forEach(function(k){mc[+k.slice(5,7)-1]++});
+for(var w=0;w<cols;w++){var lab="",cells="";
+for(var r=0;r<7;r++){var i=w*7+r-off;if(i<0||i>=days){cells+="<i></i>";continue}
+var d=new Date(yr,0,1+i),k=dk(d),h=S.hist[k];if(d.getDate()===1)lab=MN[d.getMonth()];if(k===today)tc=w;
+cells+='<i class="c l'+lvl(h)+(k===today?" now":"")+(k>today?" fut":"")+'" title="'+p2(d.getDate())+"/"+p2(d.getMonth()+1)+"/"+yr+": "+(h?h.c+"/"+h.t+" diárias":"sem registro")+'"></i>'}
+g+='<b class="ml">'+lab+"</b>"+cells}
+var wd=["","","Seg","","Qua","","Sex",""].map(function(t){return"<span>"+t+"</span>"}).join("");
+var yb=ys.map(function(y){return'<button class="btn'+(y===yr?" on":"")+'" data-y="'+y+'">'+y+"</button>"}).join("");
+var mo=MN.map(function(m,i){return"<div><b>"+mc[i]+"</b>"+m+"</div>"}).join("");
+el.innerHTML='<section><h2>'+yk.length+' dias com atividade em '+yr+'</h2><div class="hmw"><div class="wd">'+wd+'</div><div class="hm" style="grid-template-columns:repeat('+cols+',12px)">'+g+'</div></div><div class="leg">Menos <i class="c"></i><i class="c l1"></i><i class="c l2"></i><i class="c l3"></i><i class="c l4"></i> Mais</div><p class="reset">Verde mais forte: fez todas as diárias do dia. Mais fraco: fez só parte.</p><div class="stats"><div><b>'+ks.length+'</b><span>dias no total</span></div><div><b>'+full+'</b><span>dias com todas as diárias</span></div><div><b>'+st[0]+'</b><span>sequência atual</span></div><div><b>'+st[1]+'</b><span>maior sequência</span></div></div><div class="mo">'+mo+'</div><div class="yrs">'+yb+'</div>'+(ks.length?"":'<p class="reset">O histórico começa a ser gravado agora. Marque uma diária na aba Hoje.</p>')+'</section>';
+var wr=el.querySelector(".hmw");if(yr===ty)wr.scrollLeft=Math.max(0,tc*15-wr.clientWidth/2)}
+function tab(t){document.getElementById("app").hidden=document.getElementById("cfgsec").hidden=document.getElementById("lun").hidden=t!=="today";document.getElementById("hist").hidden=t!=="hist";document.getElementById("perm").hidden=t!=="perm";
+[].forEach.call(document.querySelectorAll(".tabs button"),function(b){b.classList.toggle("on",b.dataset.tab===t)});if(t==="hist")renderHist();if(t==="perm")renderPerm()}
+document.querySelector(".tabs").addEventListener("click",function(e){if(e.target.dataset.tab)tab(e.target.dataset.tab)});
+document.getElementById("hist").addEventListener("click",function(e){var y=e.target.dataset.y;if(y){yr=+y;renderHist()}});
+
+function lunDays(){var ms=S.lun-Date.now();return ms>0?Math.ceil(ms/864e5):0}
+function lunLeft(){var m=Math.floor((S.lun-Date.now())/60000),d=Math.floor(m/1440),h=Math.floor(m%1440/60);return d+"d "+h+"h "+p2(m%60)+"min"}
+function setLun(n){var b=nextReset("daily");b.setDate(b.getDate()+n-1);S.lun=b.getTime();save();renderLun()}
+function addLun(){if(S.lun&&S.lun>Date.now()){var e=new Date(S.lun);e.setDate(e.getDate()+30);S.lun=e.getTime();save();renderLun()}else setLun(30)}
+function renderLun(){var el=document.getElementById("lun"),on=S.lun&&S.lun>Date.now(),n=lunDays(),e=new Date(S.lun||0);
+el.className=on&&n<=3?"warn":"";
+el.innerHTML='<div class="head"><h2>Assinatura de Lunita</h2><span class="reset">'+(on?"Termina em "+lunLeft():S.lun?"Expirada":"Não configurada")+'</span></div>'+(on?'<p class="big">'+n+' <small>dia(s) restante(s)</small></p><p class="reset">Termina em '+p2(e.getDate())+"/"+p2(e.getMonth()+1)+"/"+e.getFullYear()+" às "+p2(e.getHours())+":"+p2(e.getMinutes())+'</p>':'<p class="reset">'+(S.lun?"A assinatura acabou.":"Informe quantos dias restam, como aparece no jogo.")+'</p>')+'<div class="add"><input type="number" id="lund" min="1" max="999" placeholder="Dias restantes"><button class="btn" id="lunset">Definir</button><button class="btn" id="lun30">+30 dias</button></div>'}
+function tickLun(){var i=document.getElementById("lund");if(!i||(document.activeElement!==i&&!i.value))renderLun()}
+function lunSet(){var v=parseInt(document.getElementById("lund").value,10);if(v>=1)setLun(v)}
+document.getElementById("lun").addEventListener("click",function(e){if(e.target.id==="lunset")lunSet();else if(e.target.id==="lun30")addLun()});
+document.getElementById("lun").addEventListener("keydown",function(e){if(e.key==="Enter"&&e.target.id==="lund")lunSet()});
+function renderPerm(){var el=document.getElementById("perm"),l=S.perm,c=l.filter(function(i){return i.d}).length,pct=l.length?Math.round(c*100/l.length):0;
+var h='<section class="'+(l.length&&c===l.length?"full":"")+'"><div class="head"><h2>Sem prazo <span class="reset">'+c+'/'+l.length+'</span></h2><span class="reset">Não reseta nunca</span></div><div class="bar"><i style="width:'+pct+'%"></i></div><ul>';
+l.forEach(function(i){h+='<li class="'+(i.d?"done":"")+'"><label><input type="checkbox" data-pid="'+i.id+'"'+(i.d?" checked":"")+'><span>'+esc(i.name)+'</span></label><button class="del" data-pdel="'+i.id+'" aria-label="Remover '+esc(i.name)+'">&times;</button></li>'});
+el.innerHTML=h+'</ul><div class="add"><input id="pnew" placeholder="Nova tarefa" maxlength="80"><button class="btn" id="padd">Adicionar</button></div></section>'}
+function addPerm(){var v=document.getElementById("pnew").value.trim();if(!v)return;S.perm.push({id:"p"+(S.n++),name:v,d:false});save();renderPerm();document.getElementById("pnew").focus()}
+document.getElementById("perm").addEventListener("click",function(e){var el=e.target;
+if(el.dataset.pid){S.perm.forEach(function(i){if(i.id===el.dataset.pid)i.d=el.checked});save();renderPerm()}
+else if(el.dataset.pdel){S.perm=S.perm.filter(function(i){return i.id!==el.dataset.pdel});save();renderPerm()}
+else if(el.id==="padd")addPerm()});
+document.getElementById("perm").addEventListener("keydown",function(e){if(e.key==="Enter"&&e.target.id==="pnew")addPerm()});
+function applyRemote(d){S=d;if(!S.hist)S.hist={};if(!S.perm)S.perm=[];mem=S;try{localStorage.setItem("wuwa-check",JSON.stringify(S))}catch(e){}document.getElementById("rh").value=S.rh;render();renderLun();if(!document.getElementById("hist").hidden)renderHist();if(!document.getElementById("perm").hidden)renderPerm()}
+var lastKeys=TYPES.map(function(x){return key(x[0])}).join();
+function checkRollover(){var k=TYPES.map(function(x){return key(x[0])}).join();if(k!==lastKeys){lastKeys=k;render();if(!document.getElementById("hist").hidden)renderHist()}}
+document.addEventListener("visibilitychange",function(){if(!document.hidden){checkRollover();tickLun()}});
+record();render();renderLun();
+</script>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import{getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import{getFirestore,doc,setDoc,onSnapshot}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+// COLE AQUI os dados do seu projeto Firebase (Configurações do projeto > Seus apps > Web)
+const firebaseConfig={apiKey:"AIzaSyCbLaERuO5MhIc_4aLPZSNRzua-I-sBzR4",authDomain:"wuthering-diary.firebaseapp.com",projectId:"wuthering-diary",appId:"1:261406568195:web:03ea2c488aabd7271dc336"};
+const $=id=>document.getElementById(id),sync=t=>{$("sync").textContent=t};
+if(firebaseConfig.apiKey.startsWith("COLE")){sync("Modo local (nuvem não configurada)")}else{
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+let ref=null,timer=null,unsub=null;
+const push=async()=>{if(!ref)return;try{await setDoc(ref,{json:JSON.stringify(window.S),ts:window.S.ts||0});sync("Sincronizado")}catch(e){sync("Erro ao salvar")}};
+window.onSaved=()=>{if(!ref)return;sync("Salvando...");clearTimeout(timer);timer=setTimeout(push,800)};
+$("login").hidden=false;sync("Entre para sincronizar");
+$("login").onclick=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(()=>sync("Login cancelado"));
+$("logout").onclick=()=>signOut(auth);
+onAuthStateChanged(auth,u=>{
+if(unsub){unsub();unsub=null}
+ref=null;$("login").hidden=!!u;$("logout").hidden=!u;$("who").hidden=!u;
+if(!u){sync("Entre para sincronizar");return}
+$("who").textContent=u.displayName||u.email;ref=doc(db,"users",u.uid);sync("Conectando...");
+unsub=onSnapshot(ref,snap=>{
+if(snap.metadata.hasPendingWrites)return;
+if(!snap.exists()){push();return}
+const c=JSON.parse(snap.data().json),l=window.S.ts||0;
+if((c.ts||0)>l){applyRemote(c);sync("Sincronizado")}else if((c.ts||0)<l)push();else sync("Sincronizado")
+},()=>sync("Erro de conexão"))
+})}
+</script>
+</body>
+</html>
