@@ -54,6 +54,8 @@ li:hover .del,.del:focus-visible{opacity:1}
 .btn.gear{font-size:1rem;line-height:1;padding:6px 9px}
 .cfg{display:flex;gap:10px;align-items:center;flex-wrap:wrap;color:var(--mute);font-size:.8rem}
 .cfg input{width:64px}
+.add select{padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;font-size:.85rem}
+.add input[type=number]{width:72px;flex:none}
 .cfg label{padding:0;gap:8px}
 .tip{width:16px;height:16px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--mute);font:600 10px/1 Inter,system-ui,sans-serif;padding:0;cursor:help;display:inline-grid;place-content:center;flex:none;transition:color .15s,border-color .15s}
 .tip:hover{color:var(--ink);border-color:var(--mute)}
@@ -101,6 +103,7 @@ section.warn .big{color:var(--gold)}
 <button class="btn" id="exp">Exportar dados</button><button class="btn" id="imp">Importar dados</button><input type="file" id="impf" accept=".json,application/json" hidden><button class="btn" id="def">Restaurar tarefas padrão</button><button class="tip" data-tip="Exportar baixa um arquivo com seus dados. Importar lê esse arquivo e substitui os dados atuais. Restaurar volta às tarefas originais sem apagar o histórico." aria-label="Ajuda">?</button>
 </div>
 </section>
+<section id="admsec" hidden></section>
 </main>
 <script>
 var TYPES=[["daily","Diárias"],["weekly","Semanais"],["monthly","Mensais"]];
@@ -116,11 +119,11 @@ if(!S.perm)S.perm=[{id:"pd1",name:"Explorar o mapa (todas as regiões)",d:false}
 function p2(n){return(n<10?"0":"")+n}
 function shifted(){return new Date(Date.now()-S.rh*3600000)}
 function key(type){var d=shifted(),y=d.getFullYear(),m=d.getMonth(),day=d.getDate();
-if(type==="monthly")return y+"-"+p2(m+1);
+if(type==="monthly")return seasonOn()?"s"+G.season.id+(Date.now()>=G.season.end?"x":""):y+"-"+p2(m+1);
 if(type==="weekly"){var w=new Date(y,m,day-((d.getDay()+6)%7));return"w"+w.getFullYear()+"-"+p2(w.getMonth()+1)+"-"+p2(w.getDate())}
 return y+"-"+p2(m+1)+"-"+p2(day)}
 function nextReset(type){var d=shifted(),y=d.getFullYear(),m=d.getMonth(),day=d.getDate(),h=S.rh;
-if(type==="monthly")return new Date(y,m+1,1,h);
+if(type==="monthly")return seasonOn()?new Date(Math.max(G.season.end,Date.now())):new Date(y,m+1,1,h);
 if(type==="weekly")return new Date(y,m,day-((d.getDay()+6)%7)+7,h);
 return new Date(y,m,day+1,h)}
 function left(type){var ms=nextReset(type)-Date.now();if(ms<0)ms=0;var min=Math.floor(ms/60000),d=Math.floor(min/1440),h=Math.floor(min%1440/60),m=min%60;
@@ -128,7 +131,7 @@ return(d?d+"d ":"")+h+"h "+p2(m)+"min"}
 function esc(s){return s.replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function render(){var app=document.getElementById("app"),html="";
 TYPES.forEach(function(x){var t=x[0],k=key(t),list=S.tasks[t],c=list.filter(function(i){return S.done[i.id]===k}).length,pct=list.length?Math.round(c*100/list.length):0;
-html+='<section class="'+(list.length&&c===list.length?"full":"")+'"><div class="head"><h2>'+x[1]+' <span class="reset">'+c+'/'+list.length+'</span></h2><span class="reset" data-left="'+t+'">Reseta em '+left(t)+'</span></div><div class="bar"><i style="width:'+pct+'%"></i></div><ul>';
+html+='<section class="'+(list.length&&c===list.length?"full":"")+'"><div class="head"><h2>'+(t==="monthly"&&seasonOn()?"Temporada":x[1])+' <span class="reset">'+c+'/'+list.length+'</span></h2><span class="reset" data-left="'+t+'">Reseta em '+left(t)+'</span></div><div class="bar"><i style="width:'+pct+'%"></i></div><ul>';
 list.forEach(function(i){var d=S.done[i.id]===k;
 html+='<li class="'+(d?"done":"")+'"><label><input type="checkbox" data-id="'+i.id+'" data-t="'+t+'"'+(d?" checked":"")+'><span>'+esc(i.name)+'</span></label><button class="del" data-del="'+i.id+'" data-t="'+t+'" aria-label="Remover '+esc(i.name)+'">&times;</button></li>'});
 html+='</ul><div class="add"><input data-new="'+t+'" placeholder="Nova tarefa" maxlength="60"><button class="btn" data-add="'+t+'" aria-label="Adicionar tarefa">+</button></div></section>'});
@@ -169,10 +172,10 @@ var yb=ys.map(function(y){return'<button class="btn'+(y===yr?" on":"")+'" data-y
 var mo=MN.map(function(m,i){return"<div><b>"+mc[i]+"</b>"+m+"</div>"}).join("");
 el.innerHTML='<section><h2>'+yk.length+' dias com atividade em '+yr+'</h2><div class="hmw"><div class="wd">'+wd+'</div><div class="hm" style="grid-template-columns:repeat('+cols+',12px)">'+g+'</div></div><div class="leg"><button class="tip" data-tip="Verde mais forte: fez todas as diárias do dia. Mais fraco: fez só parte." aria-label="Ajuda">?</button> Menos <i class="c"></i><i class="c l1"></i><i class="c l2"></i><i class="c l3"></i><i class="c l4"></i> Mais</div><div class="stats"><div><b>'+ks.length+'</b><span>dias no total</span></div><div><b>'+full+'</b><span>dias completos</span></div><div><b>'+st[0]+'</b><span>sequência atual</span></div><div><b>'+st[1]+'</b><span>maior sequência</span></div></div><div class="mo">'+mo+'</div><div class="yrs">'+yb+'</div>'+(ks.length?"":'<p class="reset">Marque uma diária para começar.</p>')+'</section>';
 var wr=el.querySelector(".hmw");if(yr===ty)wr.scrollLeft=Math.max(0,tc*15-wr.clientWidth/2)}
-function tab(t){var v={today:["app"],hist:["hist"],perm:["perm"],cfg:["lun","cfgsec"]};
+function tab(t){var v={today:["app"],hist:["hist"],perm:["perm"],cfg:["lun","cfgsec","admsec"]};
 for(var k in v)v[k].forEach(function(id){document.getElementById(id).hidden=k!==t});
 [].forEach.call(document.querySelectorAll(".tabs button"),function(b){b.classList.toggle("on",b.dataset.tab===t)});
-document.getElementById("gear").classList.toggle("on",t==="cfg");
+document.getElementById("gear").classList.toggle("on",t==="cfg");if(!window.isAdmin)document.getElementById("admsec").hidden=true;else if(t==="cfg")renderAdm();
 if(t==="hist")renderHist();if(t==="perm")renderPerm()}
 document.getElementById("gear").onclick=function(){tab(document.getElementById("cfgsec").hidden?"cfg":"today")};
 function exportData(){var b=new Blob([JSON.stringify(S,null,1)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="wuwa-checklist-"+dk(new Date())+".json";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)}
@@ -206,7 +209,7 @@ if(el.dataset.pid){S.perm.forEach(function(i){if(i.id===el.dataset.pid)i.d=el.ch
 else if(el.dataset.pdel){S.perm=S.perm.filter(function(i){return i.id!==el.dataset.pdel});save();renderPerm()}
 else if(el.id==="padd")addPerm()});
 document.getElementById("perm").addEventListener("keydown",function(e){if(e.key==="Enter"&&e.target.id==="pnew")addPerm()});
-function applyRemote(d){S=d;if(!S.hist)S.hist={};if(!S.perm)S.perm=[];mem=S;try{localStorage.setItem("wuwa-check",JSON.stringify(S))}catch(e){}document.getElementById("rh").value=S.rh;render();renderLun();if(!document.getElementById("hist").hidden)renderHist();if(!document.getElementById("perm").hidden)renderPerm()}
+function applyRemote(d){S=d;if(!S.hist)S.hist={};if(!S.perm)S.perm=[];mem=S;try{localStorage.setItem("wuwa-check",JSON.stringify(S))}catch(e){}document.getElementById("rh").value=S.rh;render();renderLun();if(!document.getElementById("hist").hidden)renderHist();if(!document.getElementById("perm").hidden)renderPerm();applyGlobal()}
 var tp=document.createElement("div");tp.id="tp";tp.setAttribute("role","tooltip");document.body.appendChild(tp);
 function showTip(b){tp.textContent=b.dataset.tip;tp.className="on";var r=b.getBoundingClientRect(),w=tp.offsetWidth;tp.style.left=Math.max(8,Math.min(innerWidth-w-8,r.left+r.width/2-w/2))+"px";tp.style.top=(r.bottom+8)+"px"}
 function hideTip(){tp.className=""}
@@ -215,6 +218,20 @@ document.addEventListener("mouseover",function(e){var b=tipOf(e);if(b)showTip(b)
 document.addEventListener("mouseout",function(e){if(tipOf(e))hideTip()});
 document.addEventListener("click",function(e){var b=tipOf(e);if(b){e.preventDefault();if(tp.className==="on"&&tp.textContent===b.dataset.tip)hideTip();else showTip(b)}else hideTip()});
 window.addEventListener("scroll",hideTip,true);
+var G=null;
+function seasonOn(){return!!(G&&G.season&&G.season.end)}
+function persist(){mem=S;try{localStorage.setItem("wuwa-check",JSON.stringify(S))}catch(e){}}
+function applyGlobal(){var ch=false;if(G&&G.tasks){if(!S.seen)S.seen=[];["daily","weekly","monthly"].forEach(function(t){(G.tasks[t]||[]).forEach(function(g){if(S.seen.indexOf(g.id)<0){S.seen.push(g.id);S.tasks[t].push({id:g.id,name:g.name});ch=true}})})}
+if(ch)persist();render();renderLun()}
+function snapEnd(ms){var c=new Date(ms),b=new Date(c.getFullYear(),c.getMonth(),c.getDate(),S.rh),dd=b-c;if(dd>432e5)b.setDate(b.getDate()-1);else if(-dd>432e5)b.setDate(b.getDate()+1);return b.getTime()}
+function admSave(p){if(window.adminSave)window.adminSave(p).catch(function(){alert("Sem permissão ou erro de rede.")})}
+function renderAdm(){var el=document.getElementById("admsec"),tk=(G&&G.tasks)||{},nm={daily:"Diária",weekly:"Semanal",monthly:"Temporada"},li="";
+["daily","weekly","monthly"].forEach(function(t){(tk[t]||[]).forEach(function(x){li+='<li><span style="flex:1;padding:9px 0">'+esc(x.name)+' <small class="reset">'+nm[t]+'</small></span><button class="del" data-gdel="'+x.id+'" data-gt="'+t+'" aria-label="Retirar">&times;</button></li>'})});
+el.innerHTML='<div class="head"><h2>Administrador <button class="tip" data-tip="Só você vê este painel. Tarefas publicadas aparecem para todos, que podem removê-las. Em Temporada, informe dias e horas como aparece no jogo." aria-label="Ajuda">?</button></h2></div><div class="add"><select id="gt"><option value="daily">Diária</option><option value="weekly">Semanal</option><option value="monthly">Temporada</option></select><input id="gn" placeholder="Nova tarefa para todos" maxlength="80"><button class="btn" id="gadd" aria-label="Publicar para todos">+</button></div><ul>'+li+'</ul><div class="add"><input type="number" id="sd" min="0" placeholder="Dias"><input type="number" id="sh" min="0" max="23" placeholder="Horas"><button class="btn" id="sset">Definir fim</button><button class="btn" id="snew">Nova temporada</button></div>'}
+document.getElementById("admsec").addEventListener("click",function(e){var el=e.target,tk=JSON.parse(JSON.stringify((G&&G.tasks)||{}));["daily","weekly","monthly"].forEach(function(t){if(!tk[t])tk[t]=[]});
+if(el.id==="gadd"){var n=document.getElementById("gn").value.trim();if(!n)return;tk[document.getElementById("gt").value].push({id:"g"+Date.now().toString(36),name:n});admSave({tasks:tk})}
+else if(el.dataset.gdel){tk[el.dataset.gt]=tk[el.dataset.gt].filter(function(x){return x.id!==el.dataset.gdel});admSave({tasks:tk})}
+else if(el.id==="sset"||el.id==="snew"){var d=parseInt(document.getElementById("sd").value,10),h=parseInt(document.getElementById("sh").value,10)||0;if(isNaN(d))return;var id=G&&G.season?G.season.id:0;if(el.id==="snew"||!id)id++;admSave({season:{id:id,end:snapEnd(Date.now()+d*864e5+h*36e5)}})}});
 var lastKeys=TYPES.map(function(x){return key(x[0])}).join();
 function checkRollover(){var k=TYPES.map(function(x){return key(x[0])}).join();if(k!==lastKeys){lastKeys=k;render();if(!document.getElementById("hist").hidden)renderHist()}}
 document.addEventListener("visibilitychange",function(){if(!document.hidden){checkRollover();tickLun()}});
@@ -226,10 +243,13 @@ import{getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut}fro
 import{getFirestore,doc,setDoc,onSnapshot}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 // COLE AQUI os dados do seu projeto Firebase (Configurações do projeto > Seus apps > Web)
 const firebaseConfig={apiKey:"AIzaSyCbLaERuO5MhIc_4aLPZSNRzua-I-sBzR4",authDomain:"wuthering-diary.firebaseapp.com",projectId:"wuthering-diary",appId:"1:261406568195:web:03ea2c488aabd7271dc336"};
+const ADMIN_EMAIL="joaovitorarantescoelho@gmail.com";
 const $=id=>document.getElementById(id),sync=t=>{$("sync").textContent=t};
 if(firebaseConfig.apiKey.startsWith("COLE")){sync("Modo local (nuvem não configurada)")}else{
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
 let ref=null,timer=null,unsub=null;
+onSnapshot(doc(db,"config","global"),snap=>{window.G=snap.exists()?snap.data():null;applyGlobal();if(window.isAdmin&&!$("admsec").hidden)renderAdm()},()=>{});
+window.adminSave=p=>setDoc(doc(db,"config","global"),p,{merge:true});
 const push=async()=>{if(!ref)return;try{await setDoc(ref,{json:JSON.stringify(window.S),ts:window.S.ts||0});sync("Sincronizado")}catch(e){sync("Erro ao salvar")}};
 window.onSaved=()=>{if(!ref)return;sync("Salvando...");clearTimeout(timer);timer=setTimeout(push,800)};
 $("login").hidden=false;sync("Entre para sincronizar");
@@ -237,7 +257,7 @@ $("login").onclick=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(()=>
 $("logout").onclick=()=>signOut(auth);
 onAuthStateChanged(auth,u=>{
 if(unsub){unsub();unsub=null}
-ref=null;$("login").hidden=!!u;$("logout").hidden=!u;$("who").hidden=!u;
+ref=null;window.isAdmin=!!u&&!!u.email&&u.email.toLowerCase()===ADMIN_EMAIL.toLowerCase();if(!$("cfgsec").hidden){$("admsec").hidden=!window.isAdmin;if(window.isAdmin)renderAdm()}$("login").hidden=!!u;$("logout").hidden=!u;$("who").hidden=!u;
 if(!u){sync("Entre para sincronizar");return}
 $("who").textContent=u.displayName||u.email;ref=doc(db,"users",u.uid);sync("Conectando...");
 unsub=onSnapshot(ref,snap=>{
