@@ -107,6 +107,11 @@ section.warn .big{color:var(--gold)}
 #about .sep{border:0;border-top:1px solid var(--line);margin:10px 0 8px}
 #about a{color:var(--acc);text-decoration:none}#about a:hover{text-decoration:underline}
 .abt{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:8px;color:var(--ink);font-weight:500}
+.c[data-d]{cursor:pointer}
+.mbox h3{margin:0 0 4px;font-size:1rem;font-weight:600}
+#dlist{margin:12px 0 18px;max-height:50vh;overflow:auto}
+.dg{font-size:.72rem;color:var(--mute);font-weight:600;margin:10px 0 2px}
+#dall{margin-right:auto}
 .ng{background:none;padding:0;margin:0 0 16px}
 .ng summary{color:var(--mute);font-weight:500;font-size:.78rem;padding:6px 4px;width:fit-content;border-radius:8px}
 .ng summary:hover{color:var(--ink)}
@@ -127,10 +132,12 @@ body.nav-open .side{transform:none}body.nav-open .scrim{display:block;position:f
 </head>
 <body>
 <div class="shell"><aside class="side" id="side"><div class="brand">Menu</div><nav class="nav" id="nav"></nav></aside><div class="scrim" id="scrim"></div>
+<div class="modal" id="dmodal" hidden><div class="mbox" role="dialog" aria-modal="true" aria-labelledby="dtitle"><h3 id="dtitle"></h3><p class="reset" id="dsub"></p><div id="dlist"></div><div class="mbtn"><button class="btn" id="dall">Marcar todas</button><button class="btn" id="dno">Cancelar</button><button class="btn on" id="dyes">Salvar</button></div></div></div>
 <div class="modal" id="modal" hidden><div class="mbox" role="dialog" aria-modal="true"><p id="mmsg"></p><div class="mbtn"><button class="btn" id="mno">Cancelar</button><button class="btn on" id="myes">Confirmar</button></div></div></div>
 <main>
-<header class="top"><div class="tl"><button class="btn menu" id="menu" aria-label="Menu">&#9776;</button><h1>Checklist <button class="tip" data-tip="Marque o que já fez. Cada lista zera sozinha no reset diário, semanal e mensal." aria-label="Ajuda">?</button></h1></div>
+<header class="top"><div class="tl"><button class="btn menu" id="menu" aria-label="Menu">&#9776;</button><h1><span id="ttl">Checklist</span> <button class="tip" id="ttip" data-tip="Marque o que já fez. Cada lista zera sozinha no reset diário, semanal e mensal." aria-label="Ajuda">?</button></h1></div>
 <div class="acct"><span id="sync"></span><span id="who" hidden></span><button class="btn" id="login" hidden>Entrar com Google</button><button class="btn" id="logout" hidden>Sair</button><button class="btn gear" id="gear" title="Configurações" aria-label="Configurações">&#9881;&#xFE0E;</button></div></header>
+<div id="pg-check">
 <nav class="tabs"><button data-tab="today" class="on">Atividades</button><button data-tab="hist">Histórico</button><button data-tab="perm">Personalizado</button></nav>
 <section id="lun" hidden></section>
 <div id="app"></div>
@@ -149,6 +156,8 @@ body.nav-open .side{transform:none}body.nav-open .scrim{display:block;position:f
 </section>
 <section id="admsec" hidden></section>
 <section id="about" hidden><div class="abt"><span>Desenvolvido por S8IGNORe</span><span id="ver"></span></div><p>Este site (<a href="https://s8ignore.github.io/WuwaDiary/" target="_blank" rel="noopener">s8ignore.github.io/WuwaDiary</a>) é um projeto independente de fãs e não possui afiliação com a Kuro Games. Wuthering Waves, seu conteúdo e os materiais do jogo são marcas registradas e direitos autorais da Kuro Games.</p><hr class="sep"><p>Projeto inspirado no <a href="https://paimon.moe" target="_blank" rel="noopener">Paimon.moe</a>.</p></section>
+</div>
+<div id="pg-char" hidden><!-- conteúdo da aba Personagem (vazia por enquanto) --></div>
 </main></div>
 <script>
 var TYPES=[["daily","Diárias"],["weekly","Semanais"],["monthly","Mensais"]];
@@ -212,7 +221,7 @@ yk.forEach(function(k){mc[+k.slice(5,7)-1]++});
 for(var w=0;w<cols;w++){var lab="",cells="";
 for(var r=0;r<7;r++){var i=w*7+r-off;if(i<0||i>=days){cells+="<i></i>";continue}
 var d=new Date(yr,0,1+i),k=dk(d),h=S.hist[k];if(d.getDate()===1)lab=MN[d.getMonth()];if(k===today)tc=w;
-cells+='<i class="c l'+lvl(h)+(k===today?" now":"")+(k>today?" fut":"")+'" title="'+p2(d.getDate())+"/"+p2(d.getMonth()+1)+"/"+yr+": "+(h?h.c+"/"+h.t+" diárias":"sem registro")+'"></i>'}
+cells+='<i class="c l'+lvl(h)+(k===today?" now":"")+(k>today?" fut":"")+'"'+(k<=today?' data-d="'+k+'"':"")+' title="'+p2(d.getDate())+"/"+p2(d.getMonth()+1)+"/"+yr+": "+(h?h.c+"/"+h.t+" diárias":"sem registro")+(k<today?" · clique para editar":"")+'"></i>'}
 g+='<b class="ml">'+lab+"</b>"+cells}
 var wd=["","","Seg","","Qua","","Sex",""].map(function(t){return"<span>"+t+"</span>"}).join("");
 var yb=ys.map(function(y){return'<button class="btn'+(y===yr?" on":"")+'" data-y="'+y+'">'+y+"</button>"}).join("");
@@ -224,7 +233,7 @@ for(var k in v)v[k].forEach(function(id){document.getElementById(id).hidden=k!==
 [].forEach.call(document.querySelectorAll(".tabs button"),function(b){b.classList.toggle("on",b.dataset.tab===t)});
 document.getElementById("gear").classList.toggle("on",t==="cfg");if(!window.isAdmin)document.getElementById("admsec").hidden=true;else if(t==="cfg")renderAdm();
 if(t==="hist")renderHist();if(t==="perm")renderPerm()}
-document.getElementById("gear").onclick=function(){tab(document.getElementById("cfgsec").hidden?"cfg":"today")};
+document.getElementById("gear").onclick=function(){if(PAGE!=="checklist"){go("checklist");tab("cfg");return}tab(document.getElementById("cfgsec").hidden?"cfg":"today")};
 function exportData(){var b=new Blob([JSON.stringify(S,null,1)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="wuwa-checklist-"+dk(new Date())+".json";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)}
 function importData(f){var r=new FileReader();r.onload=function(){var d;try{d=JSON.parse(r.result);if(!d||!(d.groups||d.tasks)||!d.done)throw 0}catch(e){note("Arquivo inválido.");return}
 ask("Importar vai substituir os dados atuais. Continuar?","Importar",function(){d.n=d.n||1000;d.rh=d.rh===undefined?6:d.rh;applyRemote(d);save();note("Dados importados.")})};r.readAsText(f)}
@@ -298,8 +307,14 @@ document.getElementById("ngadd"+x).onclick=function(){var n=document.getElementB
 if(r==="days"){var d=parseInt(document.getElementById("ngd"+x).value,10);if(!(d>=1))return;g.reset="days:"+d;g.anchor=dn(key("daily"))}
 S.groups.push(g);document.getElementById("ngn"+x).value="";document.querySelector("#newgrp"+x+" details").open=false;save();render();document.querySelector('[data-new="'+g.id+'"]').focus()}}
 bindNG("","act");bindNG("2","per");
-var NAV=[{id:"checklist",label:"Checklist",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>'}];
-function renderNav(){document.getElementById("nav").innerHTML=NAV.map(function(n,i){return'<button class="'+(i?"":"on")+'" data-nav="'+n.id+'">'+n.icon+"<span>"+n.label+"</span></button>"}).join("")}
+var NAV=[{id:"checklist",label:"Checklist",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>'},
+{id:"character",label:"Personagem",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>'}];
+var PAGE="checklist";
+function renderNav(){document.getElementById("nav").innerHTML=NAV.map(function(n){return'<button class="'+(n.id===PAGE?"on":"")+'" data-nav="'+n.id+'">'+n.icon+"<span>"+n.label+"</span></button>"}).join("")}
+function go(p){PAGE=p;var c=p==="checklist";document.getElementById("pg-check").hidden=!c;document.getElementById("pg-char").hidden=c;
+document.getElementById("ttl").textContent=c?"Checklist":"Personagem";document.getElementById("ttip").style.display=c?"":"none";
+document.getElementById("gear").classList.toggle("on",c&&!document.getElementById("cfgsec").hidden);renderNav();window.scrollTo(0,0)}
+document.getElementById("nav").addEventListener("click",function(e){var b=e.target.closest("button[data-nav]");if(b&&b.dataset.nav!==PAGE)go(b.dataset.nav)});
 document.getElementById("menu").onclick=function(){document.body.classList.toggle("nav-open")};
 document.getElementById("scrim").onclick=document.getElementById("nav").onclick=function(){document.body.classList.remove("nav-open")};
 var askCb=null;
@@ -312,6 +327,24 @@ document.getElementById("modal").addEventListener("click",function(e){if(e.targe
 document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!document.getElementById("modal").hidden)askClose(false)});
 var BUILD="1.0";
 function renderAbout(){document.getElementById("ver").textContent="Versão "+((G&&G.version)||BUILD)}
+var dayKey=null;
+function dailyTasks(){var r=[];S.groups.forEach(function(g){if(g.reset==="daily")g.tasks.forEach(function(i){r.push({id:i.id,name:i.name,g:g.name})})});return r}
+function openDay(k){var today=key("daily");if(k>today)return;if(k===today){tab("today");return}
+var h=S.hist[k],list=dailyTasks(),multi=S.groups.filter(function(g){return g.reset==="daily"}).length>1;
+if(!list.length){note("Não há tarefas diárias para registrar.");return}
+var sel=h&&h.ids?h.ids:(h&&h.c>=h.t?list.map(function(x){return x.id}):[]),html="",last=null,a=k.split("-");
+list.forEach(function(x){if(multi&&x.g!==last){html+='<div class="dg">'+esc(x.g)+"</div>";last=x.g}
+html+='<label><input type="checkbox" data-tid="'+x.id+'"'+(sel.indexOf(x.id)>=0?" checked":"")+"><span>"+esc(x.name)+"</span></label>"});
+dayKey=k;document.getElementById("dtitle").textContent="Diárias de "+a[2]+"/"+a[1]+"/"+a[0];document.getElementById("dsub").textContent="Marque o que você fez nesse dia.";
+document.getElementById("dlist").innerHTML=html;document.getElementById("dmodal").hidden=false;document.getElementById("dno").focus()}
+function closeDay(){document.getElementById("dmodal").hidden=true;dayKey=null}
+document.getElementById("hist").addEventListener("click",function(e){var d=e.target.dataset&&e.target.dataset.d;if(d)openDay(d)});
+document.getElementById("dno").onclick=closeDay;
+document.getElementById("dall").onclick=function(){[].forEach.call(document.querySelectorAll("#dlist input"),function(i){i.checked=true})};
+document.getElementById("dyes").onclick=function(){var ids=[].filter.call(document.querySelectorAll("#dlist input"),function(i){return i.checked}).map(function(i){return i.dataset.tid});
+if(ids.length)S.hist[dayKey]={c:ids.length,t:dailyTasks().length,ids:ids};else delete S.hist[dayKey];closeDay();save();renderHist()};
+document.getElementById("dmodal").addEventListener("click",function(e){if(e.target.id==="dmodal")closeDay()});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!document.getElementById("dmodal").hidden)closeDay()});
 var lastKeys=allKeys();
 function checkRollover(){var k=allKeys();if(k!==lastKeys){lastKeys=k;render();if(!document.getElementById("hist").hidden)renderHist()}}
 document.addEventListener("visibilitychange",function(){if(!document.hidden){checkRollover();tickLun()}});
