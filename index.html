@@ -112,6 +112,20 @@ section.warn .big{color:var(--gold)}
 #dlist{margin:12px 0 18px;max-height:50vh;overflow:auto}
 .dg{font-size:.72rem;color:var(--mute);font-weight:600;margin:10px 0 2px}
 #dall{margin-right:auto}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:16px 12px;margin-top:16px}
+.ch{text-align:center;min-width:0}
+.ci{position:relative;aspect-ratio:1;border-radius:16px;overflow:hidden;background:var(--bg);cursor:pointer;display:grid;place-items:center}
+.ci:before{content:attr(data-i);position:absolute;font-size:1.8rem;font-weight:700;color:var(--mute)}
+.ci img{position:relative;width:100%;height:100%;object-fit:cover;transition:filter .25s,transform .25s}
+.ch:not(.own) .ci img{filter:grayscale(1) brightness(.75)}
+@media (hover:hover){.ch:hover .ci img{filter:none;transform:scale(1.04)}}
+.ck{position:absolute;right:6px;bottom:6px;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.85);color:#9aa0b8;display:grid;place-items:center;font-size:.8rem}
+.cb{position:absolute;right:6px;bottom:6px;min-width:26px;height:26px;border-radius:50%;border:0;background:var(--acc);color:#fff;font:700 .78rem Poppins,system-ui,sans-serif;cursor:pointer;display:grid;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,.35);transition:transform .1s}
+.cb:active{transform:scale(.9)}
+.cdel{position:absolute;left:6px;top:6px;width:22px;height:22px;border:0;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;cursor:pointer;line-height:1;opacity:0;transition:opacity .15s}
+.ci:hover .cdel{opacity:1}
+.nm{margin-top:8px;font-size:.78rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ch:not(.own) .nm{color:var(--mute)}
 .ng{background:none;padding:0;margin:0 0 16px}
 .ng summary{color:var(--mute);font-weight:500;font-size:.78rem;padding:6px 4px;width:fit-content;border-radius:8px}
 .ng summary:hover{color:var(--ink)}
@@ -157,7 +171,10 @@ body.nav-open .side{transform:none}body.nav-open .scrim{display:block;position:f
 <section id="admsec" hidden></section>
 <section id="about" hidden><div class="abt"><span>Desenvolvido por S8IGNORe</span><span id="ver"></span></div><p>Este site (<a href="https://s8ignore.github.io/WuwaDiary/" target="_blank" rel="noopener">s8ignore.github.io/WuwaDiary</a>) é um projeto independente de fãs e não possui afiliação com a Kuro Games. Wuthering Waves, seu conteúdo e os materiais do jogo são marcas registradas e direitos autorais da Kuro Games.</p><hr class="sep"><p>Projeto inspirado no <a href="https://paimon.moe" target="_blank" rel="noopener">Paimon.moe</a>.</p></section>
 </div>
-<div id="pg-char" hidden><!-- conteúdo da aba Personagem (vazia por enquanto) --></div>
+<div id="pg-char" hidden>
+<section id="charadm" hidden><div class="head"><h2>Administrador <button class="tip" data-tip="Envie a imagem para a pasta img do repositório no GitHub e digite aqui só o nome do arquivo, por exemplo rover.png. Vale para todos os usuários." aria-label="Ajuda">?</button></h2></div><div class="add"><input id="chn" placeholder="Nome do personagem" maxlength="40"><input id="chi" placeholder="Arquivo da imagem, ex.: rover.png" maxlength="120"><button class="btn" id="chadd">Adicionar</button></div></section>
+<section id="chardash"></section>
+</div>
 </main></div>
 <script>
 var TYPES=[["daily","Diárias"],["weekly","Semanais"],["monthly","Mensais"]];
@@ -277,7 +294,7 @@ var G=null;
 function seasonOn(){return!!(G&&G.season&&G.season.end)}
 function persist(){mem=S;try{localStorage.setItem("wuwa-check",JSON.stringify(S))}catch(e){}}
 function applyGlobal(){var ch=false;if(G&&G.tasks){if(!S.seen)S.seen=[];["daily","weekly","monthly"].forEach(function(t){(G.tasks[t]||[]).forEach(function(g){if(S.seen.indexOf(g.id)<0){S.seen.push(g.id);var gr=gget(t)||addDefGroup(t,false);gr.tasks.push({id:g.id,name:g.name});ch=true}})})}
-if(ch)persist();render();renderLun();renderAbout()}
+if(ch)persist();render();renderLun();renderAbout();renderChars()}
 function snapEnd(ms){var c=new Date(ms),b=new Date(c.getFullYear(),c.getMonth(),c.getDate(),S.rh),dd=b-c;if(dd>432e5)b.setDate(b.getDate()-1);else if(-dd>432e5)b.setDate(b.getDate()+1);return b.getTime()}
 function admSave(p){if(window.adminSave)window.adminSave(p).catch(function(){note("Sem permissão ou erro de rede.")})}
 function renderAdm(){var el=document.getElementById("admsec"),tk=(G&&G.tasks)||{},nm={daily:"Diária",weekly:"Semanal",monthly:"Temporada"},li="";
@@ -287,7 +304,25 @@ document.getElementById("admsec").addEventListener("click",function(e){var el=e.
 if(el.id==="gadd"){var n=document.getElementById("gn").value.trim();if(!n)return;tk[document.getElementById("gt").value].push({id:"g"+Date.now().toString(36),name:n});admSave({tasks:tk})}
 else if(el.dataset.gdel){tk[el.dataset.gt]=tk[el.dataset.gt].filter(function(x){return x.id!==el.dataset.gdel});admSave({tasks:tk})}
 else if(el.id==="sset"||el.id==="snew"){var d=parseInt(document.getElementById("sd").value,10),h=parseInt(document.getElementById("sh").value,10)||0;if(isNaN(d))return;var id=G&&G.season?G.season.id:0;if(el.id==="snew"||!id)id++;admSave({season:{id:id,end:snapEnd(Date.now()+d*864e5+h*36e5)}})}else if(el.id==="vset"){var v=document.getElementById("vin").value.trim();if(!v)return;admSave({version:v})}});
-function migrate(o){if(!o.groups){o.groups=[];["daily","weekly","monthly"].forEach(function(t){if(o.tasks&&o.tasks[t])o.groups.push({id:t,name:DEFG[t][0],reset:DEFG[t][1],tasks:o.tasks[t]})});delete o.tasks}return o}
+function chSrc(i){i=i||"";return/^https?:|\//.test(i)?i:"img/"+i}
+function renderChars(){var el=document.getElementById("chardash"),l=(G&&G.chars)||[],n=0,h="",adm=!!window.isAdmin;document.getElementById("charadm").hidden=!adm;
+l.forEach(function(c){var x=S.chars[c.id]||{},o=!!x.o;if(o)n++;
+h+='<div class="ch'+(o?" own":"")+'" data-cid="'+c.id+'"><div class="ci" data-i="'+esc(c.name.charAt(0))+'"><img src="'+esc(chSrc(c.img))+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">'+(o?'<button class="cb" data-cb="'+c.id+'" aria-label="Constelação">'+(x.c||0)+"</button>":'<span class="ck">&#10003;</span>')+(adm?'<button class="cdel" data-cdel="'+c.id+'" aria-label="Remover">&times;</button>':"")+'</div><div class="nm">'+esc(c.name)+"</div></div>"});
+var pct=l.length?Math.round(n*100/l.length):0;
+el.innerHTML='<div class="head"><h2>Coletados <span class="reset">'+pct+"% ("+n+"/"+l.length+')</span> <button class="tip" data-tip="Clique no personagem para marcar que você o tem. Clique no número azul para aumentar a constelação (Shift ou botão direito diminui). Quem não foi marcado fica cinza e ganha cor ao passar o mouse." aria-label="Ajuda">?</button></h2><div class="hr"><button class="btn" id="chreset">Redefinir tudo</button><button class="btn" id="chall">Marcar todos</button></div></div><div class="bar"><i style="width:'+pct+'%"></i></div>'+(l.length?'<div class="cgrid">'+h+"</div>":'<p class="reset" style="margin-top:12px">Nenhum personagem cadastrado ainda.</p>')}
+function chOwn(id){var x=S.chars[id]||(S.chars[id]={o:0,c:0});x.o=x.o?0:1;save();renderChars()}
+function chCon(id,d){var x=S.chars[id];if(!x||!x.o)return;x.c=((x.c||0)+d+7)%7;save();renderChars()}
+function addChar(){var n=document.getElementById("chn").value.trim(),i=document.getElementById("chi").value.trim();if(!n)return;var l=((G&&G.chars)||[]).slice();l.push({id:"p"+Date.now().toString(36),name:n,img:i});admSave({chars:l});document.getElementById("chn").value="";document.getElementById("chi").value=""}
+function delChar(id){var c=((G&&G.chars)||[]).filter(function(x){return x.id===id})[0];if(!c)return;ask('Remover "'+c.name+'" do catálogo?',"Remover",function(){admSave({chars:G.chars.filter(function(x){return x.id!==id})})},true)}
+document.getElementById("pg-char").addEventListener("click",function(e){var t=e.target,b=t.closest("[data-cb]");
+if(b){chCon(b.dataset.cb,e.shiftKey?-1:1);return}
+var x=t.closest("[data-cdel]");if(x){delChar(x.dataset.cdel);return}
+if(t.id==="chadd"){addChar();return}
+if(t.id==="chall"){((G&&G.chars)||[]).forEach(function(c){var y=S.chars[c.id]||(S.chars[c.id]={o:0,c:0});y.o=1});save();renderChars();return}
+if(t.id==="chreset"){ask("Redefinir todos os personagens e constelações?","Redefinir",function(){S.chars={};save();renderChars()},true);return}
+var c=t.closest("[data-cid]");if(c&&t.closest(".ci"))chOwn(c.dataset.cid)});
+document.getElementById("pg-char").addEventListener("contextmenu",function(e){var b=e.target.closest("[data-cb]");if(b){e.preventDefault();chCon(b.dataset.cb,-1)}});
+function migrate(o){if(!o.groups){o.groups=[];["daily","weekly","monthly"].forEach(function(t){if(o.tasks&&o.tasks[t])o.groups.push({id:t,name:DEFG[t][0],reset:DEFG[t][1],tasks:o.tasks[t]})});delete o.tasks}if(!o.chars)o.chars={};return o}
 function gget(id){return S.groups.filter(function(g){return g.id===id})[0]}
 function gkey(g){var r=g.reset;if(r==="none")return"-";if(r==="season")return key("monthly");if(r==="monthly")return key("cal");if(r.indexOf("days:")===0)return"c"+Math.floor((dn(key("daily"))-(g.anchor||0))/(+r.slice(5)||1));return key(r)}
 function gnext(g){var r=g.reset;if(r==="none")return null;if(r==="season")return nextReset("monthly");if(r==="monthly")return nextReset("cal");
@@ -312,7 +347,7 @@ var NAV=[{id:"checklist",label:"Checklist",icon:'<svg width="20" height="20" vie
 var PAGE="checklist";
 function renderNav(){document.getElementById("nav").innerHTML=NAV.map(function(n){return'<button class="'+(n.id===PAGE?"on":"")+'" data-nav="'+n.id+'">'+n.icon+"<span>"+n.label+"</span></button>"}).join("")}
 function go(p){PAGE=p;var c=p==="checklist";document.getElementById("pg-check").hidden=!c;document.getElementById("pg-char").hidden=c;
-document.getElementById("ttl").textContent=c?"Checklist":"Personagem";document.getElementById("ttip").style.display=c?"":"none";
+document.getElementById("ttl").textContent=c?"Checklist":"Personagem";if(!c)renderChars();document.getElementById("ttip").style.display=c?"":"none";
 document.getElementById("gear").classList.toggle("on",c&&!document.getElementById("cfgsec").hidden);renderNav();window.scrollTo(0,0)}
 document.getElementById("nav").addEventListener("click",function(e){var b=e.target.closest("button[data-nav]");if(b&&b.dataset.nav!==PAGE)go(b.dataset.nav)});
 document.getElementById("menu").onclick=function(){document.body.classList.toggle("nav-open")};
@@ -348,7 +383,7 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!document.g
 var lastKeys=allKeys();
 function checkRollover(){var k=allKeys();if(k!==lastKeys){lastKeys=k;render();if(!document.getElementById("hist").hidden)renderHist()}}
 document.addEventListener("visibilitychange",function(){if(!document.hidden){checkRollover();tickLun()}});
-record();renderNav();render();renderLun();renderAbout();
+record();renderNav();render();renderLun();renderAbout();renderChars();
 </script>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -370,7 +405,7 @@ $("login").onclick=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(()=>
 $("logout").onclick=()=>signOut(auth);
 onAuthStateChanged(auth,u=>{
 if(unsub){unsub();unsub=null}
-ref=null;window.isAdmin=!!u&&!!u.email&&u.email.toLowerCase()===ADMIN_EMAIL.toLowerCase();if(!$("cfgsec").hidden){$("admsec").hidden=!window.isAdmin;if(window.isAdmin)renderAdm()}$("login").hidden=!!u;$("logout").hidden=!u;$("who").hidden=!u;
+ref=null;window.isAdmin=!!u&&!!u.email&&u.email.toLowerCase()===ADMIN_EMAIL.toLowerCase();if(window.renderChars)renderChars();if(!$("cfgsec").hidden){$("admsec").hidden=!window.isAdmin;if(window.isAdmin)renderAdm()}$("login").hidden=!!u;$("logout").hidden=!u;$("who").hidden=!u;
 if(!u){sync("Entre para sincronizar");return}
 $("who").textContent=u.displayName||u.email;ref=doc(db,"users",u.uid);sync("Conectando...");
 unsub=onSnapshot(ref,snap=>{
