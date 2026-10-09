@@ -170,6 +170,48 @@ section.warn .big{color:var(--gold)}
 body.nav-open .side{transform:none}body.nav-open .scrim{display:block;position:fixed;inset:0;z-index:15;background:rgba(0,0,0,.4)}
 .menu{display:inline-grid}main{padding:20px 16px 64px}}
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+
+/* ---- visual neon (pity + personagens) ---- */
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) body{background-image:radial-gradient(900px 520px at 88% -8%,rgba(91,130,246,.22),transparent 60%),radial-gradient(700px 420px at 8% 108%,rgba(167,139,250,.14),transparent 60%);background-attachment:fixed}}
+:root[data-theme="dark"] body{background-image:radial-gradient(900px 520px at 88% -8%,rgba(91,130,246,.22),transparent 60%),radial-gradient(700px 420px at 8% 108%,rgba(167,139,250,.14),transparent 60%);background-attachment:fixed}
+section{border:1px solid var(--line)}
+#pdash{grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:20px}
+.pc{padding:24px;background:linear-gradient(160deg,rgba(255,255,255,.05),transparent 45%),var(--card);transition:box-shadow .25s,border-color .25s}
+.pc:hover{border-color:rgba(122,150,255,.45);box-shadow:0 0 0 1px rgba(122,150,255,.25),0 14px 42px -14px rgba(91,130,246,.6)}
+.pc h2{font-size:1.2rem;letter-spacing:-.02em}
+.ps{margin-top:4px;font-size:.82rem;color:var(--mute)}.ps .y{font-weight:700}
+.wn{color:#37e6a8;font-weight:600}
+.pn{font-size:2.1rem}.pn small{font-size:.64rem}
+.pb{gap:12px;margin:20px 0 4px}
+.bx{padding:14px 16px;border:1px solid var(--line);border-radius:14px}
+.bt{font-size:.74rem}
+.bn{font-size:2.2rem;margin:6px 0 10px}
+.bx .bar{height:6px;margin:0;background:rgba(255,255,255,.08)}
+.bx .bar i{background:linear-gradient(90deg,#f59e0b,#f6d56b);box-shadow:0 0 12px rgba(246,213,107,.7)}
+.bx.p4 .bar i{background:linear-gradient(90deg,#7c5cff,#b79cff);box-shadow:0 0 12px rgba(167,139,250,.7)}
+.bx .bar i.hot{background:linear-gradient(90deg,#ff7a18,#ffb347);box-shadow:0 0 14px rgba(255,138,24,.8)}
+.rt{font-size:.72rem;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.rl{gap:18px;margin-top:14px}
+.pr{position:relative;width:60px;flex-direction:row;gap:0;justify-content:center;padding-bottom:14px;cursor:pointer;transition:transform .22s cubic-bezier(.3,1.6,.5,1)}
+.pr:hover,.pr:focus-visible{transform:translateY(-5px) scale(1.14);outline:0}
+.pa{width:56px;height:56px;border:2px solid #f59e0b;box-shadow:0 0 14px rgba(245,158,11,.55),inset 0 0 10px rgba(245,158,11,.25);transition:box-shadow .22s}
+.pr:hover .pa,.pr:focus-visible .pa{box-shadow:0 0 26px rgba(245,158,11,.9),inset 0 0 12px rgba(245,158,11,.4)}
+.pp{position:absolute;left:50%;bottom:0;transform:translateX(-50%);min-width:28px;padding:1px 7px;border-radius:10px;background:#0d0d24;border:1px solid rgba(255,255,255,.14);font-size:.7rem;font-weight:700;text-align:center;line-height:1.5}
+.pp.g{color:#37e6a8}.pp.y{color:#f6d56b}.pp.r{color:#ff5d6c}
+.cr{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:#0f3d33;border:1px solid #37b9a2;display:grid;place-items:center;font-size:.72rem;color:#37e6a8;text-decoration:none;box-shadow:0 0 10px rgba(55,230,168,.7)}
+#tp.rich{max-width:none;white-space:nowrap;padding:10px 14px;text-align:left;background:#10102e;color:#fff;border:1px solid rgba(255,255,255,.16);box-shadow:0 12px 32px rgba(0,0,0,.55),0 0 18px rgba(91,130,246,.25)}
+#tp.rich:after{content:"";position:absolute;left:var(--ax,50%);bottom:-6px;width:10px;height:10px;background:#10102e;border-right:1px solid rgba(255,255,255,.16);border-bottom:1px solid rgba(255,255,255,.16);transform:translateX(-50%) rotate(45deg)}
+#tp b{display:block;margin-bottom:4px;font-size:.88rem}
+.tl{font-size:.78rem;font-weight:600}.tl.g{color:#37e6a8}.tl.y{color:#f6d56b}.tl.r{color:#ff5d6c}.tl.m{color:#9ea0c8;font-weight:400}
+.cgrid{grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:24px 16px}
+.ci{border-radius:22px;border:2px solid transparent;transition:transform .22s cubic-bezier(.3,1.5,.5,1),box-shadow .22s,border-color .22s}
+.ch.own .ci{border-color:var(--acc);box-shadow:0 0 16px rgba(91,130,246,.55),inset 0 0 10px rgba(91,130,246,.25)}
+.ch:hover .ci{transform:translateY(-5px) scale(1.05)}
+.ch.own:hover .ci{box-shadow:0 0 30px rgba(91,130,246,.9),inset 0 0 12px rgba(91,130,246,.35)}
+.ch:not(.own):hover .ci{box-shadow:0 0 24px rgba(167,139,250,.55);border-color:rgba(167,139,250,.6)}
+.cb{min-width:30px;height:30px;font-size:.9rem;box-shadow:0 0 14px rgba(91,130,246,.9)}
+.ck{width:30px;height:30px}
+.nm{font-size:.86rem;margin-top:12px}
 </style>
 </head>
 <body>
@@ -447,11 +489,11 @@ if(r[1]===5){var res=null;if(type===1&&r[3]==="R"){if(guar){res="g";guar=false}e
 list.push({n:r[2],p:c5,t:r[0],res:res});sum+=c5;c5=0;c4=0}else if(r[1]===4)c4=0});
 return{total:recs.length,p5:c5,p4:c4,list:list,avg:list.length?Math.round(sum/list.length):0,w:w,l:l,guar:guar}}
 function pityCard(t,recs,chars){var b=BANN[t]||["Banner especial (tipo "+t+")",80,10],cap=b[1],st=stats(t,recs,cap),n5=st.list.length,wl=st.w+st.l,
-p5=Math.min(100,Math.round(st.p5*100/cap)),p4=Math.min(100,Math.round(st.p4*100/b[2])),
-info=n5+" × 5★"+(n5?" · pity médio "+st.avg:"")+(wl?" · "+Math.round(st.w*100/wl)+"% ganhou":"")+(st.guar?" · próximo 5★ garantido":"");
-var rec=st.list.slice(-10).reverse().map(function(x){var ch=chars.filter(function(c){return nk(c.name)===nk(x.n)})[0],cls=x.res==="l"?" lost":(x.res?" won":"");
-return'<div class="pr" title="'+esc(x.n)+" · pity "+x.p+" · "+esc(x.t)+'"><div class="pa'+cls+'">'+(ch?'<img src="'+esc(chSrc(ch.img))+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':"")+"<i>"+esc(x.n.charAt(0))+"</i><b>"+x.p+"</b></div><span>"+esc(x.n)+"</span></div>"}).join("");
-return'<section class="pc"><div class="head"><h2>'+esc(b[0])+'</h2><div class="pn">'+st.total+"<small>giros</small></div></div>"+'<div class="reset">'+info+'</div><div class="pb"><div class="bx"><div class="bt"><span class="y">5★ PITY</span><span>faltam '+Math.max(0,cap-st.p5)+'</span></div><div class="bn">'+st.p5+"<small>/"+cap+'</small></div><div class="bar"><i class="'+(cap>=80&&st.p5>=65?"hot":"")+'" style="width:'+p5+'%"></i></div></div><div class="bx p4"><div class="bt"><span class="v">4★ PITY</span><span>faltam '+Math.max(0,b[2]-st.p4)+'</span></div><div class="bn">'+st.p4+"<small>/"+b[2]+'</small></div><div class="bar"><i style="width:'+p4+'%"></i></div></div></div><div class="rt">5★ RECENTES</div><div class="rl">'+(rec||'<span class="reset">Nenhum 5★ ainda</span>')+"</div></section>"}
+p5=Math.min(100,Math.round(st.p5*100/cap)),p4=Math.min(100,Math.round(st.p4*100/b[2]));
+var sub='<b class="y">'+n5+'</b> × <b class="y">5★</b>'+(n5?" · pity médio "+st.avg:"")+(wl?' · <span class="wn">♛ '+Math.round(st.w*100/wl)+"% ganhou</span>":"")+(st.guar?' · <span class="wn">próximo 5★ garantido</span>':"");
+var rec=st.list.slice(-10).reverse().map(function(x){var ch=chars.filter(function(c){return nk(c.name)===nk(x.n)})[0],col=x.p<=cap*.45?"g":x.p<=cap*.7?"y":"r";
+return'<div class="pr" tabindex="0" aria-label="'+esc(x.n)+", pity "+x.p+'" data-n="'+esc(x.n)+'" data-p="'+x.p+'" data-c="'+cap+'" data-r="'+(x.res||"")+'" data-t="'+esc(x.t)+'"><div class="pa">'+(ch?'<img src="'+esc(chSrc(ch.img))+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':"")+"<i>"+esc(x.n.charAt(0))+"</i>"+(x.res==="w"?'<u class="cr">♛</u>':"")+'</div><b class="pp '+col+'">'+x.p+"</b></div>"}).join("");
+return'<section class="pc"><div class="head"><div><h2>'+esc(b[0])+'</h2><div class="ps">'+sub+'</div></div><div class="pn">'+st.total+"<small>giros</small></div></div>"+'<div class="pb"><div class="bx"><div class="bt"><span class="y">5★ PITY</span><span>faltam '+Math.max(0,cap-st.p5)+'</span></div><div class="bn">'+st.p5+"<small>/"+cap+'</small></div><div class="bar"><i class="'+(cap>=80&&st.p5>=65?"hot":"")+'" style="width:'+p5+'%"></i></div></div><div class="bx p4"><div class="bt"><span class="v">4★ PITY</span><span>faltam '+Math.max(0,b[2]-st.p4)+'</span></div><div class="bn">'+st.p4+"<small>/"+b[2]+'</small></div><div class="bar"><i style="width:'+p4+'%"></i></div></div></div><div class="rt">5★ RECENTES</div><div class="rl">'+(rec||'<span class="reset">Nenhum 5★ ainda</span>')+"</div></section>"}
 function renderPity(){var d=document.getElementById("pdash"),bar=document.getElementById("pbar"),ids=Object.keys(PL.acc),det=document.getElementById("pimpd");
 document.getElementById("pcmd").textContent=IMPORT_CMD;
 if(!ids.length){bar.innerHTML="";d.innerHTML='<section><p class="reset">Nenhum giro importado ainda. Use "Importar giros" acima.</p></section>';det.open=true;return}
@@ -471,6 +513,15 @@ if(t.id==="pcopy")copyText(IMPORT_CMD,t);
 else if(t.id==="pimport")importPulls();
 else if(t.id==="pdel")ask("Apagar todos os giros importados, aqui e na nuvem?","Apagar",function(){PL={rs:Date.now(),sel:"",acc:{}};savePullsLocal();pushPulls();renderPity()},true)});
 document.getElementById("pg-pity").addEventListener("change",function(e){if(e.target.id==="pacc"){PL.sel=e.target.value;savePullsLocal();renderPity()}});
+function showPr(el){var p=+el.dataset.p,c=+el.dataset.c,r=el.dataset.r,col=p<=c*.45?"g":p<=c*.7?"y":"r";
+tp.innerHTML="<b>"+esc(el.dataset.n)+'</b><div class="tl '+col+'">Pity '+p+" / "+c+"</div>"+(r==="w"?'<div class="tl g">♛ Ganhou o 50/50</div>':r==="l"?'<div class="tl r">Perdeu o 50/50</div>':r==="g"?'<div class="tl y">Garantido</div>':"")+'<div class="tl m">'+esc(el.dataset.t)+"</div>";
+tp.className="on rich";var rc=el.getBoundingClientRect(),w=tp.offsetWidth,h=tp.offsetHeight,cx=rc.left+rc.width/2,x=Math.max(8,Math.min(innerWidth-w-8,cx-w/2)),y=rc.top-h-14;if(y<8)y=rc.bottom+10;
+tp.style.left=x+"px";tp.style.top=y+"px";tp.style.setProperty("--ax",(cx-x)+"px")}
+document.addEventListener("mouseover",function(e){var b=e.target.closest&&e.target.closest(".pr");if(b)showPr(b)});
+document.addEventListener("mouseout",function(e){if(e.target.closest&&e.target.closest(".pr"))hideTip()});
+document.addEventListener("focusin",function(e){var b=e.target.closest&&e.target.closest(".pr");if(b)showPr(b)});
+document.addEventListener("focusout",function(e){if(e.target.closest&&e.target.closest(".pr"))hideTip()});
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest(".pr");if(b)showPr(b)});
 var lastKeys=allKeys();
 function checkRollover(){var k=allKeys();if(k!==lastKeys){lastKeys=k;render();if(!document.getElementById("hist").hidden)renderHist()}}
 document.addEventListener("visibilitychange",function(){if(!document.hidden){checkRollover();tickLun()}});
