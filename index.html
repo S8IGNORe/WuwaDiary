@@ -126,6 +126,34 @@ section.warn .big{color:var(--gold)}
 .ci:hover .cdel{opacity:1}
 .nm{margin-top:8px;font-size:.78rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ch:not(.own) .nm{color:var(--mute)}
+#pdash{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+#pdash section{margin-bottom:0}
+.st{display:flex;gap:10px;align-items:flex-start;margin:10px 0;font-size:.82rem}
+.st b{flex:none;width:22px;height:22px;border-radius:50%;background:var(--acc);color:#fff;display:grid;place-items:center;font-size:.72rem}
+.cmd{display:flex;gap:8px;align-items:center;background:var(--bg);border-radius:10px;padding:8px 10px;margin:8px 0}
+.cmd code{flex:1;min-width:0;font:500 .72rem ui-monospace,Consolas,monospace;overflow-x:auto;white-space:nowrap}
+#ptxt{width:100%;margin:8px 0;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--ink);font:.76rem ui-monospace,Consolas,monospace;resize:vertical}
+#ptxt:focus{border-color:var(--acc);outline:0}
+#pimp a,#pbar a{color:var(--acc);text-decoration:none}
+.pn{font-size:1.4rem;font-weight:700;text-align:right;line-height:1}
+.pn small{display:block;font-size:.6rem;font-weight:500;color:var(--mute);letter-spacing:.05em;text-transform:uppercase}
+.pb{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.bx{background:var(--bg);border-radius:12px;padding:10px 12px}
+.bt{display:flex;justify-content:space-between;font-size:.66rem;color:var(--mute);font-weight:600}
+.y{color:var(--gold)}.v{color:#a78bfa}
+.bn{font-size:1.5rem;font-weight:700;line-height:1.2;margin:4px 0 2px}
+.bn small{font-size:.8rem;font-weight:400;color:var(--mute)}
+.bx .bar{height:5px;margin:6px 0 0}
+.bx .bar i{background:var(--gold)}.bx.p4 .bar i{background:#a78bfa}.bx .bar i.hot{background:#f59e0b}
+.rt{font-size:.66rem;color:var(--mute);font-weight:600;letter-spacing:.06em;margin-top:6px}
+.rl{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+.pr{display:flex;flex-direction:column;align-items:center;gap:8px;width:56px}
+.pr span{font-size:.62rem;color:var(--mute);max-width:56px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pa{position:relative;width:46px;height:46px;border-radius:50%;border:2px solid var(--gold);background:var(--bg);display:grid;place-items:center}
+.pa.won{border-color:#37b9a2}.pa.lost{border-color:#e5484d}
+.pa i{font-style:normal;font-weight:700;color:var(--mute)}
+.pa img{position:absolute;inset:0;width:100%;height:100%;border-radius:50%;object-fit:cover}
+.pa b{position:absolute;right:-6px;bottom:-6px;min-width:20px;height:20px;padding:0 4px;border-radius:10px;background:var(--card);border:1px solid var(--line);color:var(--gold);font-size:.62rem;display:grid;place-items:center}
 .ng{background:none;padding:0;margin:0 0 16px}
 .ng summary{color:var(--mute);font-weight:500;font-size:.78rem;padding:6px 4px;width:fit-content;border-radius:8px}
 .ng summary:hover{color:var(--ink)}
@@ -174,6 +202,19 @@ body.nav-open .side{transform:none}body.nav-open .scrim{display:block;position:f
 <div id="pg-char" hidden>
 <section id="charadm" hidden><div class="head"><h2>Administrador <button class="tip" data-tip="Envie a imagem para a pasta img do repositório no GitHub e digite aqui só o nome do arquivo, por exemplo rover.png. Vale para todos os usuários." aria-label="Ajuda">?</button></h2></div><div class="add"><input id="chn" placeholder="Nome do personagem" maxlength="40"><input id="chi" placeholder="Arquivo da imagem, ex.: rover.png" maxlength="120"><button class="btn" id="chadd">Adicionar</button></div></section>
 <section id="chardash"></section>
+</div>
+<div id="pg-pity" hidden>
+<section class="ng" id="pimp"><details id="pimpd"><summary>Importar giros</summary>
+<div class="st"><b>1</b><span>Abra o Wuthering Waves no PC e entre em Convocação &gt; Histórico. Folheie 2 ou 3 páginas.</span></div>
+<div class="st"><b>2</b><span>Abra o Windows PowerShell (tecla Win, digite PowerShell e Enter) e cole o comando abaixo.</span></div>
+<div class="cmd"><code id="pcmd"></code><button class="btn" id="pcopy">Copiar</button></div>
+<div class="st"><b>3</b><span>O resultado é copiado sozinho. Cole no campo e clique em Importar.</span></div>
+<textarea id="ptxt" rows="3" placeholder="Cole aqui o resultado do comando"></textarea>
+<div class="add"><button class="btn on" id="pimport">Importar</button></div>
+<p class="reset" style="margin-top:10px">O script apenas lê o log do seu jogo e consulta a API da Kuro. <a href="https://github.com/S8IGNORe/WuwaDiary/blob/main/import.ps1" target="_blank" rel="noopener">Revisar script</a></p>
+</details></section>
+<section id="pbar" style="background:none;padding:0"></section>
+<div id="pdash"></div>
 </div>
 </main></div>
 <script>
@@ -294,7 +335,7 @@ var G=null;
 function seasonOn(){return!!(G&&G.season&&G.season.end)}
 function persist(){mem=S;try{localStorage.setItem("wuwa-check",JSON.stringify(S))}catch(e){}}
 function applyGlobal(){var ch=false;if(G&&G.tasks){if(!S.seen)S.seen=[];["daily","weekly","monthly"].forEach(function(t){(G.tasks[t]||[]).forEach(function(g){if(S.seen.indexOf(g.id)<0){S.seen.push(g.id);var gr=gget(t)||addDefGroup(t,false);gr.tasks.push({id:g.id,name:g.name});ch=true}})})}
-if(ch)persist();render();renderLun();renderAbout();renderChars()}
+if(ch)persist();render();renderLun();renderAbout();renderChars();if(!document.getElementById("pg-pity").hidden)renderPity()}
 function snapEnd(ms){var c=new Date(ms),b=new Date(c.getFullYear(),c.getMonth(),c.getDate(),S.rh),dd=b-c;if(dd>432e5)b.setDate(b.getDate()-1);else if(-dd>432e5)b.setDate(b.getDate()+1);return b.getTime()}
 function admSave(p){if(window.adminSave)window.adminSave(p).catch(function(){note("Sem permissão ou erro de rede.")})}
 function renderAdm(){var el=document.getElementById("admsec"),tk=(G&&G.tasks)||{},nm={daily:"Diária",weekly:"Semanal",monthly:"Temporada"},li="";
@@ -343,11 +384,13 @@ if(r==="days"){var d=parseInt(document.getElementById("ngd"+x).value,10);if(!(d>
 S.groups.push(g);document.getElementById("ngn"+x).value="";document.querySelector("#newgrp"+x+" details").open=false;save();render();document.querySelector('[data-new="'+g.id+'"]').focus()}}
 bindNG("","act");bindNG("2","per");
 var NAV=[{id:"checklist",label:"Checklist",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>'},
-{id:"character",label:"Personagem",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>'}];
+{id:"character",label:"Personagem",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>'},{id:"pity",label:"Contador de Pity",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>'}];
 var PAGE="checklist";
 function renderNav(){document.getElementById("nav").innerHTML=NAV.map(function(n){return'<button class="'+(n.id===PAGE?"on":"")+'" data-nav="'+n.id+'">'+n.icon+"<span>"+n.label+"</span></button>"}).join("")}
-function go(p){PAGE=p;var c=p==="checklist";document.getElementById("pg-check").hidden=!c;document.getElementById("pg-char").hidden=c;
-document.getElementById("ttl").textContent=c?"Checklist":"Personagem";if(!c)renderChars();document.getElementById("ttip").style.display=c?"":"none";
+function go(p){PAGE=p;var pg={checklist:"pg-check",character:"pg-char",pity:"pg-pity"},tt={checklist:"Checklist",character:"Personagem",pity:"Contador de Pity"},c=p==="checklist";
+for(var k in pg)document.getElementById(pg[k]).hidden=k!==p;
+document.getElementById("ttl").textContent=tt[p];if(p==="character")renderChars();if(p==="pity")renderPity();
+document.getElementById("ttip").style.display=c?"":"none";
 document.getElementById("gear").classList.toggle("on",c&&!document.getElementById("cfgsec").hidden);renderNav();window.scrollTo(0,0)}
 document.getElementById("nav").addEventListener("click",function(e){var b=e.target.closest("button[data-nav]");if(b&&b.dataset.nav!==PAGE)go(b.dataset.nav)});
 document.getElementById("menu").onclick=function(){document.body.classList.toggle("nav-open")};
@@ -380,6 +423,54 @@ document.getElementById("dyes").onclick=function(){var ids=[].filter.call(docume
 if(ids.length)S.hist[dayKey]={c:ids.length,t:dailyTasks().length,ids:ids};else delete S.hist[dayKey];closeDay();save();renderHist()};
 document.getElementById("dmodal").addEventListener("click",function(e){if(e.target.id==="dmodal")closeDay()});
 document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!document.getElementById("dmodal").hidden)closeDay()});
+var IMPORT_CMD='iwr -useb "https://raw.githubusercontent.com/S8IGNORe/WuwaDiary/main/import.ps1" | iex';
+var BANN={1:["Ressonador em Destaque",80,10],2:["Arma em Destaque",80,10],3:["Ressonador Padrão",80,10],4:["Arma Padrão",80,10],5:["Iniciante",50,10],6:["Escolha do Iniciante",80,10]};
+var STD5=["verina","encore","calcharo","jianxin","lingyang"];
+function loadPulls(){try{var x=localStorage.getItem("wuwa-pulls");if(x){var o=JSON.parse(x);if(o&&o.acc)return o}}catch(e){}return{rs:0,sel:"",acc:{}}}
+var PL=loadPulls();
+function savePullsLocal(){try{localStorage.setItem("wuwa-pulls",JSON.stringify(PL))}catch(e){}}
+function pushPulls(){if(window.pullsPushFn)window.pullsPushFn(JSON.stringify(PL)).catch(function(){})}
+function pullsHas(){return Object.keys(PL.acc).length>0||PL.rs>0}
+function mergePool(S,N){if(!S||!S.length)return N||[];if(!N||!N.length)return S;var t0=N[0][0],t1=N[N.length-1][0];return S.filter(function(r){return r[0]<t0}).concat(N,S.filter(function(r){return r[0]>t1}))}
+function mergeP(a,b){var rs=Math.max(a.rs||0,b.rs||0),out={rs:rs,sel:b.sel||a.sel||"",acc:{}},ids={};
+[a,b].forEach(function(p){Object.keys(p.acc||{}).forEach(function(k){ids[k]=1})});
+Object.keys(ids).sort().forEach(function(k){var x=(a.acc||{})[k],y=(b.acc||{})[k];if(x&&x.at<rs)x=null;if(y&&y.at<rs)y=null;if(!x&&!y)return;if(!x||!y){out.acc[k]=x||y;return}
+var o=x.at<=y.at?[x,y]:[y,x],pools={},ts={};Object.keys(o[0].pools).concat(Object.keys(o[1].pools)).forEach(function(t){ts[t]=1});
+Object.keys(ts).sort(function(m,n){return m-n}).forEach(function(t){pools[t]=mergePool(o[0].pools[t],o[1].pools[t])});
+out.acc[k]={server:o[1].server,lang:o[1].lang,at:o[1].at,pools:pools}});
+if(!out.acc[out.sel])out.sel=Object.keys(out.acc)[0]||"";return out}
+function pullsRemote(c){if(!c||!c.acc)return;var m=mergeP(PL,c),chg=JSON.stringify(m)!==JSON.stringify(c);PL=m;savePullsLocal();if(!document.getElementById("pg-pity").hidden)renderPity();if(chg)pushPulls()}
+function nk(s){var t=String(s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]/g,"");return t||String(s).trim().toLowerCase()}
+function stats(type,recs,cap){var c5=0,c4=0,list=[],guar=false,w=0,l=0,sum=0;
+recs.forEach(function(r){c5++;c4++;
+if(r[1]===5){var res=null;if(type===1&&r[3]==="R"){if(guar){res="g";guar=false}else if(STD5.indexOf(nk(r[2]))>=0){res="l";l++;guar=true}else{res="w";w++}}
+list.push({n:r[2],p:c5,t:r[0],res:res});sum+=c5;c5=0;c4=0}else if(r[1]===4)c4=0});
+return{total:recs.length,p5:c5,p4:c4,list:list,avg:list.length?Math.round(sum/list.length):0,w:w,l:l,guar:guar}}
+function pityCard(t,recs,chars){var b=BANN[t]||["Banner especial (tipo "+t+")",80,10],cap=b[1],st=stats(t,recs,cap),n5=st.list.length,wl=st.w+st.l,
+p5=Math.min(100,Math.round(st.p5*100/cap)),p4=Math.min(100,Math.round(st.p4*100/b[2])),
+info=n5+" × 5★"+(n5?" · pity médio "+st.avg:"")+(wl?" · "+Math.round(st.w*100/wl)+"% ganhou":"")+(st.guar?" · próximo 5★ garantido":"");
+var rec=st.list.slice(-10).reverse().map(function(x){var ch=chars.filter(function(c){return nk(c.name)===nk(x.n)})[0],cls=x.res==="l"?" lost":(x.res?" won":"");
+return'<div class="pr" title="'+esc(x.n)+" · pity "+x.p+" · "+esc(x.t)+'"><div class="pa'+cls+'">'+(ch?'<img src="'+esc(chSrc(ch.img))+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':"")+"<i>"+esc(x.n.charAt(0))+"</i><b>"+x.p+"</b></div><span>"+esc(x.n)+"</span></div>"}).join("");
+return'<section class="pc"><div class="head"><h2>'+esc(b[0])+'</h2><div class="pn">'+st.total+"<small>giros</small></div></div>"+'<div class="reset">'+info+'</div><div class="pb"><div class="bx"><div class="bt"><span class="y">5★ PITY</span><span>faltam '+Math.max(0,cap-st.p5)+'</span></div><div class="bn">'+st.p5+"<small>/"+cap+'</small></div><div class="bar"><i class="'+(cap>=80&&st.p5>=65?"hot":"")+'" style="width:'+p5+'%"></i></div></div><div class="bx p4"><div class="bt"><span class="v">4★ PITY</span><span>faltam '+Math.max(0,b[2]-st.p4)+'</span></div><div class="bn">'+st.p4+"<small>/"+b[2]+'</small></div><div class="bar"><i style="width:'+p4+'%"></i></div></div></div><div class="rt">5★ RECENTES</div><div class="rl">'+(rec||'<span class="reset">Nenhum 5★ ainda</span>')+"</div></section>"}
+function renderPity(){var d=document.getElementById("pdash"),bar=document.getElementById("pbar"),ids=Object.keys(PL.acc),det=document.getElementById("pimpd");
+document.getElementById("pcmd").textContent=IMPORT_CMD;
+if(!ids.length){bar.innerHTML="";d.innerHTML='<section><p class="reset">Nenhum giro importado ainda. Use "Importar giros" acima.</p></section>';det.open=true;return}
+if(!PL.acc[PL.sel])PL.sel=ids[0];
+var a=PL.acc[PL.sel],sel=ids.length>1?'<select id="pacc">'+ids.map(function(k){return'<option value="'+esc(k)+'"'+(k===PL.sel?" selected":"")+">UID "+esc(k)+"</option>"}).join("")+"</select>":"UID "+esc(PL.sel);
+bar.innerHTML='<div class="head" style="margin-bottom:12px"><span class="reset">'+sel+" · "+esc(a.server||"")+" · importado em "+new Date(a.at).toLocaleString("pt-BR")+'</span><button class="btn" id="pdel">Apagar dados</button></div>';
+var h="",chars=(G&&G.chars)||[];Object.keys(a.pools).forEach(function(t){h+=pityCard(+t,a.pools[t],chars)});d.innerHTML=h}
+function importPulls(){var d;try{d=JSON.parse(document.getElementById("ptxt").value.trim())}catch(e){note("O texto colado não é um JSON válido. Rode o comando e cole o resultado completo.");return}
+if(!d||d.format!=="wuwa-diary-pulls"||!d.pools||!d.player){note("Formato não reconhecido. Use o comando desta página.");return}
+var pools={},n=0;d.pools.forEach(function(p){var r=(p.records||[]).map(function(x){return[String(x.time),+x.qualityLevel,String(x.name),String(x.resourceType||"").charAt(0)]});if(!r.length)return;if(r.length>1&&r[0][0]>=r[r.length-1][0])r.reverse();pools[p.type]=r;n+=r.length});
+if(!n){note("Nenhum giro encontrado no texto.");return}
+var uid=String(d.player.uid),inc={rs:0,sel:uid,acc:{}};inc.acc[uid]={server:String(d.server||""),lang:String(d.language||""),at:Date.now(),pools:pools};
+PL=mergeP(PL,inc);PL.sel=uid;savePullsLocal();pushPulls();document.getElementById("ptxt").value="";document.getElementById("pimpd").open=false;renderPity();note(n+" giros importados.")}
+function copyText(x,btn){var ok=function(){var o=btn.textContent;btn.textContent="Copiado";setTimeout(function(){btn.textContent=o},1500)},bad=function(){note("Não foi possível copiar. Selecione o comando e copie manualmente.")};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(x).then(ok,bad);else bad()}
+document.getElementById("pg-pity").addEventListener("click",function(e){var t=e.target;
+if(t.id==="pcopy")copyText(IMPORT_CMD,t);
+else if(t.id==="pimport")importPulls();
+else if(t.id==="pdel")ask("Apagar todos os giros importados, aqui e na nuvem?","Apagar",function(){PL={rs:Date.now(),sel:"",acc:{}};savePullsLocal();pushPulls();renderPity()},true)});
+document.getElementById("pg-pity").addEventListener("change",function(e){if(e.target.id==="pacc"){PL.sel=e.target.value;savePullsLocal();renderPity()}});
 var lastKeys=allKeys();
 function checkRollover(){var k=allKeys();if(k!==lastKeys){lastKeys=k;render();if(!document.getElementById("hist").hidden)renderHist()}}
 document.addEventListener("visibilitychange",function(){if(!document.hidden){checkRollover();tickLun()}});
@@ -395,19 +486,20 @@ const ADMIN_EMAIL="joaovitorarantescoelho@gmail.com";
 const $=id=>document.getElementById(id),sync=t=>{$("sync").textContent=t};
 if(firebaseConfig.apiKey.startsWith("COLE")){sync("Modo local (nuvem não configurada)")}else{
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
-let ref=null,timer=null,unsub=null;
+let ref=null,timer=null,unsub=null,punsub=null,pref=null;
 onSnapshot(doc(db,"config","global"),snap=>{window.G=snap.exists()?snap.data():null;applyGlobal();if(window.isAdmin&&!$("admsec").hidden)renderAdm()},()=>{});
 window.adminSave=p=>setDoc(doc(db,"config","global"),p,{merge:true});
+window.pullsPushFn=j=>pref?setDoc(pref,{json:j,ts:Date.now()}):Promise.resolve();
 const push=async()=>{if(!ref)return;try{await setDoc(ref,{json:JSON.stringify(window.S),ts:window.S.ts||0});sync("Sincronizado")}catch(e){sync("Erro ao salvar")}};
 window.onSaved=()=>{if(!ref)return;sync("Salvando...");clearTimeout(timer);timer=setTimeout(push,800)};
 $("login").hidden=false;sync("Entre para sincronizar");
 $("login").onclick=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(()=>sync("Login cancelado"));
 $("logout").onclick=()=>signOut(auth);
 onAuthStateChanged(auth,u=>{
-if(unsub){unsub();unsub=null}
+if(unsub){unsub();unsub=null}if(punsub){punsub();punsub=null}pref=null;
 ref=null;window.isAdmin=!!u&&!!u.email&&u.email.toLowerCase()===ADMIN_EMAIL.toLowerCase();if(window.renderChars)renderChars();if(!$("cfgsec").hidden){$("admsec").hidden=!window.isAdmin;if(window.isAdmin)renderAdm()}$("login").hidden=!!u;$("logout").hidden=!u;$("who").hidden=!u;
 if(!u){sync("Entre para sincronizar");return}
-$("who").textContent=u.displayName||u.email;ref=doc(db,"users",u.uid);sync("Conectando...");
+$("who").textContent=u.displayName||u.email;ref=doc(db,"users",u.uid);sync("Conectando...");pref=doc(db,"pulls",u.uid);punsub=onSnapshot(pref,snap=>{if(snap.metadata.hasPendingWrites)return;if(snap.exists()){try{window.pullsRemote(JSON.parse(snap.data().json))}catch(e){}}else if(window.pullsHas())window.pushPulls()},()=>{});
 unsub=onSnapshot(ref,snap=>{
 if(snap.metadata.hasPendingWrites)return;
 if(!snap.exists()){push();return}
