@@ -204,15 +204,6 @@ section{border:1px solid var(--line)}
 #tp.rich:after{content:"";position:absolute;left:var(--ax,50%);bottom:-6px;width:10px;height:10px;background:#0b0b16;border-right:1px solid rgba(255,255,255,.16);border-bottom:1px solid rgba(255,255,255,.16);transform:translateX(-50%) rotate(45deg)}
 #tp b{display:block;margin-bottom:4px;font-size:.88rem}
 .tl{font-size:.78rem;font-weight:600}.tl.g{color:#37e6a8}.tl.y{color:#fde047}.tl.r{color:#ff5d6c}.tl.m{color:#9ea0c8;font-weight:400}
-.cgrid{grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:24px 16px}
-.ci{border-radius:22px;border:2px solid transparent;transition:transform .22s cubic-bezier(.3,1.5,.5,1),box-shadow .22s,border-color .22s}
-.ch.own .ci{border-color:var(--acc);box-shadow:0 0 16px rgba(168,85,247,.55),inset 0 0 10px rgba(168,85,247,.25)}
-.ch:hover .ci{transform:translateY(-5px) scale(1.05)}
-.ch.own:hover .ci{box-shadow:0 0 30px rgba(168,85,247,.9),inset 0 0 12px rgba(168,85,247,.35)}
-.ch:not(.own):hover .ci{box-shadow:0 0 24px rgba(139,92,246,.55);border-color:rgba(139,92,246,.6)}
-.cb{min-width:30px;height:30px;font-size:.9rem;box-shadow:0 0 14px rgba(168,85,247,.9)}
-.ck{width:30px;height:30px}
-.nm{font-size:.86rem;margin-top:12px}
 #pfoot{margin-top:28px}
 .pf{display:flex;align-items:center;justify-content:space-between;gap:14px 20px;flex-wrap:wrap;padding:16px 20px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(160deg,rgba(255,255,255,.05),transparent 55%),var(--card)}
 .pfi{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-width:0}
@@ -253,12 +244,78 @@ section.full .bar i{background:linear-gradient(90deg,#f59e0b,#fde047);box-shadow
 .modal{background:rgba(3,3,9,.72);backdrop-filter:blur(4px)}
 .mbox{border:1px solid var(--line);box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 40px -10px rgba(168,85,247,.4)}
 @media (max-width:820px){.side{margin:0;top:0;height:100vh;border-radius:0 18px 18px 0}}
+/* ---- aba Personagem (estilo My Collections) ---- */
+.ctabs{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.ctab{flex:0 1 250px;min-width:200px;display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025);color:var(--mute);font:inherit;cursor:pointer;text-align:left;transition:border-color .2s,background .2s,box-shadow .2s,color .2s}
+.ctab:hover{border-color:rgba(168,85,247,.45);color:var(--ink)}
+.ctab.on{color:var(--ink);border-color:rgba(168,85,247,.7);background:linear-gradient(160deg,rgba(168,85,247,.22),rgba(168,85,247,.05));box-shadow:0 0 22px -8px rgba(168,85,247,.8)}
+.cti{flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.06)}
+.ctab.on .cti{background:var(--accg);color:#fff;box-shadow:0 0 14px rgba(168,85,247,.7)}
+.ctm{flex:1;min-width:0}
+.ctr{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.ctr b{font-size:.95rem;font-weight:600}
+.ctr em{font-style:normal;font-size:.72rem;font-weight:600;font-variant-numeric:tabular-nums;color:var(--acc)}
+.ctb{display:block;height:4px;border-radius:2px;background:rgba(255,255,255,.1);margin-top:7px;overflow:hidden}
+.ctb u{display:block;height:100%;text-decoration:none;background:var(--accg);box-shadow:0 0 8px rgba(168,85,247,.7);transition:width .3s}
+.cfl{padding:18px 20px 22px}
+.csr{display:flex;align-items:center;gap:10px;padding:0 14px;height:42px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.03);color:var(--mute);cursor:text;transition:border-color .15s,box-shadow .15s}
+.csr:focus-within{border-color:var(--acc);box-shadow:0 0 0 3px rgba(168,85,247,.16)}
+.csr input{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:inherit;font-size:.86rem;outline:0}
+.cg{display:flex;gap:22px 34px;flex-wrap:wrap;margin-top:20px;align-items:flex-start}
+.cgp>small{display:block;margin-bottom:9px;font-size:.66rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
+.cgp>div{display:flex;gap:8px;flex-wrap:wrap}
+.fi{width:40px;height:40px;padding:0;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.03);display:grid;place-items:center;cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s}
+.fi:hover{border-color:rgba(168,85,247,.5)}
+.fi:not(.on) .ei{opacity:.65}
+.fi.on{border-color:var(--acc);background:rgba(168,85,247,.2);box-shadow:0 0 14px -3px rgba(168,85,247,.85)}
+.fc{padding:8px 15px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--mute);font:600 .76rem Poppins,system-ui,sans-serif;cursor:pointer;transition:color .15s,border-color .15s,background .15s,box-shadow .15s}
+.fc:hover{color:var(--ink);border-color:rgba(168,85,247,.45)}
+.fc.on{background:var(--accg);border-color:transparent;color:#fff;box-shadow:0 0 14px -4px rgba(168,85,247,.85)}
+.fc.r5.on{background:linear-gradient(90deg,#f59e0b,#fde047);color:#1b1300;box-shadow:0 0 14px -4px rgba(251,191,36,.85)}
+.dd{position:relative}
+.ddb{min-width:168px;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:0 14px;height:40px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.03);color:var(--ink);font:600 .85rem Poppins,system-ui,sans-serif;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.ddb:hover{border-color:rgba(168,85,247,.5)}
+.ddb.open{border-color:var(--acc);box-shadow:0 0 0 3px rgba(168,85,247,.16)}
+.ddb svg{transition:transform .15s}.ddb.open svg{transform:rotate(180deg)}
+.ddm{position:absolute;top:calc(100% + 6px);left:0;min-width:100%;z-index:25;padding:8px;border:1px solid var(--line);border-radius:14px;background:#12121f;box-shadow:0 18px 40px rgba(0,0,0,.65),0 0 24px -8px rgba(168,85,247,.5);animation:in .15s ease}
+.ddo{display:block;width:100%;padding:10px 14px;border:0;border-radius:10px;background:none;color:var(--ink);font:500 .88rem Poppins,system-ui,sans-serif;text-align:left;white-space:nowrap;cursor:pointer}
+.ddo:hover{background:var(--hover)}
+.ddo.on{color:var(--acc);font-weight:600}
+.cbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:6px 2px 14px;font-size:.78rem;color:var(--mute)}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:14px;margin-top:0}
+.ch{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);transition:transform .2s,border-color .2s,box-shadow .2s}
+.ch:hover{transform:translateY(-3px);border-color:rgba(168,85,247,.55);box-shadow:0 12px 30px -12px rgba(168,85,247,.6)}
+.ch.own{border-color:rgba(168,85,247,.38)}
+.ci{aspect-ratio:1/1.1;border-radius:0;background:linear-gradient(180deg,#171726,#0c0c16)}
+.ci:after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;z-index:1;background:var(--rc,rgba(255,255,255,.12))}
+.r5{--rc:linear-gradient(90deg,#f59e0b,#fde047)}.r4{--rc:linear-gradient(90deg,#7c3aed,#c084fc)}.r3{--rc:#4fc3f7}.r2{--rc:#2ee6a8}.r1{--rc:#9ea0b8}
+.pill{position:absolute;top:8px;left:8px;z-index:2;padding:3px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(8,8,15,.78);backdrop-filter:blur(4px);color:var(--mute);font:700 .6rem/1.3 Poppins,system-ui,sans-serif;letter-spacing:.08em}
+.pill.s{background:var(--accg);border-color:transparent;color:#fff;font-size:.7rem;letter-spacing:.03em;box-shadow:0 0 12px rgba(168,85,247,.75);cursor:pointer;transition:transform .12s}
+.pill.s:hover{transform:scale(1.1)}
+.ei{position:relative;display:inline-grid;place-items:center;flex:none;width:26px;height:26px;border-radius:50%;background:rgba(8,8,15,.88);border:1.5px solid var(--ec);box-shadow:0 0 10px -2px var(--ec);overflow:hidden}
+.ei b{font-size:.62rem;font-weight:700;color:var(--ec)}
+.ei img{position:absolute;inset:2px;width:calc(100% - 4px);height:calc(100% - 4px);object-fit:contain}
+.ci .ei{position:absolute;z-index:2}
+.ci .ei.tr{top:8px;right:8px;width:30px;height:30px}
+.ci .ei.bl{left:8px;bottom:11px;width:24px;height:24px}
+.nm{margin:0;padding:10px 8px 11px;text-align:center;font-size:.8rem;border-top:1px solid var(--line);background:rgba(255,255,255,.02)}
+.ca{position:absolute;right:6px;bottom:11px;z-index:3;display:flex;gap:4px;opacity:0;transition:opacity .15s}
+.ci:hover .ca,.ca:focus-within{opacity:1}
+.ca button{width:24px;height:24px;padding:0;border:0;border-radius:50%;background:rgba(0,0,0,.7);color:#fff;cursor:pointer;line-height:1}
+@media (hover:none){.ca{opacity:.85}}
+.fm{display:grid;gap:12px;margin:14px 0 20px}
+.fm label{display:grid;gap:5px;padding:0;cursor:default;font-size:.72rem;color:var(--mute)}
+.fm [hidden]{display:none}
+.fm input,.fm select{padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;font-size:.85rem}
+.fm input:focus,.fm select:focus{border-color:var(--acc);outline:0}
+@media (max-width:560px){.ctab{flex:1 1 100%}.cgrid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}}
 </style>
 </head>
 <body>
 <div class="shell"><aside class="side" id="side"><div class="brand">Menu</div><nav class="nav" id="nav"></nav></aside><div class="scrim" id="scrim"></div>
 <div class="modal" id="dmodal" hidden><div class="mbox" role="dialog" aria-modal="true" aria-labelledby="dtitle"><h3 id="dtitle"></h3><p class="reset" id="dsub"></p><div id="dlist"></div><div class="mbtn"><button class="btn" id="dall">Marcar todas</button><button class="btn" id="dno">Cancelar</button><button class="btn on" id="dyes">Salvar</button></div></div></div>
 <div class="modal" id="modal" hidden><div class="mbox" role="dialog" aria-modal="true"><p id="mmsg"></p><div class="mbtn"><button class="btn" id="mno">Cancelar</button><button class="btn on" id="myes">Confirmar</button></div></div></div>
+<div class="modal" id="emodal" hidden><div class="mbox" role="dialog" aria-modal="true" aria-labelledby="efTitle"><h3 id="efTitle">Adicionar</h3><div class="fm"><label>Tipo<select id="efT"><option value="c">Personagem</option><option value="w">Arma</option></select></label><label>Nome<input id="efN" maxlength="40" autocomplete="off"></label><label>Arquivo da imagem<input id="efI" placeholder="ex.: rover.png" maxlength="120" autocomplete="off"></label><label id="efEl">Elemento<select id="efE"></select></label><label>Tipo de arma<select id="efW"></select></label><label>Raridade<select id="efR"></select></label></div><div class="mbtn"><button class="btn" id="eno">Cancelar</button><button class="btn on" id="eyes">Salvar</button></div></div></div>
 <main>
 <header class="top"><div class="tl"><button class="btn menu" id="menu" aria-label="Menu">&#9776;</button><h1><span id="ttl">Checklist</span> <button class="tip" id="ttip" data-tip="Marque o que já fez. Cada lista zera sozinha no reset diário, semanal e mensal." aria-label="Ajuda">?</button></h1></div>
 <div class="acct"><span id="sync"></span><span id="who" hidden></span><button class="btn" id="login" hidden>Entrar com Google</button><button class="btn" id="logout" hidden>Sair</button><button class="btn gear" id="gear" title="Configurações" aria-label="Configurações">&#9881;&#xFE0E;</button></div></header>
@@ -283,8 +340,11 @@ section.full .bar i{background:linear-gradient(90deg,#f59e0b,#fde047);box-shadow
 <section id="about" hidden><div class="abt"><span>Desenvolvido por S8IGNORe</span><span id="ver"></span></div><p>Este site (<a href="https://s8ignore.github.io/WuwaDiary/" target="_blank" rel="noopener">s8ignore.github.io/WuwaDiary</a>) é um projeto independente de fãs e não possui afiliação com a Kuro Games. Wuthering Waves, seu conteúdo e os materiais do jogo são marcas registradas e direitos autorais da Kuro Games.</p><hr class="sep"><p>Projeto inspirado no <a href="https://paimon.moe" target="_blank" rel="noopener">Paimon.moe</a>.</p></section>
 </div>
 <div id="pg-char" hidden>
-<section id="charadm" hidden><div class="head"><h2>Administrador <button class="tip" data-tip="Envie a imagem para a pasta img do repositório no GitHub e digite aqui só o nome do arquivo, por exemplo rover.png. Vale para todos os usuários." aria-label="Ajuda">?</button></h2></div><div class="add"><input id="chn" placeholder="Nome do personagem" maxlength="40"><input id="chi" placeholder="Arquivo da imagem, ex.: rover.png" maxlength="120"><button class="btn" id="chadd">Adicionar</button></div></section>
-<section id="chardash"></section>
+<section id="charadm" hidden><div class="head"><h2>Administrador <button class="tip" data-tip="Envie as imagens para a pasta img do repositório no GitHub e informe só o nome do arquivo, por exemplo rover.png. Os ícones de elemento e de arma ficam em img/icons: glacio.png, fusion.png, electro.png, aero.png, spectro.png, havoc.png, broadblade.png, sword.png, pistols.png, gauntlets.png e rectifier.png. Vale para todos os usuários." aria-label="Ajuda">?</button></h2><div class="hr"><button class="btn" data-cnew="c">+ Personagem</button><button class="btn" data-cnew="w">+ Arma</button></div></div></section>
+<div class="ctabs" id="chtabs"></div>
+<section class="cfl" id="chfl"><label class="csr"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="chq" type="search" placeholder="Buscar personagens..." autocomplete="off" maxlength="40"></label><div id="chchips"></div></section>
+<div class="cbar" id="chbar"></div>
+<div id="chgrid"></div>
 </div>
 <div id="pg-pity" hidden>
 
@@ -432,23 +492,105 @@ if(el.id==="gadd"){var n=document.getElementById("gn").value.trim();if(!n)return
 else if(el.dataset.gdel){tk[el.dataset.gt]=tk[el.dataset.gt].filter(function(x){return x.id!==el.dataset.gdel});admSave({tasks:tk})}
 else if(el.id==="sset"||el.id==="snew"){var d=parseInt(document.getElementById("sd").value,10),h=parseInt(document.getElementById("sh").value,10)||0;if(isNaN(d))return;var id=G&&G.season?G.season.id:0;if(el.id==="snew"||!id)id++;admSave({season:{id:id,end:snapEnd(Date.now()+d*864e5+h*36e5)}})}else if(el.id==="vset"){var v=document.getElementById("vin").value.trim();if(!v)return;admSave({version:v})}});
 function chSrc(i){i=i||"";return/^https?:|\//.test(i)?i:"img/"+i}
-function renderChars(){var el=document.getElementById("chardash"),l=(G&&G.chars)||[],n=0,h="",adm=!!window.isAdmin;document.getElementById("charadm").hidden=!adm;
-l.forEach(function(c){var x=S.chars[c.id]||{},o=!!x.o;if(o)n++;
-h+='<div class="ch'+(o?" own":"")+'" data-cid="'+c.id+'"><div class="ci" data-i="'+esc(c.name.charAt(0))+'"><img src="'+esc(chSrc(c.img))+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">'+(o?'<button class="cb" data-cb="'+c.id+'" aria-label="Constelação">'+(x.c||0)+"</button>":'<span class="ck">&#10003;</span>')+(adm?'<button class="cdel" data-cdel="'+c.id+'" aria-label="Remover">&times;</button>':"")+'</div><div class="nm">'+esc(c.name)+"</div></div>"});
-var pct=l.length?Math.round(n*100/l.length):0;
-el.innerHTML='<div class="head"><h2>Coletados <span class="reset">'+pct+"% ("+n+"/"+l.length+')</span> <button class="tip" data-tip="Clique no personagem para marcar que você o tem. Clique no número azul para aumentar a constelação (Shift ou botão direito diminui). Quem não foi marcado fica cinza e ganha cor ao passar o mouse." aria-label="Ajuda">?</button></h2><div class="hr"><button class="btn" id="chreset">Redefinir tudo</button><button class="btn" id="chall">Marcar todos</button></div></div><div class="bar"><i style="width:'+pct+'%"></i></div>'+(l.length?'<div class="cgrid">'+h+"</div>":'<p class="reset" style="margin-top:12px">Nenhum personagem cadastrado ainda.</p>')}
+var ELS=[["glacio","Glacio","#4fc3f7","G"],["fusion","Fusão","#ff7043","F"],["electro","Eletro","#b66bff","E"],["aero","Aero","#2ee6a8","A"],["spectro","Espectro","#f5d94e","S"],["havoc","Havoc","#e6407a","H"]],
+WTS=[["broadblade","Lâmina Larga","#c9b6ff","L"],["sword","Espada","#c9b6ff","E"],["pistols","Pistolas","#c9b6ff","P"],["gauntlets","Manoplas","#c9b6ff","M"],["rectifier","Retificador","#c9b6ff","R"]],
+SORTS=[["name","Nome"],["el","Elemento"],["rar","Raridade"],["wt","Arma"],["lvl","Constelações"]],
+CH={tab:"c",q:"",el:{},wt:{},ra:{},st:"all",sort:"rar",dd:false,edit:null},
+SV='fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"',
+IC_C='<svg width="20" height="20" viewBox="0 0 24 24" '+SV+'><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>',
+IC_W='<svg width="20" height="20" viewBox="0 0 24 24" '+SV+'><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" x2="19" y1="19" y2="13"/><line x1="16" x2="20" y1="16" y2="20"/><line x1="19" x2="21" y1="21" y2="19"/><polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"/><line x1="5" x2="9" y1="14" y2="18"/><line x1="7" x2="4" y1="17" y2="20"/><line x1="3" x2="5" y1="19" y2="21"/></svg>',
+IC_D='<svg width="16" height="16" viewBox="0 0 24 24" '+SV+'><path d="m6 9 6 6 6-6"/></svg>';
+function defOf(a,k){for(var i=0;i<a.length;i++)if(a[i][0]===k)return a[i];return null}
+function idxOf(a,k){for(var i=0;i<a.length;i++)if(a[i][0]===k)return i;return 99}
+function ico(d,cls){return d?'<span class="ei '+(cls||"")+'" style="--ec:'+d[2]+'" title="'+esc(d[1])+'"><b>'+d[3]+'</b><img src="img/icons/'+d[0]+'.png" alt="" onload="this.previousSibling.style.display=\'none\'" onerror="this.remove()"></span>':""}
+function chAll(){return(G&&G.chars)||[]}
+function chTp(c){return c.t==="w"?"w":"c"}
+function chLv(x){return x&&x.o?1+(x.c||0):0}
+function chNorm(s){return String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
+function hasK(o){for(var k in o)if(o[k])return true;return false}
+function chSorts(){return SORTS.filter(function(s){return!(CH.tab==="w"&&s[0]==="el")})}
+function chSortLabel(s){return CH.tab==="w"&&s[0]==="lvl"?"Rank":s[1]}
+function chList(){var q=chNorm(CH.q.trim()),out=[];
+chAll().forEach(function(c){if(chTp(c)!==CH.tab)return;var o=!!(S.chars[c.id]&&S.chars[c.id].o);
+if(q&&chNorm(c.name).indexOf(q)<0)return;
+if(CH.tab==="c"&&hasK(CH.el)&&!CH.el[c.e])return;
+if(hasK(CH.wt)&&!CH.wt[c.w])return;
+if(hasK(CH.ra)&&!CH.ra[c.r])return;
+if(CH.st==="own"&&!o)return;if(CH.st==="miss"&&o)return;out.push(c)});
+out.sort(function(a,b){var d=0;
+if(CH.sort==="el")d=idxOf(ELS,a.e)-idxOf(ELS,b.e);
+else if(CH.sort==="wt")d=idxOf(WTS,a.w)-idxOf(WTS,b.w);
+else if(CH.sort==="rar")d=(b.r||0)-(a.r||0);
+else if(CH.sort==="lvl")d=chLv(S.chars[b.id])-chLv(S.chars[a.id]);
+return d||a.name.localeCompare(b.name,"pt-BR")});
+return out}
+function renderChars(){var cnt={c:[0,0],w:[0,0]};document.getElementById("charadm").hidden=!window.isAdmin;
+chAll().forEach(function(c){var t=chTp(c);cnt[t][1]++;if(S.chars[c.id]&&S.chars[c.id].o)cnt[t][0]++});
+document.getElementById("chtabs").innerHTML=[["c","Personagens",IC_C],["w","Armas",IC_W]].map(function(t){var n=cnt[t[0]],p=n[1]?Math.round(n[0]*100/n[1]):0;
+return'<button class="ctab'+(CH.tab===t[0]?" on":"")+'" data-ctab="'+t[0]+'"><span class="cti">'+t[2]+'</span><span class="ctm"><span class="ctr"><b>'+t[1]+"</b><em>"+n[0]+" / "+n[1]+'</em></span><i class="ctb"><u style="width:'+p+'%"></u></i></span></button>'}).join("");
+document.getElementById("chq").placeholder=CH.tab==="w"?"Buscar armas...":"Buscar personagens...";
+chFilters();chGrid()}
+function chFilters(){var h="",grp=function(t,b){return'<div class="cgp"><small>'+t+"</small><div>"+b+"</div></div>"},
+fi=function(f,d){var on=CH[f][d[0]];return'<button class="fi'+(on?" on":"")+'" data-f="'+f+'" data-v="'+d[0]+'" aria-pressed="'+(on?"true":"false")+'" title="'+esc(d[1])+'">'+ico(d)+"</button>"};
+if(CH.tab==="c")h+=grp("Elementos",ELS.map(function(d){return fi("el",d)}).join(""));
+h+=grp("Tipos de arma",WTS.map(function(d){return fi("wt",d)}).join(""));
+var rs={};chAll().forEach(function(c){if(chTp(c)===CH.tab&&c.r)rs[c.r]=1});rs=Object.keys(rs).sort(function(a,b){return b-a});
+if(rs.length>1)h+=grp("Raridade",rs.map(function(r){return'<button class="fc r'+r+(CH.ra[r]?" on":"")+'" data-f="ra" data-v="'+r+'">'+r+"★</button>"}).join(""));
+h+=grp("Status",[["all","Todos"],["own","Tenho"],["miss","Faltando"]].map(function(s){return'<button class="fc'+(CH.st===s[0]?" on":"")+'" data-st="'+s[0]+'">'+s[1]+"</button>"}).join(""));
+var ss=chSorts(),cur=ss.filter(function(s){return s[0]===CH.sort})[0]||ss[0];
+h+=grp("Ordenar por",'<div class="dd" id="chsort"><button class="ddb'+(CH.dd?" open":"")+'" id="chddb" aria-haspopup="listbox" aria-expanded="'+(CH.dd?"true":"false")+'"><span>'+chSortLabel(cur)+"</span>"+IC_D+"</button>"+(CH.dd?'<div class="ddm" role="listbox">'+ss.map(function(s){return'<button class="ddo'+(s[0]===cur[0]?" on":"")+'" role="option" aria-selected="'+(s[0]===cur[0]?"true":"false")+'" data-sort="'+s[0]+'">'+chSortLabel(s)+"</button>"}).join("")+"</div>":"")+"</div>");
+if(CH.q||hasK(CH.el)||hasK(CH.wt)||hasK(CH.ra)||CH.st!=="all")h+='<div class="cgp"><small>&nbsp;</small><div><button class="fc" id="chclr">Limpar filtros</button></div></div>';
+document.getElementById("chchips").innerHTML='<div class="cg">'+h+"</div>"}
+function chGrid(){var l=chList(),tot=0,adm=!!window.isAdmin,w=CH.tab==="w",h="";chAll().forEach(function(c){if(chTp(c)===CH.tab)tot++});
+l.forEach(function(c){var x=S.chars[c.id]||{},o=!!x.o,lv=Math.min(x.c||0,w?4:6),badge=w?"R"+(lv+1):"S"+lv,lab=w?"Rank":"Constelação";
+h+='<div class="ch'+(o?" own":"")+" r"+(c.r||0)+'" data-cid="'+c.id+'"><div class="ci" data-i="'+esc(c.name.charAt(0))+'"><img src="'+esc(chSrc(c.img))+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">'
++(o?'<button class="pill s" data-cb="'+c.id+'" title="'+lab+" "+badge+'" aria-label="'+lab+" "+badge+'">'+badge+"</button>":'<span class="pill">FALTANDO</span>')
++(w?ico(defOf(WTS,c.w),"tr"):ico(defOf(ELS,c.e),"tr")+ico(defOf(WTS,c.w),"bl"))
++(adm?'<span class="ca"><button data-cedit="'+c.id+'" aria-label="Editar">&#9998;</button><button data-cdel="'+c.id+'" aria-label="Remover">&times;</button></span>':"")
++'</div><div class="nm">'+esc(c.name)+"</div></div>"});
+document.getElementById("chbar").innerHTML="<span>"+(tot?"Mostrando "+l.length+" de "+tot+" ":"")+'<button class="tip" data-tip="Clique no card para marcar que você o tem. Clique no selo roxo (S0 a S6 nos personagens, R1 a R5 nas armas) para subir de nível; Shift ou botão direito diminui. Quem falta fica cinza e ganha cor ao passar o mouse. Marcar todos e Redefinir valem só para os itens mostrados." aria-label="Ajuda">?</button></span><span class="hr"><button class="btn" id="chreset">Redefinir tudo</button><button class="btn" id="chall">Marcar todos</button></span>';
+document.getElementById("chgrid").innerHTML=!tot?'<section><p class="reset">'+(w?"Nenhuma arma cadastrada ainda.":"Nenhum personagem cadastrado ainda.")+"</p></section>":l.length?'<div class="cgrid">'+h+"</div>":'<section><p class="reset">Nenhum resultado com esses filtros.</p></section>'}
 function chOwn(id){var x=S.chars[id]||(S.chars[id]={o:0,c:0});x.o=x.o?0:1;save();renderChars()}
-function chCon(id,d){var x=S.chars[id];if(!x||!x.o)return;x.c=((x.c||0)+d+7)%7;save();renderChars()}
-function addChar(){var n=document.getElementById("chn").value.trim(),i=document.getElementById("chi").value.trim();if(!n)return;var l=((G&&G.chars)||[]).slice();l.push({id:"p"+Date.now().toString(36),name:n,img:i});admSave({chars:l});document.getElementById("chn").value="";document.getElementById("chi").value=""}
-function delChar(id){var c=((G&&G.chars)||[]).filter(function(x){return x.id===id})[0];if(!c)return;ask('Remover "'+c.name+'" do catálogo?',"Remover",function(){admSave({chars:G.chars.filter(function(x){return x.id!==id})})},true)}
-document.getElementById("pg-char").addEventListener("click",function(e){var t=e.target,b=t.closest("[data-cb]");
-if(b){chCon(b.dataset.cb,e.shiftKey?-1:1);return}
-var x=t.closest("[data-cdel]");if(x){delChar(x.dataset.cdel);return}
-if(t.id==="chadd"){addChar();return}
-if(t.id==="chall"){((G&&G.chars)||[]).forEach(function(c){var y=S.chars[c.id]||(S.chars[c.id]={o:0,c:0});y.o=1});save();renderChars();return}
-if(t.id==="chreset"){ask("Redefinir todos os personagens e constelações?","Redefinir",function(){S.chars={};save();renderChars()},true);return}
+function chCon(id,d){var x=S.chars[id],c=chAll().filter(function(y){return y.id===id})[0];if(!x||!x.o||!c)return;var m=chTp(c)==="w"?5:7;x.c=((x.c||0)+d+m)%m;save();renderChars()}
+function chBulk(fn){chList().forEach(function(c){fn(c.id)});save();renderChars()}
+function delChar(id){var c=chAll().filter(function(x){return x.id===id})[0];if(!c)return;ask('Remover "'+c.name+'" do catálogo?',"Remover",function(){admSave({chars:G.chars.filter(function(x){return x.id!==id})})},true)}
+function chFormFill(t,c){var rs=t==="w"?[5,4,3,2,1]:[5,4],opt=function(a){return'<option value="">—</option>'+a.map(function(d){return'<option value="'+d[0]+'">'+d[1]+"</option>"}).join("")};
+document.getElementById("efE").innerHTML=opt(ELS);document.getElementById("efW").innerHTML=opt(WTS);
+document.getElementById("efR").innerHTML=rs.map(function(n){return'<option value="'+n+'">'+n+"★</option>"}).join("");
+document.getElementById("efEl").hidden=t==="w";
+if(c){document.getElementById("efE").value=c.e||"";document.getElementById("efW").value=c.w||"";document.getElementById("efR").value=String(c.r||rs[0])}}
+function chOpenForm(id,tp){var c=null;if(id)chAll().forEach(function(y){if(y.id===id)c=y});var t=c?chTp(c):(tp==="w"?"w":"c");CH.edit=c?c.id:null;
+document.getElementById("efTitle").textContent=(c?"Editar ":"Adicionar ")+(t==="w"?"arma":"personagem");
+document.getElementById("efT").value=t;chFormFill(t,c);document.getElementById("efN").value=c?c.name:"";document.getElementById("efI").value=c?(c.img||""):"";
+document.getElementById("emodal").hidden=false;document.getElementById("efN").focus()}
+function chClose(){document.getElementById("emodal").hidden=true;CH.edit=null}
+function chSave(){var n=document.getElementById("efN").value.trim();if(!n){document.getElementById("efN").focus();return}
+var t=document.getElementById("efT").value==="w"?"w":"c",o={name:n,img:document.getElementById("efI").value.trim(),t:t,r:parseInt(document.getElementById("efR").value,10)||5},
+e=document.getElementById("efE").value,w=document.getElementById("efW").value;if(t==="c"&&e)o.e=e;if(w)o.w=w;
+var l=chAll().slice(),i=-1;if(CH.edit)l.forEach(function(c,k){if(c.id===CH.edit)i=k});
+if(i>=0){o.id=l[i].id;l[i]=o}else{o.id="p"+Date.now().toString(36);l.push(o)}
+CH.tab=t;admSave({chars:l});chClose();renderChars()}
+document.getElementById("pg-char").addEventListener("click",function(e){var t=e.target,b;
+if(b=t.closest("[data-cb]")){chCon(b.dataset.cb,e.shiftKey?-1:1);return}
+if(b=t.closest("[data-cdel]")){delChar(b.dataset.cdel);return}
+if(b=t.closest("[data-cedit]")){chOpenForm(b.dataset.cedit);return}
+if(b=t.closest("[data-cnew]")){chOpenForm(null,b.dataset.cnew);return}
+if(b=t.closest("[data-ctab]")){if(CH.tab!==b.dataset.ctab){CH.tab=b.dataset.ctab;CH.el={};CH.wt={};CH.ra={};CH.st="all";CH.dd=false;if(CH.tab==="w"&&CH.sort==="el")CH.sort="rar";renderChars()}return}
+if(b=t.closest("[data-f]")){var m=CH[b.dataset.f];m[b.dataset.v]=!m[b.dataset.v];chFilters();chGrid();return}
+if(b=t.closest("[data-st]")){CH.st=b.dataset.st;chFilters();chGrid();return}
+if(t.closest("#chddb")){CH.dd=!CH.dd;chFilters();return}
+if(b=t.closest("[data-sort]")){CH.sort=b.dataset.sort;CH.dd=false;chFilters();chGrid();return}
+if(t.id==="chclr"){CH.q="";document.getElementById("chq").value="";CH.el={};CH.wt={};CH.ra={};CH.st="all";chFilters();chGrid();return}
+if(t.id==="chall"){chBulk(function(id){var y=S.chars[id]||(S.chars[id]={o:0,c:0});y.o=1});return}
+if(t.id==="chreset"){var n=chList().length;if(!n)return;ask("Redefinir "+n+(n===1?" item mostrado":" itens mostrados")+" ("+(CH.tab==="w"?"armas":"personagens")+" e níveis)?","Redefinir",function(){chBulk(function(id){delete S.chars[id]})},true);return}
 var c=t.closest("[data-cid]");if(c&&t.closest(".ci"))chOwn(c.dataset.cid)});
 document.getElementById("pg-char").addEventListener("contextmenu",function(e){var b=e.target.closest("[data-cb]");if(b){e.preventDefault();chCon(b.dataset.cb,-1)}});
+document.getElementById("chq").addEventListener("input",function(){CH.q=this.value;chFilters();chGrid()});
+document.getElementById("emodal").addEventListener("click",function(e){var i=e.target.id;if(i==="emodal"||i==="eno")chClose();else if(i==="eyes")chSave()});
+document.getElementById("efT").addEventListener("change",function(){var e=document.getElementById("efE").value,w=document.getElementById("efW").value;chFormFill(this.value,null);document.getElementById("efE").value=e;document.getElementById("efW").value=w});
+document.getElementById("efN").addEventListener("keydown",function(e){if(e.key==="Enter")chSave()});
+document.addEventListener("click",function(e){if(CH.dd&&e.target.isConnected&&!e.target.closest("#chsort")){CH.dd=false;chFilters()}});
+document.addEventListener("keydown",function(e){if(e.key!=="Escape")return;if(!document.getElementById("emodal").hidden)chClose();else if(CH.dd){CH.dd=false;chFilters()}});
 function migrate(o){if(!o.groups){o.groups=[];["daily","weekly","monthly"].forEach(function(t){if(o.tasks&&o.tasks[t])o.groups.push({id:t,name:DEFG[t][0],reset:DEFG[t][1],tasks:o.tasks[t]})});delete o.tasks}if(!o.chars)o.chars={};return o}
 function gget(id){return S.groups.filter(function(g){return g.id===id})[0]}
 function gkey(g){var r=g.reset;if(r==="none")return"-";if(r==="season")return key("monthly");if(r==="monthly")return key("cal");if(r.indexOf("days:")===0)return"c"+Math.floor((dn(key("daily"))-(g.anchor||0))/(+r.slice(5)||1));return key(r)}
@@ -475,7 +617,7 @@ var PAGE="checklist";
 function renderNav(){document.getElementById("nav").innerHTML=NAV.map(function(n){return'<button class="'+(n.id===PAGE?"on":"")+'" data-nav="'+n.id+'">'+n.icon+"<span>"+n.label+"</span></button>"}).join("")}
 function go(p){PAGE=p;var pg={checklist:"pg-check",character:"pg-char",pity:"pg-pity"},tt={checklist:"Checklist",character:"Personagem",pity:"Contador de Pity"},c=p==="checklist";
 for(var k in pg)document.getElementById(pg[k]).hidden=k!==p;
-document.querySelector("main").classList.toggle("wide",p==="pity");
+document.querySelector("main").classList.toggle("wide",p==="pity"||p==="character");
 document.getElementById("ttl").textContent=tt[p];if(p==="character")renderChars();if(p==="pity")renderPity();
 document.getElementById("ttip").style.display=c?"":"none";
 document.getElementById("gear").classList.toggle("on",c&&!document.getElementById("cfgsec").hidden);renderNav();window.scrollTo(0,0)}
