@@ -1,5 +1,5 @@
 <#
-  WuWa Diary - Importador de giros (Convene)            versao 1.0.0
+  WuWa Diary - Importador de giros (Convene)            versao 1.1.0
 
   O QUE ESTE SCRIPT FAZ (e so isso):
     1. Procura o log do jogo (Client.log) no SEU computador e le o arquivo.
@@ -21,14 +21,19 @@
   Registro (leitura): so le a lista de programas instalados para achar a pasta
   do Wuthering Waves. Se nao achar, pede o caminho a voce.
 
-  Este arquivo e texto puro: leia tudo antes de rodar. Sao cerca de 300 linhas, sem nada ofuscado.
+  Este arquivo e texto puro: leia tudo antes de rodar. Sao cerca de 380 linhas, sem nada ofuscado.
 #>
 
 function Invoke-WuwaDiaryImport {
     $ErrorActionPreference = 'Stop'
+    $ProgressPreference    = 'SilentlyContinue'   # sem a barra azul do Invoke-WebRequest (e bem mais rapido)
+
+    # Texto bonito no console: tenta usar UTF-8 (e restaura ao final). Se nao der, usa ASCII.
+    $oldEnc = $null; $Unicode = $false
+    try { $oldEnc = [Console]::OutputEncoding; [Console]::OutputEncoding = [Text.Encoding]::UTF8; $Unicode = $true } catch { }
 
     # ---------------- Configuracao (tudo visivel, nada escondido) ----------------
-    $ScriptVersion = '1.0.0'
+    $ScriptVersion = '1.1.0'
     $PoolTypes     = 1..15      # tipos de banner consultados (veja o resumo no final)
     $DelayMs       = 400        # pausa entre consultas, para nao sobrecarregar a API
     $MaxLogBytes   = 64MB       # le no maximo os ultimos 64 MB do log (o link fica no fim)
@@ -38,6 +43,33 @@ function Invoke-WuwaDiaryImport {
     $latin1 = [Text.Encoding]::GetEncoding(28591)   # 1 byte = 1 caractere (sem perdas)
 
     function Say([string]$Text, [string]$Color = 'Gray') { Write-Host $Text -ForegroundColor $Color }
+
+    # ---------------- Apresentacao (so visual) ----------------
+    $BannerNames = @{ 1 = 'Ressonador em Destaque'; 2 = 'Arma em Destaque'; 3 = 'Ressonador Padrao'; 4 = 'Arma Padrao' }
+    if ($Unicode) {
+        $G = @{ full = [string][char]0x2588; empty = [string][char]0x2591; line = [string][char]0x2500; ok = [string][char]0x2713; star = [string][char]0x2605 }
+    } else {
+        $G = @{ full = '#'; empty = '-'; line = '-'; ok = 'OK'; star = '*' }
+    }
+    function Rule { Write-Host ('  ' + ($G.line * 48)) -ForegroundColor DarkCyan }
+    function Step([string]$n, [string]$title) {
+        Say ''
+        Write-Host ('  [' + $n + '] ') -NoNewline -ForegroundColor Cyan
+        Write-Host $title -ForegroundColor White
+    }
+    function Bar([int]$i, [int]$n, [string]$label) {
+        $w   = 28
+        $f   = [int][Math]::Floor($w * $i / $n)
+        $pct = [int][Math]::Floor(100 * $i / $n)
+        Write-Host "`r     " -NoNewline
+        Write-Host ($G.full * $f) -NoNewline -ForegroundColor Cyan
+        Write-Host ($G.empty * ($w - $f)) -NoNewline -ForegroundColor DarkGray
+        Write-Host (('  {0,3}%  {1}' -f $pct, $label).PadRight(46)) -NoNewline
+    }
+    function Cell([string]$t, [string]$c = 'Gray', [int]$w = 0) {
+        if ($w -gt 0) { $t = $t.PadLeft($w) }
+        Write-Host $t -NoNewline -ForegroundColor $c
+    }
 
     # ---------------- Achar os arquivos de log ----------------
     function Get-GameRoots {
@@ -152,7 +184,7 @@ function Invoke-WuwaDiaryImport {
 
     function Search-Files($files) {
         foreach ($f in ($files | Sort-Object LastWriteTime -Descending)) {
-            Say ('  lendo: ' + $f.FullName)
+            Say ('     lendo: ' + $f.FullName) 'DarkGray'
             $u = Find-RecordUrl $f.FullName
             if ($u) { return [pscustomobject]@{ Url = $u; File = $f } }
         }
@@ -192,18 +224,16 @@ function Invoke-WuwaDiaryImport {
     # ======================= Execucao =======================
     try {
         Say ''
-        Say "=== WuWa Diary - Importador de giros v$ScriptVersion ===" 'Cyan'
-        Say 'Este script: le o log do jogo no seu PC, consulta SOMENTE a API oficial da Kuro'
-        Say 'e copia seus giros para a area de transferencia. Nao envia nada para outro lugar,'
-        Say 'nao altera o jogo e nao precisa de administrador.'
-        Say ''
-        Say 'Antes de continuar: abra o jogo e entre em Convene > Historico (folheie 2-3 paginas).' 'Yellow'
-        Say ''
-        [void](Read-Host 'Pressione Enter para continuar (ou feche esta janela para cancelar)')
+        Rule
+        Write-Host '  WuWa Diary ' -NoNewline -ForegroundColor Cyan
+        Write-Host ('| Importador de giros  v' + $ScriptVersion) -ForegroundColor White
+        Say '  Le o log do jogo no seu PC e consulta so a API oficial da Kuro.' 'DarkGray'
+        Say '  Nada e enviado para outro lugar e o jogo nao e alterado.' 'DarkGray'
+        Rule
+        Say '  Dica: o historico precisa ter sido aberto no jogo ha pouco (Convene > Historico).' 'DarkYellow'
 
         # 1) log
-        Say ''
-        Say '[1/3] Procurando o log do jogo...'
+        Step '1/3' 'Localizando o log do jogo'
         $found = @{}
         foreach ($root in (Get-GameRoots)) {
             foreach ($f in (Get-LogFiles $root)) { $found[$f.FullName] = $f }
@@ -227,7 +257,7 @@ function Invoke-WuwaDiaryImport {
             throw 'Link do historico nao encontrado. Abra Convene > Historico no jogo, folheie algumas paginas e rode de novo.'
         }
         $ageH = [Math]::Round(((Get-Date) - $hit.File.LastWriteTime).TotalHours, 1)
-        Say ('  OK. Log modificado ha ' + $ageH + ' h.') 'Green'
+        Say ('     ' + $G.ok + ' Log encontrado (modificado ha ' + $ageH + ' h)') 'Green'
         if ($ageH -gt 6) { Say '  Aviso: o log e antigo; se der erro de link expirado, abra o historico no jogo de novo.' 'Yellow' }
 
         # 2) validar o link (nada do link e usado sem passar por aqui)
@@ -248,19 +278,26 @@ function Invoke-WuwaDiaryImport {
         }
         $lang = 'en'
         if ($q.ContainsKey('lang') -and $q['lang'] -match '^[A-Za-z]{2,3}(-[A-Za-z0-9]{2,8})?$') { $lang = $q['lang'] }
-        Say ('  UID: ' + $q['player_id'] + '   servidor: ' + $tld + '   idioma: ' + $lang)
+        Say ('     UID ' + $q['player_id'] + '  |  servidor ' + $tld + '  |  idioma ' + $lang) 'DarkGray'
 
         # 3) consultar cada banner (uma consulta por tipo, uma de cada vez)
-        Say ''
-        Say ('[2/3] Consultando ' + $apiBase.Replace('https://', '') + ' (API oficial da Kuro)...')
-        $pools = @()
+        Step '2/3' 'Baixando seus giros da API oficial da Kuro'
+        Say ('     ' + $apiBase.Replace('https://', '')) 'DarkGray'
+        $pools   = @()
+        $summary = @()
+        $skipped = 0
+        $n = @($PoolTypes).Count
+        $i = 0
         foreach ($t in $PoolTypes) {
+            Bar $i $n ('Consultando banner ' + $t + ' de ' + $PoolTypes[-1] + '...')
+            $i++
             try {
                 $resp = Invoke-Pool $apiBase $q $lang $t
                 if ($resp.code -ne 0) {
                     if ($t -eq $PoolTypes[0]) {
                         throw ('A Kuro recusou o link (' + $resp.message + '). Abra o historico no jogo de novo e rode o script outra vez.')
                     }
+                    $skipped++
                     continue
                 }
                 $recs = @()
@@ -268,15 +305,35 @@ function Invoke-WuwaDiaryImport {
                 if ($recs.Count -gt 0) {
                     $pools += [ordered]@{ type = $t; total = $recs.Count; records = $recs }
                     $five = @($recs | Where-Object { $_.qualityLevel -eq 5 }).Count
-                    Say ('  tipo ' + $t + ': ' + $recs.Count + ' giros, ' + $five + ' de 5 estrelas')
+                    $four = @($recs | Where-Object { $_.qualityLevel -eq 4 }).Count
+                    $nm = 'Banner tipo ' + $t
+                    if ($BannerNames.ContainsKey($t)) { $nm = $BannerNames[$t] }
+                    $summary += [pscustomobject]@{ Name = $nm; Total = $recs.Count; Five = $five; Four = $four }
                 }
             } catch {
-                if ($t -eq $PoolTypes[0]) { throw }
-                Say ('  tipo ' + $t + ': sem resposta valida (ignorado)') 'DarkGray'
+                if ($t -eq $PoolTypes[0]) { Write-Host ''; throw }
+                $skipped++
             }
             Start-Sleep -Milliseconds $DelayMs
         }
+        Bar $n $n 'Concluido'
+        Write-Host ''
         if ($pools.Count -eq 0) { throw 'Nenhum giro retornado pela API.' }
+
+        # resumo por banner (todos os giros sao copiados: 3, 4 e 5 estrelas)
+        Say ''
+        Cell ('     ' + 'Banner'.PadRight(26)) 'DarkGray'; Cell 'Giros' 'DarkGray' 7
+        Cell ($G.star + '5') 'Yellow' 6; Cell ($G.star + '4') 'Magenta' 6; Write-Host ''
+        $tt = 0; $t5 = 0; $t4 = 0
+        foreach ($s in $summary) {
+            Cell ('     ' + $s.Name.PadRight(26)) 'White'; Cell ([string]$s.Total) 'Gray' 7
+            Cell ([string]$s.Five) 'Yellow' 6; Cell ([string]$s.Four) 'Magenta' 6; Write-Host ''
+            $tt += $s.Total; $t5 += $s.Five; $t4 += $s.Four
+        }
+        Say ('     ' + ($G.line * 45)) 'DarkGray'
+        Cell ('     ' + 'Total'.PadRight(26)) 'Cyan'; Cell ([string]$tt) 'Cyan' 7
+        Cell ([string]$t5) 'Yellow' 6; Cell ([string]$t4) 'Magenta' 6; Write-Host ''
+        if ($skipped -gt 0) { Say ('     (' + $skipped + ' banner(s) sem giros ou sem resposta, ignorado(s))') 'DarkGray' }
 
         # 4) montar o JSON (sem record_id) e copiar
         $serverName = 'global'
@@ -295,13 +352,13 @@ function Invoke-WuwaDiaryImport {
         $json = $result | ConvertTo-Json -Depth 8 -Compress
 
         Say ''
-        Say '[3/3] Copiando o resultado...'
+        Step '3/3' 'Copiando o resultado'
         $total = 0
         foreach ($p in $pools) { $total += $p.total }
         try {
             Set-Clipboard -Value $json
-            Say ('  Pronto! ' + $total + ' giros copiados para a area de transferencia.') 'Green'
-            Say '  Volte ao site e cole (Ctrl+V) na area de importacao.' 'Green'
+            Say ('     ' + $G.ok + ' Pronto! ' + $total + ' giros copiados para a area de transferencia.') 'Green'
+            Say '     Agora volte ao site e cole (Ctrl+V) na area de importacao.' 'White'
         } catch {
             $dir = [Environment]::GetFolderPath('Desktop')
             if (-not $dir) { $dir = [Environment]::GetFolderPath('UserProfile') }
@@ -309,11 +366,18 @@ function Invoke-WuwaDiaryImport {
             [IO.File]::WriteAllText($file, $json, (New-Object Text.UTF8Encoding($false)))
             Say ('  Nao consegui usar a area de transferencia. Salvei em: ' + $file) 'Yellow'
         }
-        Say '  Nada foi enviado para fora do seu PC, alem das consultas a API da Kuro.' 'DarkGray'
+        Say ''
+        Say '     Nada foi enviado para fora do seu PC, alem das consultas a API da Kuro.' 'DarkGray'
+        Rule
     }
     catch {
         Say ''
-        Say ('[ERRO] ' + $_.Exception.Message) 'Red'
+        Write-Host '  [ERRO] ' -NoNewline -ForegroundColor Red
+        Write-Host $_.Exception.Message -ForegroundColor Red
+        Say '     Dica: abra Convene > Historico no jogo de novo e rode o comando outra vez.' 'DarkGray'
+    }
+    finally {
+        if ($oldEnc) { try { [Console]::OutputEncoding = $oldEnc } catch { } }
     }
 }
 
