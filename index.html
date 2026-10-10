@@ -23,6 +23,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 14.5px/1.55 Poppins
 .nav button.on{background:var(--acc);color:#fff;box-shadow:0 6px 16px -6px var(--acc)}
 .scrim{display:none}
 main{flex:1;min-width:0;max-width:760px;margin:0 auto;padding:28px 24px 72px}
+main.wide{max-width:1240px}
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:22px}
 .tl{display:flex;align-items:center;gap:10px}
 .menu{display:none;font-size:1.1rem;line-height:1;padding:7px 10px}
@@ -175,7 +176,8 @@ body.nav-open .side{transform:none}body.nav-open .scrim{display:block;position:f
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) body{background-image:radial-gradient(900px 520px at 88% -8%,rgba(91,130,246,.22),transparent 60%),radial-gradient(700px 420px at 8% 108%,rgba(167,139,250,.14),transparent 60%);background-attachment:fixed}}
 :root[data-theme="dark"] body{background-image:radial-gradient(900px 520px at 88% -8%,rgba(91,130,246,.22),transparent 60%),radial-gradient(700px 420px at 8% 108%,rgba(167,139,250,.14),transparent 60%);background-attachment:fixed}
 section{border:1px solid var(--line)}
-#pdash{grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:20px}
+#pdash{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+@media (max-width:731px),(min-width:821px) and (max-width:979px){#pdash{grid-template-columns:1fr}}
 .pc{padding:24px;background:linear-gradient(160deg,rgba(255,255,255,.05),transparent 45%),var(--card);transition:box-shadow .25s,border-color .25s}
 .pc:hover{border-color:rgba(122,150,255,.45);box-shadow:0 0 0 1px rgba(122,150,255,.25),0 14px 42px -14px rgba(91,130,246,.6)}
 .pc h2{font-size:1.2rem;letter-spacing:-.02em}
@@ -431,6 +433,7 @@ var PAGE="checklist";
 function renderNav(){document.getElementById("nav").innerHTML=NAV.map(function(n){return'<button class="'+(n.id===PAGE?"on":"")+'" data-nav="'+n.id+'">'+n.icon+"<span>"+n.label+"</span></button>"}).join("")}
 function go(p){PAGE=p;var pg={checklist:"pg-check",character:"pg-char",pity:"pg-pity"},tt={checklist:"Checklist",character:"Personagem",pity:"Contador de Pity"},c=p==="checklist";
 for(var k in pg)document.getElementById(pg[k]).hidden=k!==p;
+document.querySelector("main").classList.toggle("wide",p==="pity");
 document.getElementById("ttl").textContent=tt[p];if(p==="character")renderChars();if(p==="pity")renderPity();
 document.getElementById("ttip").style.display=c?"":"none";
 document.getElementById("gear").classList.toggle("on",c&&!document.getElementById("cfgsec").hidden);renderNav();window.scrollTo(0,0)}
