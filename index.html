@@ -314,6 +314,8 @@ section.full .bar i{background:linear-gradient(90deg,#f59e0b,#fde047);box-shadow
 @media (max-width:560px){.ctab{flex:1 1 100%}.cgrid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}}
 .ci:before{display:none}.ci.nf:before{display:block}
 .ch{content-visibility:auto;contain-intrinsic-size:auto 190px}
+body.scr .cgrid{pointer-events:none}
+.ca{will-change:auto}
 </style>
 </head>
 <body>
@@ -482,6 +484,7 @@ document.addEventListener("mouseover",function(e){var b=tipOf(e);if(b)showTip(b)
 document.addEventListener("mouseout",function(e){if(tipOf(e))hideTip()});
 document.addEventListener("click",function(e){var b=tipOf(e);if(b){e.preventDefault();if(tp.className==="on"&&tp.textContent===b.dataset.tip)hideTip();else showTip(b)}else hideTip()});
 window.addEventListener("scroll",hideTip,{capture:true,passive:true});
+var scrT,scrOn=false;window.addEventListener("scroll",function(){if(!scrOn){scrOn=true;document.body.classList.add("scr")}clearTimeout(scrT);scrT=setTimeout(function(){scrOn=false;document.body.classList.remove("scr")},140)},{passive:true});
 var G=null;
 function seasonOn(){return!!(G&&G.season&&G.season.end)}
 function persist(){mem=S;try{localStorage.setItem("wuwa-check",JSON.stringify(S))}catch(e){}}
@@ -674,6 +677,10 @@ Object.keys(ts).sort(function(m,n){return m-n}).forEach(function(t){pools[t]=mer
 out.acc[k]={server:o[1].server,lang:o[1].lang,at:o[1].at,pools:pools}});
 if(!out.acc[out.sel])out.sel=Object.keys(out.acc)[0]||"";return out}
 function pullsRemote(c){if(!c||!c.acc)return;var m=mergeP(PL,c),chg=JSON.stringify(m)!==JSON.stringify(c);PL=m;savePullsLocal();if(!document.getElementById("pg-pity").hidden)renderPity();if(chg)pushPulls()}
+var PYM={};
+function pyFind(chars,n){var k=nk(n),m=chars.filter(function(c){return nk(c.name)===k});
+if(!m.length&&k.length>3)m=chars.filter(function(c){return c.img&&nk(String(c.img).split("/").pop().replace(/\.[a-z0-9]+$/i,"")).indexOf(k)>=0});
+return m.filter(function(c){return c.img})[0]||m[0]}
 function nk(s){var t=String(s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]/g,"");return t||String(s).trim().toLowerCase()}
 function stats(type,recs,cap){var c5=0,c4=0,list=[],guar=false,w=0,l=0,sum=0;
 recs.forEach(function(r){c5++;c4++;
@@ -683,7 +690,8 @@ return{total:recs.length,p5:c5,p4:c4,list:list,avg:list.length?Math.round(sum/li
 function pityCard(t,recs,chars){var b=BANN[t]||["Banner especial (tipo "+t+")",80,10],cap=b[1],st=stats(t,recs,cap),n5=st.list.length,wl=st.w+st.l,
 p5=Math.min(100,Math.round(st.p5*100/cap)),p4=Math.min(100,Math.round(st.p4*100/b[2]));
 var sub='<b class="y">'+n5+'</b> × <b class="y">5★</b>'+(n5?" · pity médio "+st.avg:"")+(wl?' · <span class="wn">♛ '+Math.round(st.w*100/wl)+"% ganhou</span>":"")+(st.guar?' · <span class="wn">próximo 5★ garantido</span>':"");
-var rec=st.list.slice(-10).reverse().map(function(x){var ch=chars.filter(function(c){return nk(c.name)===nk(x.n)})[0],col=x.p<=cap*.45?"g":x.p<=cap*.7?"y":"r";
+var rec=st.list.slice(-10).reverse().map(function(x){var ch=pyFind(chars,x.n),col=x.p<=cap*.45?"g":x.p<=cap*.7?"y":"r";
+if(!ch||!ch.img)PYM[x.n]=1;
 return'<div class="pr" tabindex="0" aria-label="'+esc(x.n)+", pity "+x.p+'" data-n="'+esc(x.n)+'" data-p="'+x.p+'" data-c="'+cap+'" data-r="'+(x.res||"")+'" data-t="'+esc(x.t)+'"><div class="pa">'+(ch?'<img src="'+esc(chSrc(ch.img))+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':"")+"<i>"+esc(x.n.charAt(0))+"</i>"+(x.res==="w"?'<u class="cr">♛</u>':"")+'</div><b class="pp '+col+'">'+x.p+"</b></div>"}).join("");
 return'<section class="pc"><div class="head"><div><h2>'+esc(b[0])+'</h2><div class="ps">'+sub+'</div></div><div class="pn">'+st.total+"<small>giros</small></div></div>"+'<div class="pb"><div class="bx"><div class="bt"><span class="y">5★ PITY</span><span>faltam '+Math.max(0,cap-st.p5)+'</span></div><div class="bn">'+st.p5+"<small>/"+cap+'</small></div><div class="bar"><i class="'+(cap>=80&&st.p5>=65?"hot":"")+'" style="width:'+p5+'%"></i></div></div><div class="bx p4"><div class="bt"><span class="v">4★ PITY</span><span>faltam '+Math.max(0,b[2]-st.p4)+'</span></div><div class="bn">'+st.p4+"<small>/"+b[2]+'</small></div><div class="bar"><i style="width:'+p4+'%"></i></div></div></div><div class="rt">5★ RECENTES</div><div class="rl">'+(rec||'<span class="reset">Nenhum 5★ ainda</span>')+"</div></section>"}
 function renderPity(){var d=document.getElementById("pdash"),bar=document.getElementById("pbar"),ids=Object.keys(PL.acc),det=document.getElementById("pimpd");
@@ -694,7 +702,7 @@ var a=PL.acc[PL.sel],sel=ids.length>1?'<select id="pacc">'+ids.map(function(k){r
 var sv=a.server==="cn"?"CN":a.server==="global"?"Global":a.server?String(a.server).charAt(0).toUpperCase()+String(a.server).slice(1):"",
 when=new Date(a.at).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}).replace(", "," às ");
 bar.innerHTML='<div class="pf"><div class="pfi"><span class="pch"><small>UID</small>'+sel+"</span>"+(sv?'<span class="pch sv"><small>Servidor</small><b>'+esc(sv)+"</b></span>":"")+'<span class="pfd"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Importado em '+when+'</span></div><button class="btn" id="pdel">Apagar dados</button></div>';
-var h="",chars=(G&&G.chars)||[];Object.keys(a.pools).forEach(function(t){h+=pityCard(+t,a.pools[t],chars)});d.innerHTML=h}
+var h="",chars=(G&&G.chars)||[];PYM={};Object.keys(a.pools).forEach(function(t){h+=pityCard(+t,a.pools[t],chars)});var ms=Object.keys(PYM);if(window.isAdmin&&ms.length)h+='<section><p class="reset">Sem imagem no catálogo (confira o nome ou o arquivo): '+ms.map(esc).join(", ")+"</p></section>";d.innerHTML=h}
 function importPulls(){var d;try{d=JSON.parse(document.getElementById("ptxt").value.trim())}catch(e){note("O texto colado não é um JSON válido. Rode o comando e cole o resultado completo.");return}
 if(!d||d.format!=="wuwa-diary-pulls"||!d.pools||!d.player){note("Formato não reconhecido. Use o comando desta página.");return}
 var pools={},n=0;d.pools.forEach(function(p){var r=(p.records||[]).map(function(x){return[String(x.time),+x.qualityLevel,String(x.name),String(x.resourceType||"").charAt(0)]});if(!r.length)return;if(r.length>1&&r[0][0]>=r[r.length-1][0])r.reverse();pools[p.type]=r;n+=r.length});
