@@ -6,6 +6,8 @@
 <meta name="theme-color" content="#07070d">
 <meta name="color-scheme" content="dark">
 <title>Checklist WuWa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
 <style>
 :root{color-scheme:dark;--bg:#07070d;--side:#0a0a14;--card:#0f0f1a;--ink:#f4f4fb;--mute:#8d8fa8;--line:rgba(255,255,255,.08);--hover:rgba(168,85,247,.10);--acc:#a855f7;--accg:linear-gradient(90deg,#9333ea,#6366f1);--gold:#fbbf24;--l0:rgba(255,255,255,.06);--l1:#2e1f66;--l2:#5a35b5;--l3:#8b4cf0;--l4:#c084fc;
@@ -173,7 +175,8 @@ body.nav-open .side{transform:none}body.nav-open .scrim{display:block;position:f
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
 
 /* ---- visual neon (pity + personagens) ---- */
-body{background-color:var(--bg);background-image:radial-gradient(900px 520px at 88% -8%,rgba(139,92,246,.22),transparent 60%),radial-gradient(700px 420px at 8% 108%,rgba(168,85,247,.12),transparent 60%);background-attachment:fixed}
+body{background-color:var(--bg)}
+body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(900px 520px at 88% -8%,rgba(139,92,246,.22),transparent 60%),radial-gradient(700px 420px at 8% 108%,rgba(168,85,247,.12),transparent 60%)}
 section{border:1px solid var(--line)}
 #pdash{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
 @media (max-width:731px),(min-width:821px) and (max-width:989px){#pdash{grid-template-columns:1fr}}
@@ -289,7 +292,7 @@ section.full .bar i{background:linear-gradient(90deg,#f59e0b,#fde047);box-shadow
 .ci{aspect-ratio:1/1.1;border-radius:0;background:linear-gradient(180deg,#171726,#0c0c16)}
 .ci:after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;z-index:1;background:var(--rc,rgba(255,255,255,.12))}
 .r5{--rc:linear-gradient(90deg,#f59e0b,#fde047)}.r4{--rc:linear-gradient(90deg,#7c3aed,#c084fc)}.r3{--rc:#4fc3f7}.r2{--rc:#2ee6a8}.r1{--rc:#9ea0b8}
-.pill{position:absolute;top:8px;left:8px;z-index:2;padding:3px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(8,8,15,.78);backdrop-filter:blur(4px);color:var(--mute);font:700 .6rem/1.3 Poppins,system-ui,sans-serif;letter-spacing:.08em}
+.pill{position:absolute;top:8px;left:8px;z-index:2;padding:3px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(8,8,15,.92);color:var(--mute);font:700 .6rem/1.3 Poppins,system-ui,sans-serif;letter-spacing:.08em}
 .pill.s{background:var(--accg);border-color:transparent;color:#fff;font-size:.7rem;letter-spacing:.03em;box-shadow:0 0 12px rgba(168,85,247,.75);cursor:pointer;transition:transform .12s}
 .pill.s:hover{transform:scale(1.1)}
 .ei{position:relative;display:inline-grid;place-items:center;flex:none;width:26px;height:26px;border-radius:50%;background:rgba(8,8,15,.88);border:1.5px solid var(--ec);box-shadow:0 0 10px -2px var(--ec);overflow:hidden}
@@ -309,6 +312,8 @@ section.full .bar i{background:linear-gradient(90deg,#f59e0b,#fde047);box-shadow
 .fm input,.fm select{padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;font-size:.85rem}
 .fm input:focus,.fm select:focus{border-color:var(--acc);outline:0}
 @media (max-width:560px){.ctab{flex:1 1 100%}.cgrid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}}
+.ci:before{display:none}.ci.nf:before{display:block}
+.ch{content-visibility:auto;contain-intrinsic-size:auto 190px}
 </style>
 </head>
 <body>
@@ -471,12 +476,12 @@ document.getElementById("perm").addEventListener("keydown",function(e){if(e.key=
 function applyRemote(d){S=migrate(d);if(!S.hist)S.hist={};if(!S.perm)S.perm=[];mem=S;try{localStorage.setItem("wuwa-check",JSON.stringify(S))}catch(e){}document.getElementById("rh").value=S.rh;render();renderLun();if(!document.getElementById("hist").hidden)renderHist();if(!document.getElementById("perm").hidden)renderPerm();applyGlobal()}
 var tp=document.createElement("div");tp.id="tp";tp.setAttribute("role","tooltip");document.body.appendChild(tp);
 function showTip(b){tp.textContent=b.dataset.tip;tp.className="on";var r=b.getBoundingClientRect(),w=tp.offsetWidth;tp.style.left=Math.max(8,Math.min(innerWidth-w-8,r.left+r.width/2-w/2))+"px";tp.style.top=(r.bottom+8)+"px"}
-function hideTip(){tp.className=""}
+function hideTip(){if(tp.className)tp.className=""}
 function tipOf(e){return e.target.closest&&e.target.closest(".tip")}
 document.addEventListener("mouseover",function(e){var b=tipOf(e);if(b)showTip(b)});
 document.addEventListener("mouseout",function(e){if(tipOf(e))hideTip()});
 document.addEventListener("click",function(e){var b=tipOf(e);if(b){e.preventDefault();if(tp.className==="on"&&tp.textContent===b.dataset.tip)hideTip();else showTip(b)}else hideTip()});
-window.addEventListener("scroll",hideTip,true);
+window.addEventListener("scroll",hideTip,{capture:true,passive:true});
 var G=null;
 function seasonOn(){return!!(G&&G.season&&G.season.end)}
 function persist(){mem=S;try{localStorage.setItem("wuwa-check",JSON.stringify(S))}catch(e){}}
@@ -543,7 +548,7 @@ if(CH.q||hasK(CH.el)||hasK(CH.wt)||hasK(CH.ra)||CH.st!=="all")h+='<div class="cg
 document.getElementById("chchips").innerHTML='<div class="cg">'+h+"</div>"}
 function chGrid(){var l=chList(),tot=0,adm=!!window.isAdmin,w=CH.tab==="w",h="";chAll().forEach(function(c){if(chTp(c)===CH.tab)tot++});
 l.forEach(function(c){var x=S.chars[c.id]||{},o=!!x.o,lv=Math.min(x.c||0,w?4:6),badge=w?"R"+(lv+1):"S"+lv,lab=w?"Rank":"Constelação";
-h+='<div class="ch'+(o?" own":"")+" r"+(c.r||0)+'" data-cid="'+c.id+'"><div class="ci" data-i="'+esc(c.name.charAt(0))+'"><img src="'+esc(chSrc(c.img))+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">'
+h+='<div class="ch'+(o?" own":"")+" r"+(c.r||0)+'" data-cid="'+c.id+'"><div class="ci" data-i="'+esc(c.name.charAt(0))+'"><img src="'+esc(chSrc(c.img))+'" alt="" loading="lazy" decoding="async" onerror="this.style.visibility=\'hidden\';this.parentNode.className+=\' nf\'">'
 +(o?'<button class="pill s" data-cb="'+c.id+'" title="'+lab+" "+badge+'" aria-label="'+lab+" "+badge+'">'+badge+"</button>":'<span class="pill">FALTANDO</span>')
 +(w?ico(defOf(WTS,c.w),"tr"):ico(defOf(ELS,c.e),"tr")+ico(defOf(WTS,c.w),"bl"))
 +(adm?'<span class="ca"><button data-cedit="'+c.id+'" aria-label="Editar">&#9998;</button><button data-cdel="'+c.id+'" aria-label="Remover">&times;</button></span>':"")
@@ -585,7 +590,7 @@ if(t.id==="chall"){chBulk(function(id){var y=S.chars[id]||(S.chars[id]={o:0,c:0}
 if(t.id==="chreset"){var n=chList().length;if(!n)return;ask("Redefinir "+n+(n===1?" item mostrado":" itens mostrados")+" ("+(CH.tab==="w"?"armas":"personagens")+" e níveis)?","Redefinir",function(){chBulk(function(id){delete S.chars[id]})},true);return}
 var c=t.closest("[data-cid]");if(c&&t.closest(".ci"))chOwn(c.dataset.cid)});
 document.getElementById("pg-char").addEventListener("contextmenu",function(e){var b=e.target.closest("[data-cb]");if(b){e.preventDefault();chCon(b.dataset.cb,-1)}});
-document.getElementById("chq").addEventListener("input",function(){CH.q=this.value;chFilters();chGrid()});
+var chqT;document.getElementById("chq").addEventListener("input",function(){CH.q=this.value;clearTimeout(chqT);chqT=setTimeout(function(){chFilters();chGrid()},120)});
 document.getElementById("emodal").addEventListener("click",function(e){var i=e.target.id;if(i==="emodal"||i==="eno")chClose();else if(i==="eyes")chSave()});
 document.getElementById("efT").addEventListener("change",function(){var e=document.getElementById("efE").value,w=document.getElementById("efW").value;chFormFill(this.value,null);document.getElementById("efE").value=e;document.getElementById("efW").value=w});
 document.getElementById("efN").addEventListener("keydown",function(e){if(e.key==="Enter")chSave()});
