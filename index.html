@@ -473,6 +473,7 @@ body.gdrag{user-select:none;-webkit-user-select:none;cursor:grabbing}
 <button class="tip" data-tip="Horário local em que as listas zeram. Servidor América: 4h do servidor = 6h em Brasília." aria-label="Ajuda">?</button>
 <button class="btn" id="exp">Exportar dados</button><button class="btn" id="imp">Importar dados</button><input type="file" id="impf" accept=".json,application/json" hidden><button class="tip" data-tip="Exportar baixa um arquivo com seus dados. Importar lê esse arquivo e substitui os dados atuais." aria-label="Ajuda">?</button>
 </div>
+<div class="cfg" id="admrow" hidden style="margin-top:14px"><span id="admst"></span><button class="btn" id="admtg"></button><button class="tip" data-tip="Só aparece para o e-mail do administrador. Desativado, o site funciona como para qualquer pessoa: sem botões de editar, sem painel e sem salvar mudanças globais. Vale só neste navegador." aria-label="Ajuda">?</button></div>
 </section>
 <section id="admsec" hidden></section>
 <section id="about" hidden><div class="abt"><span>Desenvolvido por S8IGNORe</span><span id="ver"></span></div><p>Este site (<a href="https://s8ignore.github.io/WuwaDiary/" target="_blank" rel="noopener">s8ignore.github.io/WuwaDiary</a>) é um projeto independente de fãs e não possui afiliação com a Kuro Games. Wuthering Waves, seu conteúdo e os materiais do jogo são marcas registradas e direitos autorais da Kuro Games.</p><hr class="sep"><p>Projeto inspirado no <a href="https://paimon.moe" target="_blank" rel="noopener">Paimon.moe</a>.</p></section>
@@ -704,6 +705,12 @@ function persist(){mem=S;try{localStorage.setItem("wuwa-check",JSON.stringify(S)
 function applyGlobal(){var ch=false;if(G&&G.tasks){if(!S.seen)S.seen=[];["daily","weekly","monthly"].forEach(function(t){(G.tasks[t]||[]).forEach(function(g){if(S.seen.indexOf(g.id)<0){S.seen.push(g.id);var gr=gget(t)||addDefGroup(t,false);gr.tasks.push({id:g.id,name:g.name});ch=true}})})}
 if(ch)persist();render();renderLun();renderAbout();renderChars();if(!document.getElementById("pg-pity").hidden)renderPity()}
 function snapEnd(ms){var c=new Date(ms),b=new Date(c.getFullYear(),c.getMonth(),c.getDate(),S.rh),dd=b-c;if(dd>432e5)b.setDate(b.getDate()-1);else if(-dd>432e5)b.setDate(b.getDate()+1);return b.getTime()}
+function admOff(){try{return localStorage.getItem("wuwa-admin-off")==="1"}catch(e){return false}}
+function admEval(){window.isAdmin=!!window.isAdminUser&&!admOff()}
+function renderAdmRow(){var r=document.getElementById("admrow");if(!r)return;r.hidden=!window.isAdminUser;if(r.hidden)return;
+document.getElementById("admst").textContent="Modo administrador: "+(admOff()?"desativado":"ativado");document.getElementById("admtg").textContent=admOff()?"Ativar":"Desativar"}
+document.getElementById("admtg").onclick=function(){if(!window.isAdminUser)return;try{if(admOff())localStorage.removeItem("wuwa-admin-off");else localStorage.setItem("wuwa-admin-off","1")}catch(e){}
+admEval();renderAdmRow();var a=document.getElementById("admsec");a.hidden=!window.isAdmin;if(window.isAdmin)renderAdm();renderChars();if(!document.getElementById("pg-pity").hidden)renderPity()};
 function admSave(p){if(window.adminSave)window.adminSave(p).catch(function(){note("Sem permissão ou erro de rede.")})}
 function renderAdm(){var el=document.getElementById("admsec"),tk=(G&&G.tasks)||{},nm={daily:"Diária",weekly:"Semanal",monthly:"Temporada"},li="";
 ["daily","weekly","monthly"].forEach(function(t){(tk[t]||[]).forEach(function(x){li+='<li><span style="flex:1;padding:9px 0">'+esc(x.name)+' <small class="reset">'+nm[t]+'</small></span><button class="del" data-gdel="'+x.id+'" data-gt="'+t+'" aria-label="Retirar">&times;</button></li>'})});
@@ -1016,7 +1023,7 @@ if(firebaseConfig.apiKey.startsWith("COLE")){sync("Modo local (nuvem não config
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
 let ref=null,timer=null,unsub=null,punsub=null,pref=null;
 onSnapshot(doc(db,"config","global"),snap=>{window.G=snap.exists()?snap.data():null;applyGlobal();if(window.isAdmin&&!$("admsec").hidden)renderAdm()},()=>{});
-window.adminSave=p=>setDoc(doc(db,"config","global"),p,{merge:true});
+window.adminSave=p=>window.isAdmin?setDoc(doc(db,"config","global"),p,{merge:true}):Promise.reject(new Error("admin off"));
 window.pullsPushFn=j=>pref?setDoc(pref,{json:j,ts:Date.now()}):Promise.resolve();
 const push=async()=>{if(!ref)return;try{await setDoc(ref,{json:JSON.stringify(window.S),ts:window.S.ts||0});sync("Sincronizado")}catch(e){sync("Erro ao salvar")}};
 window.onSaved=()=>{if(!ref)return;sync("Salvando...");clearTimeout(timer);timer=setTimeout(push,800)};
@@ -1025,7 +1032,7 @@ $("login").onclick=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(()=>
 $("logout").onclick=()=>signOut(auth);
 onAuthStateChanged(auth,u=>{
 if(unsub){unsub();unsub=null}if(punsub){punsub();punsub=null}pref=null;
-ref=null;window.isAdmin=!!u&&!!u.email&&u.email.toLowerCase()===ADMIN_EMAIL.toLowerCase();if(window.renderChars)renderChars();if(!$("cfgsec").hidden){$("admsec").hidden=!window.isAdmin;if(window.isAdmin)renderAdm()}$("login").hidden=!!u;$("logout").hidden=!u;$("who").hidden=!u;
+ref=null;window.isAdminUser=!!u&&!!u.email&&u.email.toLowerCase()===ADMIN_EMAIL.toLowerCase();admEval();renderAdmRow();if(window.renderChars)renderChars();if(!$("cfgsec").hidden){$("admsec").hidden=!window.isAdmin;if(window.isAdmin)renderAdm()}$("login").hidden=!!u;$("logout").hidden=!u;$("who").hidden=!u;
 if(!u){sync("Entre para sincronizar");return}
 $("who").textContent=u.displayName||u.email;ref=doc(db,"users",u.uid);sync("Conectando...");pref=doc(db,"pulls",u.uid);punsub=onSnapshot(pref,snap=>{if(snap.metadata.hasPendingWrites)return;if(snap.exists()){try{window.pullsRemote(JSON.parse(snap.data().json))}catch(e){}}else if(window.pullsHas())window.pushPulls()},()=>{});
 unsub=onSnapshot(ref,snap=>{
