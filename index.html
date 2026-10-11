@@ -367,17 +367,35 @@ body.gdrag{user-select:none;-webkit-user-select:none;cursor:grabbing}
 .ric img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .dmain{position:relative;flex:1;min-width:0;overflow:auto;padding:22px}
 .dtop{display:flex;gap:14px;align-items:center;margin-bottom:20px;padding-right:30px}
-.dtop .dpic{width:60px;height:60px;border-radius:14px}
+.dtop{align-items:flex-start}
+.dleft{flex:none;display:flex;flex-direction:column;align-items:center;gap:7px}
+.dtop .dpic{width:80px;height:80px;border-radius:16px}
+.dtop .dstars{font-size:.8rem;letter-spacing:2px;margin:0 -2px 0 0;min-height:0;line-height:1;text-shadow:0 0 8px rgba(251,191,36,.45);white-space:nowrap}
+.dnm{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 10px}
+.dic{display:inline-flex;align-items:center;gap:6px}
+.dtop .dnm h3{margin:0}
+.dwk{flex:none;margin-left:auto;width:124px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 10px 11px;border:1px solid rgba(251,191,36,.28);border-radius:16px;background:linear-gradient(180deg,rgba(251,191,36,.07),rgba(168,85,247,.06));box-shadow:0 8px 24px -14px rgba(251,191,36,.45);color:var(--ink);font:inherit;text-align:center;cursor:pointer;transition:border-color .15s,transform .15s}
+.dwk:hover{border-color:rgba(251,191,36,.6);transform:translateY(-2px)}
+.dwk[inert]{opacity:.45;cursor:default}
+.dwk .wimg.big{width:84px;aspect-ratio:1;border-radius:12px;border:1px solid var(--line)}
+.dwkn{font-size:.74rem;font-weight:600;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dwkr{color:var(--gold);font-size:.68rem;letter-spacing:2px;line-height:1;text-shadow:0 0 8px rgba(251,191,36,.45)}
+.dwk.empty{justify-content:center;width:124px;height:124px;border:1.5px dashed rgba(168,85,247,.55);background:rgba(168,85,247,.05);box-shadow:none}
+.dwkp{font-size:2.6rem;font-weight:300;line-height:1;color:var(--acc);animation:dwb 2.2s ease-in-out infinite}
+@keyframes dwb{0%,100%{opacity:.35;transform:scale(.94)}50%{opacity:1;transform:scale(1.06)}}
+.dwk.empty[inert] .dwkp{animation:none;opacity:.5}
+@media (max-width:520px){.dtop{flex-wrap:wrap}.dwk{width:100px;margin-left:0}.dwk .wimg.big{width:64px}.dwk.empty{width:100px;height:100px}}
 .dtop .dti{flex:1;min-width:0}
 .dtop .dti h3{margin:0 0 8px;font-size:1.2rem}
 .dtop .dst{padding:0;border:0;background:none;margin:0;justify-content:flex-start}
 .dpt{margin:0 0 14px;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:600}
-.dlvl{display:flex;align-items:baseline;gap:6px}
-.dnv{font-size:1.1rem;font-weight:600;color:var(--mute)}
-.dlvi{width:72px;padding:0 0 2px;font:700 1.9rem Poppins,system-ui,sans-serif;background:transparent;border:0;border-bottom:1px solid var(--line);color:var(--ink);text-align:center;border-radius:0}
+.dlvl{display:flex;align-items:baseline;gap:0;font:600 1.6rem/1.2 Poppins,system-ui,sans-serif}
+.dnv{font:inherit;font-size:1.05rem;color:var(--mute);margin-right:12px}
+.dlvi{width:1.55em;padding:0;margin:0;font:inherit;background:transparent;border:0;border-bottom:1px solid var(--line);color:var(--ink);text-align:right;border-radius:0}
+.dlvi::placeholder{color:var(--mute);opacity:1}
 .dlvi:focus{outline:0;border-bottom-color:var(--acc)}
-.dmax{font-size:1.1rem;color:var(--mute);font-weight:600}
-.dbar{height:5px;border-radius:3px;background:rgba(255,255,255,.07);margin:10px 0 14px;overflow:hidden}
+.dmax{font:inherit;color:var(--ink)}
+.dbar{height:7px;border-radius:4px;background:rgba(255,255,255,.07);margin:10px 0 14px;overflow:hidden}
 .dbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#f59e0b,#fde68a);border-radius:3px;transition:width .25s}
 .dstars{color:var(--gold);font-size:1.25rem;letter-spacing:5px;text-shadow:0 0 12px rgba(251,191,36,.5);margin-bottom:18px;min-height:1.4em}
 .dinfo{display:grid;gap:8px}
@@ -728,22 +746,17 @@ function wimg(y,cls){return'<span class="wimg '+(cls||"")+'" data-i="'+esc(y.nam
 function chDetHtml(){var c=chById(CH.det),box=document.getElementById("dbox");if(!c){chDetClose();return}
 var mn=box.querySelector(".dmain"),st=mn&&!CH.dscr?mn.scrollTop:0;CH.dscr=0;var w=chTp(c)==="w",x=S.chars[c.id]||{},o=!!x.o,el=defOf(ELS,c.e),wt=defOf(WTS,c.w),n=w?5:7,
 tabs=w?[["ov","Visão Geral"],["cs","Rank"]]:[["ov","Visão Geral"],["wp","Arma"],["sk","Habilidades"],["cs","Constelações"]],tb=CH.dtab,ok=tabs.some(function(t){return t[0]===tb});if(!ok)tb=CH.dtab="ov";
+var eq=!w&&x.wp?chById(x.wp):null;
 var h='<div class="dwrap"><nav class="drail" aria-label="Seções">'+tabs.map(function(t){return'<button class="drb'+(t[0]===tb?" on":"")+'" data-dtab="'+t[0]+'" title="'+t[1]+'" aria-label="'+t[1]+'" aria-pressed="'+(t[0]===tb?"true":"false")+'">'+ric(t[0])+'</button>'}).join("")+'</nav><div class="dmain">';
 h+='<button class="dx" data-dact="close" aria-label="Fechar">&times;</button>';
-h+='<div class="dtop"><div class="dpic" data-i="'+esc(c.name.charAt(0))+'"><img src="'+esc(chSrc(c.img))+'" alt="" onerror="this.style.visibility=\'hidden\';this.parentNode.className+=\' nf\'"></div><div class="dti"><h3 id="dtt">'+esc(c.name)+'</h3><div class="dst">'+(o?'<span class="don">✓ Na coleção</span><button class="btn danger" data-dact="rm">Remover</button>':'<span class="dno">Não obtido</span><button class="btn on" data-dact="own">Adicionar à coleção</button>')+'</div></div></div>';
+h+='<div class="dtop"><div class="dleft"><div class="dpic" data-i="'+esc(c.name.charAt(0))+'"><img src="'+esc(chSrc(c.img))+'" alt="" onerror="this.style.visibility=\'hidden\';this.parentNode.className+=\' nf\'"></div><div class="dstars" aria-label="'+(c.r||0)+' estrelas">'+new Array((c.r||0)+1).join("★")+'</div></div><div class="dti"><div class="dnm"><h3 id="dtt">'+esc(c.name)+'</h3><div class="dic">'+(!w&&el?ico(el):"")+(wt?ico(wt):"")+'</div></div><div class="dst">'+(o?'<span class="don">✓ Na coleção</span><button class="btn danger" data-dact="rm">Remover</button>':'<span class="dno">Não obtido</span><button class="btn on" data-dact="own">Adicionar à coleção</button>')+'</div></div>'+(w?"":eq?'<button class="dwk" data-dgo="wp" title="Trocar arma equipada" aria-label="Arma equipada: '+esc(eq.name)+'. Trocar"'+(o?"":" inert")+'>'+wimg(eq,"big")+'<span class="dwkn">'+esc(eq.name)+'</span><span class="dwkr">'+new Array((eq.r||0)+1).join("★")+'</span></button>':'<button class="dwk empty" data-dgo="wp" title="Escolher arma equipada" aria-label="Escolher arma equipada"'+(o?"":" inert")+'><span class="dwkp">+</span></button>')+'</div>';
 h+='<h4 class="dpt">'+tabs.filter(function(t){return t[0]===tb})[0][1]+'</h4><div class="dfld"'+(o?"":" inert")+'>';
 if(tb==="ov"){
 var lv=x.lv||0;
-h+='<div class="dlvl"><span class="dnv">Nv.</span><input class="dlvi" id="dlv" inputmode="numeric" maxlength="2" placeholder="—" autocomplete="off" value="'+(lv||"")+'"><span class="dmax">/90</span></div><div class="dbar"><i id="dlvb" style="width:'+Math.round(lv*100/90)+'%"></i></div>';
-h+='<div class="dstars" aria-label="'+(c.r||0)+' estrelas">'+new Array((c.r||0)+1).join("★")+'</div>';
-h+='<div class="dinfo">';
-if(!w&&el)h+='<div class="drow"><small>Elemento</small><span class="dv">'+ico(el)+el[1]+'</span></div>';
-if(wt)h+='<div class="drow"><small>Tipo de arma</small><span class="dv">'+ico(wt)+wt[1]+'</span></div>';
-if(!w){var eq=x.wp&&chById(x.wp);
-h+='<button class="drow dgo" data-dgo="wp"><small>Arma equipada</small>'+(eq?'<span class="dv">'+wimg(eq,"sm")+esc(eq.name)+' <em>'+(eq.r||0)+'★</em></span>':'<span class="dv dmu">Nenhuma — escolher</span>')+'</button>'}
-else{var on=chAll().filter(function(y){return chTp(y)==="c"&&S.chars[y.id]&&S.chars[y.id].wp===c.id}).map(function(y){return esc(y.name)});
-h+='<div class="drow"><small>Equipada em</small><span class="dv'+(on.length?"":" dmu")+'">'+(on.length?on.join(", "):"Ninguém")+'</span></div>'}
-h+='</div>'}
+h+='<div class="dlvl"><span class="dnv">Nv.</span><input class="dlvi" id="dlv" inputmode="numeric" maxlength="2" placeholder="0" autocomplete="off" value="'+(lv||"")+'"><span class="dmax">/90</span></div><div class="dbar"><i id="dlvb" style="width:'+Math.round(lv*100/90)+'%"></i></div>';
+if(w){var on=chAll().filter(function(y){return chTp(y)==="c"&&S.chars[y.id]&&S.chars[y.id].wp===c.id}).map(function(y){return esc(y.name)});
+h+='<div class="dinfo"><div class="drow"><small>Equipada em</small><span class="dv'+(on.length?"":" dmu")+'">'+(on.length?on.join(", "):"Ninguém")+'</span></div></div>'}
+}
 else if(tb==="wp"){
 var ws=chAll().filter(function(y){return chTp(y)==="w"&&(!c.w||!y.w||y.w===c.w)}),ow=[],ot=[];
 ws.forEach(function(y){(S.chars[y.id]&&S.chars[y.id].o?ow:ot).push(y)});
@@ -761,7 +774,7 @@ else{
 h+='<div class="dchips">';
 for(var k=0;k<n;k++)h+='<button class="dchip'+((x.c||0)===k?" on":"")+'" data-dcon="'+k+'">'+(w?"R"+(k+1):"S"+k)+'</button>';
 h+='</div><p class="dhint">'+(w?"Rank atual: R":"Constelação atual: S")+(w?(x.c||0)+1:(x.c||0))+'</p>'}
-h+='</div><p class="dhint">'+(o?"Tudo aqui é opcional. As alterações são salvas na hora.":"Adicione à coleção para preencher os detalhes. Tudo é opcional.")+'</p></div></div>';
+h+='</div>'+(o?'<p class="dhint">Tudo aqui é opcional. As alterações são salvas na hora.</p>':'')+'</div></div>';
 box.innerHTML=h;var m2=box.querySelector(".dmain");if(m2)m2.scrollTop=st}
 document.getElementById("cmodal").addEventListener("click",function(e){var t=e.target,id=CH.det,b;
 if(t.id==="cmodal"){chDetClose();return}
