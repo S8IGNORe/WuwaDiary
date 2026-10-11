@@ -367,7 +367,13 @@ body.gdrag{user-select:none;-webkit-user-select:none;cursor:grabbing}
 .ric img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .dmain{position:relative;flex:1;min-width:0;overflow:auto;padding:22px}
 .dtop{display:flex;gap:14px;align-items:center;margin-bottom:20px;padding-right:30px}
-.dtop .dpic{width:60px;height:60px;border-radius:14px}
+.dtop{align-items:flex-start}
+.dleft{flex:none;display:flex;flex-direction:column;align-items:center;gap:7px}
+.dtop .dpic{width:80px;height:80px;border-radius:16px}
+.dtop .dstars{font-size:.8rem;letter-spacing:2px;margin:0 -2px 0 0;min-height:0;line-height:1;text-shadow:0 0 8px rgba(251,191,36,.45);white-space:nowrap}
+.dnm{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 10px}
+.dic{display:inline-flex;align-items:center;gap:6px}
+.dtop .dnm h3{margin:0}
 .dtop .dti{flex:1;min-width:0}
 .dtop .dti h3{margin:0 0 8px;font-size:1.2rem}
 .dtop .dst{padding:0;border:0;background:none;margin:0;justify-content:flex-start}
@@ -730,15 +736,12 @@ var mn=box.querySelector(".dmain"),st=mn&&!CH.dscr?mn.scrollTop:0;CH.dscr=0;var 
 tabs=w?[["ov","Visão Geral"],["cs","Rank"]]:[["ov","Visão Geral"],["wp","Arma"],["sk","Habilidades"],["cs","Constelações"]],tb=CH.dtab,ok=tabs.some(function(t){return t[0]===tb});if(!ok)tb=CH.dtab="ov";
 var h='<div class="dwrap"><nav class="drail" aria-label="Seções">'+tabs.map(function(t){return'<button class="drb'+(t[0]===tb?" on":"")+'" data-dtab="'+t[0]+'" title="'+t[1]+'" aria-label="'+t[1]+'" aria-pressed="'+(t[0]===tb?"true":"false")+'">'+ric(t[0])+'</button>'}).join("")+'</nav><div class="dmain">';
 h+='<button class="dx" data-dact="close" aria-label="Fechar">&times;</button>';
-h+='<div class="dtop"><div class="dpic" data-i="'+esc(c.name.charAt(0))+'"><img src="'+esc(chSrc(c.img))+'" alt="" onerror="this.style.visibility=\'hidden\';this.parentNode.className+=\' nf\'"></div><div class="dti"><h3 id="dtt">'+esc(c.name)+'</h3><div class="dst">'+(o?'<span class="don">✓ Na coleção</span><button class="btn danger" data-dact="rm">Remover</button>':'<span class="dno">Não obtido</span><button class="btn on" data-dact="own">Adicionar à coleção</button>')+'</div></div></div>';
+h+='<div class="dtop"><div class="dleft"><div class="dpic" data-i="'+esc(c.name.charAt(0))+'"><img src="'+esc(chSrc(c.img))+'" alt="" onerror="this.style.visibility=\'hidden\';this.parentNode.className+=\' nf\'"></div><div class="dstars" aria-label="'+(c.r||0)+' estrelas">'+new Array((c.r||0)+1).join("★")+'</div></div><div class="dti"><div class="dnm"><h3 id="dtt">'+esc(c.name)+'</h3><div class="dic">'+(!w&&el?ico(el):"")+(wt?ico(wt):"")+'</div></div><div class="dst">'+(o?'<span class="don">✓ Na coleção</span><button class="btn danger" data-dact="rm">Remover</button>':'<span class="dno">Não obtido</span><button class="btn on" data-dact="own">Adicionar à coleção</button>')+'</div></div></div>';
 h+='<h4 class="dpt">'+tabs.filter(function(t){return t[0]===tb})[0][1]+'</h4><div class="dfld"'+(o?"":" inert")+'>';
 if(tb==="ov"){
 var lv=x.lv||0;
-h+='<div class="dlvl"><span class="dnv">Nv.</span><input class="dlvi" id="dlv" inputmode="numeric" maxlength="2" placeholder="—" autocomplete="off" value="'+(lv||"")+'"><span class="dmax">/90</span></div><div class="dbar"><i id="dlvb" style="width:'+Math.round(lv*100/90)+'%"></i></div>';
-h+='<div class="dstars" aria-label="'+(c.r||0)+' estrelas">'+new Array((c.r||0)+1).join("★")+'</div>';
+h+='<div class="dlvl"><span class="dnv">Nv.</span><input class="dlvi" id="dlv" inputmode="numeric" maxlength="2" placeholder="0" autocomplete="off" value="'+(lv||"")+'"><span class="dmax">/90</span></div><div class="dbar"><i id="dlvb" style="width:'+Math.round(lv*100/90)+'%"></i></div>';
 h+='<div class="dinfo">';
-if(!w&&el)h+='<div class="drow"><small>Elemento</small><span class="dv">'+ico(el)+el[1]+'</span></div>';
-if(wt)h+='<div class="drow"><small>Tipo de arma</small><span class="dv">'+ico(wt)+wt[1]+'</span></div>';
 if(!w){var eq=x.wp&&chById(x.wp);
 h+='<button class="drow dgo" data-dgo="wp"><small>Arma equipada</small>'+(eq?'<span class="dv">'+wimg(eq,"sm")+esc(eq.name)+' <em>'+(eq.r||0)+'★</em></span>':'<span class="dv dmu">Nenhuma — escolher</span>')+'</button>'}
 else{var on=chAll().filter(function(y){return chTp(y)==="c"&&S.chars[y.id]&&S.chars[y.id].wp===c.id}).map(function(y){return esc(y.name)});
@@ -761,7 +764,7 @@ else{
 h+='<div class="dchips">';
 for(var k=0;k<n;k++)h+='<button class="dchip'+((x.c||0)===k?" on":"")+'" data-dcon="'+k+'">'+(w?"R"+(k+1):"S"+k)+'</button>';
 h+='</div><p class="dhint">'+(w?"Rank atual: R":"Constelação atual: S")+(w?(x.c||0)+1:(x.c||0))+'</p>'}
-h+='</div><p class="dhint">'+(o?"Tudo aqui é opcional. As alterações são salvas na hora.":"Adicione à coleção para preencher os detalhes. Tudo é opcional.")+'</p></div></div>';
+h+='</div>'+(o?'<p class="dhint">Tudo aqui é opcional. As alterações são salvas na hora.</p>':'')+'</div></div>';
 box.innerHTML=h;var m2=box.querySelector(".dmain");if(m2)m2.scrollTop=st}
 document.getElementById("cmodal").addEventListener("click",function(e){var t=e.target,id=CH.det,b;
 if(t.id==="cmodal"){chDetClose();return}
