@@ -321,6 +321,41 @@ body.scr .cgrid{pointer-events:none}
 .card.drag{position:relative;z-index:5;border-color:rgba(168,85,247,.7);box-shadow:0 18px 40px -12px rgba(0,0,0,.7),0 0 0 1px rgba(168,85,247,.5),0 0 28px -6px rgba(168,85,247,.55)}
 .card.drag .grip{cursor:grabbing;opacity:1;color:#c4b5fd}
 body.gdrag{user-select:none;-webkit-user-select:none;cursor:grabbing}
+.ch{cursor:pointer}
+.dmw{z-index:38}
+.dbox{max-width:520px;max-height:min(90vh,780px);overflow:auto;position:relative;background:#0f0f1a;border-radius:20px;padding:22px}
+.dx{position:absolute;top:12px;right:14px;width:30px;height:30px;border:0;border-radius:50%;background:transparent;color:var(--mute);font-size:1.4rem;line-height:1;cursor:pointer}
+.dx:hover{background:rgba(255,255,255,.06);color:var(--ink)}
+.dhd{display:flex;gap:16px;align-items:center;margin-bottom:18px;padding-right:28px}
+.dpic{position:relative;width:84px;height:84px;flex:none;border-radius:16px;overflow:hidden;background:linear-gradient(180deg,#171726,#0c0c16);display:grid;place-items:center;border:1px solid var(--line)}
+.dpic img{width:100%;height:100%;object-fit:cover}
+.dpic:before{content:attr(data-i);display:none;font-weight:700;font-size:1.6rem;color:var(--mute)}
+.dpic.nf:before{display:block}
+.dti h3{margin:0 0 6px;font-size:1.25rem;font-weight:700;letter-spacing:-.02em}
+.dmeta{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:.78rem;color:var(--mute)}
+.dmeta .dm{display:inline-flex;align-items:center;gap:6px}
+.dmeta .ei{width:20px;height:20px}.dmeta .ei b{font-size:.5rem}
+.dstar{color:var(--gold);font-weight:700}
+.dst{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03);margin-bottom:18px}
+.don{color:#86efac;font-weight:600;font-size:.85rem}.dno{color:var(--mute);font-weight:600;font-size:.85rem}
+.dfld{display:grid;gap:18px;transition:opacity .2s}.dfld[inert]{opacity:.38}
+.dsec{display:grid;gap:8px}
+.dsec>b{font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.dchips{display:flex;flex-wrap:wrap;gap:6px}
+.dchip{padding:7px 13px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.03);color:var(--mute);font:600 .78rem Poppins,system-ui,sans-serif;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+.dchip:hover{color:var(--ink);border-color:rgba(168,85,247,.45)}
+.dchip.on{background:var(--accg);border-color:transparent;color:#fff;box-shadow:0 0 16px -4px rgba(168,85,247,.8)}
+.dinp{padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;font-size:.85rem;width:100%}
+.dinp:focus{border-color:var(--acc);outline:0}
+#dlv{max-width:120px}
+.dtl{display:grid;gap:8px}
+.dtr{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.025);font-size:.82rem}
+.dstep{display:inline-flex;align-items:center;gap:8px}
+.dstep b{min-width:28px;text-align:center;font-size:.85rem}
+.dstep button{width:28px;height:28px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.04);color:var(--ink);font-size:1rem;line-height:1;cursor:pointer}
+.dstep button:hover{border-color:rgba(168,85,247,.5)}
+.dhint{margin:20px 0 0;font-size:.74rem;color:var(--mute)}
+.dsub{font-size:.85rem}
 </style>
 </head>
 <body>
@@ -328,6 +363,7 @@ body.gdrag{user-select:none;-webkit-user-select:none;cursor:grabbing}
 <div class="modal" id="dmodal" hidden><div class="mbox" role="dialog" aria-modal="true" aria-labelledby="dtitle"><h3 id="dtitle"></h3><p class="reset" id="dsub"></p><div id="dlist"></div><div class="mbtn"><button class="btn" id="dall">Marcar todas</button><button class="btn" id="dno">Cancelar</button><button class="btn on" id="dyes">Salvar</button></div></div></div>
 <div class="modal" id="modal" hidden><div class="mbox" role="dialog" aria-modal="true"><p id="mmsg"></p><div class="mbtn"><button class="btn" id="mno">Cancelar</button><button class="btn on" id="myes">Confirmar</button></div></div></div>
 <div class="modal" id="emodal" hidden><div class="mbox" role="dialog" aria-modal="true" aria-labelledby="efTitle"><h3 id="efTitle">Adicionar</h3><div class="fm"><label>Tipo<select id="efT"><option value="c">Personagem</option><option value="w">Arma</option></select></label><label>Nome<input id="efN" maxlength="40" autocomplete="off"></label><label>Arquivo da imagem<input id="efI" placeholder="ex.: rover.png" maxlength="120" autocomplete="off"></label><label>Nome alternativo (como vem do jogo)<input id="efA" placeholder="ex.: Chama Gélida (opcional)" maxlength="120" autocomplete="off"></label><label id="efEl">Elemento<select id="efE"></select></label><label>Tipo de arma<select id="efW"></select></label><label>Raridade<select id="efR"></select></label></div><div class="mbtn"><button class="btn" id="eno">Cancelar</button><button class="btn on" id="eyes">Salvar</button></div></div></div>
+<div class="modal dmw" id="cmodal" hidden><div class="mbox dbox" id="dbox" role="dialog" aria-modal="true" aria-labelledby="dtt"></div></div>
 <main>
 <header class="top"><div class="tl"><button class="btn menu" id="menu" aria-label="Menu">&#9776;</button><h1><span id="ttl">Checklist</span> <button class="tip" id="ttip" data-tip="Marque o que já fez. Cada lista zera sozinha no reset diário, semanal e mensal." aria-label="Ajuda">?</button></h1></div>
 <div class="acct"><span id="sync"></span><span id="who" hidden></span><button class="btn" id="login" hidden>Entrar com Google</button><button class="btn" id="logout" hidden>Sair</button><button class="btn gear" id="gear" title="Configurações" aria-label="Configurações">&#9881;&#xFE0E;</button></div></header>
@@ -592,7 +628,7 @@ h+='<div class="ch'+(o?" own":"")+" r"+(c.r||0)+'" data-cid="'+c.id+'"><div clas
 +(w?ico(defOf(WTS,c.w),"tr"):ico(defOf(ELS,c.e),"tr")+ico(defOf(WTS,c.w),"bl"))
 +(adm?'<span class="ca"><button data-cedit="'+c.id+'" aria-label="Editar">&#9998;</button><button data-cdel="'+c.id+'" aria-label="Remover">&times;</button></span>':"")
 +'</div><div class="nm">'+esc(c.name)+"</div></div>"});
-document.getElementById("chbar").innerHTML="<span>"+(tot?"Mostrando "+l.length+" de "+tot+" ":"")+'<button class="tip" data-tip="Clique no card para marcar que você o tem. Clique no selo roxo (S0 a S6 nos personagens, R1 a R5 nas armas) para subir de nível; Shift ou botão direito diminui. Quem falta fica cinza e ganha cor ao passar o mouse. Marcar todos e Redefinir valem só para os itens mostrados." aria-label="Ajuda">?</button></span><span class="hr"><button class="btn" id="chreset">Redefinir tudo</button><button class="btn" id="chall">Marcar todos</button></span>';
+document.getElementById("chbar").innerHTML="<span>"+(tot?"Mostrando "+l.length+" de "+tot+" ":"")+'<button class="tip" data-tip="Clique em um card para abrir os detalhes: lá você marca que tem o item e, se quiser, preenche constelação (ou rank), nível, arma e talentos. Tudo é opcional. Quem falta fica cinza e ganha cor ao passar o mouse. Marcar todos e Redefinir valem só para os itens mostrados." aria-label="Ajuda">?</button></span><span class="hr"><button class="btn" id="chreset">Redefinir tudo</button><button class="btn" id="chall">Marcar todos</button></span>';
 document.getElementById("chgrid").innerHTML=!tot?'<section><p class="reset">'+(w?"Nenhuma arma cadastrada ainda.":"Nenhum personagem cadastrado ainda.")+"</p></section>":l.length?'<div class="cgrid">'+h+"</div>":'<section><p class="reset">Nenhum resultado com esses filtros.</p></section>'}
 function chOwn(id){var x=S.chars[id]||(S.chars[id]={o:0,c:0});x.o=x.o?0:1;save();renderChars()}
 function chCon(id,d){var x=S.chars[id],c=chAll().filter(function(y){return y.id===id})[0];if(!x||!x.o||!c)return;var m=chTp(c)==="w"?5:7;x.c=((x.c||0)+d+m)%m;save();renderChars()}
@@ -615,7 +651,6 @@ var l=chAll().slice(),i=-1;if(CH.edit)l.forEach(function(c,k){if(c.id===CH.edit)
 if(i>=0){o.id=l[i].id;l[i]=o}else{o.id="p"+Date.now().toString(36);l.push(o)}
 CH.tab=t;admSave({chars:l});chClose();renderChars()}
 document.getElementById("pg-char").addEventListener("click",function(e){var t=e.target,b;
-if(b=t.closest("[data-cb]")){chCon(b.dataset.cb,e.shiftKey?-1:1);return}
 if(b=t.closest("[data-cdel]")){delChar(b.dataset.cdel);return}
 if(b=t.closest("[data-cedit]")){chOpenForm(b.dataset.cedit);return}
 if(b=t.closest("[data-cnew]")){chOpenForm(null,b.dataset.cnew);return}
@@ -627,14 +662,55 @@ if(b=t.closest("[data-sort]")){CH.sort=b.dataset.sort;CH.dd=false;chFilters();ch
 if(t.id==="chclr"){CH.q="";document.getElementById("chq").value="";CH.el={};CH.wt={};CH.ra={};CH.st="all";chFilters();chGrid();return}
 if(t.id==="chall"){chBulk(function(id){var y=S.chars[id]||(S.chars[id]={o:0,c:0});y.o=1});return}
 if(t.id==="chreset"){var n=chList().length;if(!n)return;ask("Redefinir "+n+(n===1?" item mostrado":" itens mostrados")+" ("+(CH.tab==="w"?"armas":"personagens")+" e níveis)?","Redefinir",function(){chBulk(function(id){delete S.chars[id]})},true);return}
-var c=t.closest("[data-cid]");if(c&&t.closest(".ci"))chOwn(c.dataset.cid)});
-document.getElementById("pg-char").addEventListener("contextmenu",function(e){var b=e.target.closest("[data-cb]");if(b){e.preventDefault();chCon(b.dataset.cb,-1)}});
+var c=t.closest("[data-cid]");if(c)chDetail(c.dataset.cid)});
 var chqT;document.getElementById("chq").addEventListener("input",function(){CH.q=this.value;clearTimeout(chqT);chqT=setTimeout(function(){chFilters();chGrid()},120)});
+
+/* ---- Detalhes do item (painel ao clicar no card) ---- */
+var TLN=["Ataque Básico","Habilidade de Ressonância","Circuito de Forte","Liberação de Ressonância","Habilidade de Introdução"];
+function chById(id){return chAll().filter(function(c){return c.id===id})[0]}
+function chX(id){return S.chars[id]||(S.chars[id]={o:0,c:0})}
+function chHasExtra(x){return!!(x&&(x.c||x.lv||x.wp||(x.tl&&x.tl.some(function(v){return v}))))}
+function chDetail(id){CH.det=id;chDetHtml();document.getElementById("cmodal").hidden=false;var b=document.querySelector("#cmodal .dx");if(b)b.focus()}
+function chDetClose(){CH.det=null;document.getElementById("cmodal").hidden=true}
+function chDetHtml(){var c=chById(CH.det),box=document.getElementById("dbox");if(!c){chDetClose();return}
+var st=box.scrollTop,w=chTp(c)==="w",x=S.chars[c.id]||{},o=!!x.o,el=defOf(ELS,c.e),wt=defOf(WTS,c.w),n=w?5:7,h="";
+h+='<button class="dx" data-dact="close" aria-label="Fechar">&times;</button>';
+h+='<div class="dhd"><div class="dpic" data-i="'+esc(c.name.charAt(0))+'"><img src="'+esc(chSrc(c.img))+'" alt="" onerror="this.style.visibility=\'hidden\';this.parentNode.className+=\' nf\'"></div><div class="dti"><h3 id="dtt">'+esc(c.name)+'</h3><div class="dmeta"><span class="dstar">'+(c.r||0)+'★</span><span>'+(w?"Arma":"Ressonante")+'</span>'+(el&&!w?'<span class="dm">'+ico(el)+el[1]+'</span>':"")+(wt?'<span class="dm">'+ico(wt)+wt[1]+'</span>':"")+'</div></div></div>';
+h+='<div class="dst">'+(o?'<span class="don">✓ Na coleção</span><button class="btn danger" data-dact="rm">Remover</button>':'<span class="dno">Não obtido</span><button class="btn on" data-dact="own">Adicionar à coleção</button>')+'</div>';
+h+='<div class="dfld"'+(o?"":" inert")+'>';
+h+='<div class="dsec"><b>'+(w?"Rank":"Constelação")+'</b><div class="dchips">';
+for(var i=0;i<n;i++)h+='<button class="dchip'+((x.c||0)===i?" on":"")+'" data-dcon="'+i+'">'+(w?"R"+(i+1):"S"+i)+'</button>';
+h+='</div></div><div class="dsec"><b>Nível</b><input class="dinp" id="dlv" inputmode="numeric" maxlength="2" placeholder="1–90" autocomplete="off" value="'+(x.lv||"")+'"></div>';
+if(!w){var ws=chAll().filter(function(y){return chTp(y)==="w"&&(!c.w||!y.w||y.w===c.w)}),ow=[],ot=[];
+ws.forEach(function(y){(S.chars[y.id]&&S.chars[y.id].o?ow:ot).push(y)});
+var so=function(a,b){return(b.r||0)-(a.r||0)||a.name.localeCompare(b.name)};ow.sort(so);ot.sort(so);
+var op=function(l){return l.map(function(y){return'<option value="'+y.id+'"'+(x.wp===y.id?" selected":"")+'>'+esc(y.name)+" ("+(y.r||0)+"★)</option>"}).join("")};
+h+='<div class="dsec"><b>Arma equipada</b><select class="dinp" id="dwp"><option value="">— Nenhuma —</option>'+(ow.length?'<optgroup label="Na sua coleção">'+op(ow)+"</optgroup>":"")+(ot.length?'<optgroup label="Outras armas">'+op(ot)+"</optgroup>":"")+"</select></div>";
+h+='<div class="dsec"><b>Talentos</b><div class="dtl">';
+TLN.forEach(function(nm,i){var v=(x.tl&&x.tl[i])||0;h+='<div class="dtr"><span>'+nm+'</span><div class="dstep"><button data-dtl="'+i+'" data-d="-1" aria-label="Diminuir">−</button><b id="dtv'+i+'">'+(v||"—")+'</b><button data-dtl="'+i+'" data-d="1" aria-label="Aumentar">+</button></div></div>'});
+h+='</div></div>'}
+else{var on=chAll().filter(function(y){return chTp(y)==="c"&&S.chars[y.id]&&S.chars[y.id].wp===c.id}).map(function(y){return esc(y.name)});
+if(on.length)h+='<div class="dsec"><b>Equipada em</b><span class="dsub">'+on.join(", ")+'</span></div>'}
+h+='</div><p class="dhint">'+(o?"Tudo aqui é opcional. As alterações são salvas na hora.":"Adicione à coleção para preencher os detalhes. Tudo é opcional.")+'</p>';
+box.innerHTML=h;box.scrollTop=st}
+document.getElementById("cmodal").addEventListener("click",function(e){var t=e.target,id=CH.det,b;
+if(t.id==="cmodal"){chDetClose();return}
+if(b=t.closest("[data-dact]")){var a=b.dataset.dact;
+if(a==="close")chDetClose();
+else if(a==="own"){chX(id).o=1;save();renderChars();chDetHtml()}
+else if(a==="rm"){var x0=S.chars[id],doit=function(){delete S.chars[id];save();renderChars();chDetHtml()};
+if(chHasExtra(x0))ask("Remover da coleção e apagar constelação, nível, arma e talentos preenchidos?","Remover",doit,true);else doit()}
+return}
+if(b=t.closest("[data-dcon]")){chX(id).c=+b.dataset.dcon;save();renderChars();chDetHtml();return}
+if(b=t.closest("[data-dtl]")){var x1=chX(id);if(!x1.tl)x1.tl=[0,0,0,0,0];var i=+b.dataset.dtl,v=Math.max(0,Math.min(10,(x1.tl[i]||0)+ +b.dataset.d));x1.tl[i]=v;save();document.getElementById("dtv"+i).textContent=v||"—"}});
+document.getElementById("cmodal").addEventListener("input",function(e){if(e.target.id!=="dlv")return;var v=e.target.value.replace(/\D/g,"").slice(0,2),n=parseInt(v,10),x=chX(CH.det);
+if(n>90){n=90;v="90"}e.target.value=v;if(!n)delete x.lv;else x.lv=n;save()});
+document.getElementById("cmodal").addEventListener("change",function(e){if(e.target.id!=="dwp")return;var x=chX(CH.det);if(e.target.value)x.wp=e.target.value;else delete x.wp;save()});
 document.getElementById("emodal").addEventListener("click",function(e){var i=e.target.id;if(i==="emodal"||i==="eno")chClose();else if(i==="eyes")chSave()});
 document.getElementById("efT").addEventListener("change",function(){var e=document.getElementById("efE").value,w=document.getElementById("efW").value;chFormFill(this.value,null);document.getElementById("efE").value=e;document.getElementById("efW").value=w});
 document.getElementById("efN").addEventListener("keydown",function(e){if(e.key==="Enter")chSave()});
 document.addEventListener("click",function(e){if(CH.dd&&e.target.isConnected&&!e.target.closest("#chsort")){CH.dd=false;chFilters()}});
-document.addEventListener("keydown",function(e){if(e.key!=="Escape")return;if(!document.getElementById("emodal").hidden)chClose();else if(CH.dd){CH.dd=false;chFilters()}});
+document.addEventListener("keydown",function(e){if(e.key!=="Escape")return;if(!document.getElementById("modal").hidden)return;if(!document.getElementById("cmodal").hidden)chDetClose();else if(!document.getElementById("emodal").hidden)chClose();else if(CH.dd){CH.dd=false;chFilters()}});
 function migrate(o){if(!o.groups){o.groups=[];["daily","weekly","monthly"].forEach(function(t){if(o.tasks&&o.tasks[t])o.groups.push({id:t,name:DEFG[t][0],reset:DEFG[t][1],tasks:o.tasks[t]})});delete o.tasks}if(!o.chars)o.chars={};return o}
 function gget(id){return S.groups.filter(function(g){return g.id===id})[0]}
 function gkey(g){var r=g.reset;if(r==="none")return"-";if(r==="season")return key("monthly");if(r==="monthly")return key("cal");if(r.indexOf("days:")===0)return"c"+Math.floor((dn(key("daily"))-(g.anchor||0))/(+r.slice(5)||1));return key(r)}
@@ -656,10 +732,10 @@ if(r==="days"){var d=parseInt(document.getElementById("ngd"+x).value,10);if(!(d>
 S.groups.push(g);document.getElementById("ngn"+x).value="";document.querySelector("#newgrp"+x+" details").open=false;save();render();document.querySelector('[data-new="'+g.id+'"]').focus()}}
 bindNG("","act");bindNG("2","per");
 var NAV=[{id:"checklist",label:"Checklist",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>'},
-{id:"character",label:"Personagem",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>'},{id:"pity",label:"Contador de Pity",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>'}];
+{id:"character",label:"Coleção",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>'},{id:"pity",label:"Contador de Pity",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>'}];
 var PAGE="checklist";
 function renderNav(){document.getElementById("nav").innerHTML=NAV.map(function(n){return'<button class="'+(n.id===PAGE?"on":"")+'" data-nav="'+n.id+'">'+n.icon+"<span>"+n.label+"</span></button>"}).join("")}
-function go(p){PAGE=p;var pg={checklist:"pg-check",character:"pg-char",pity:"pg-pity"},tt={checklist:"Checklist",character:"Personagem",pity:"Contador de Pity"},c=p==="checklist";
+function go(p){PAGE=p;var pg={checklist:"pg-check",character:"pg-char",pity:"pg-pity"},tt={checklist:"Checklist",character:"Coleção",pity:"Contador de Pity"},c=p==="checklist";
 for(var k in pg)document.getElementById(pg[k]).hidden=k!==p;
 document.querySelector("main").classList.toggle("wide",p==="pity"||p==="character");
 document.getElementById("ttl").textContent=tt[p];if(p==="character")renderChars();if(p==="pity")renderPity();
