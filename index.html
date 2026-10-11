@@ -316,6 +316,11 @@ section.full .bar i{background:linear-gradient(90deg,#f59e0b,#fde047);box-shadow
 .ch{content-visibility:auto;contain-intrinsic-size:auto 190px}
 body.scr .cgrid{pointer-events:none}
 .ca{will-change:auto}
+.grip{display:inline-grid;place-items:center;width:22px;height:26px;margin:0 0 0 -6px;padding:0;border:0;border-radius:8px;background:transparent;color:var(--mute);opacity:.45;cursor:grab;touch-action:none;flex:none;transition:opacity .15s,color .15s,background .15s}
+.grip:hover,.grip:focus-visible{opacity:1;color:var(--ink);background:rgba(255,255,255,.06)}
+.card.drag{position:relative;z-index:5;border-color:rgba(168,85,247,.7);box-shadow:0 18px 40px -12px rgba(0,0,0,.7),0 0 0 1px rgba(168,85,247,.5),0 0 28px -6px rgba(168,85,247,.55)}
+.card.drag .grip{cursor:grabbing;opacity:1;color:#c4b5fd}
+body.gdrag{user-select:none;-webkit-user-select:none;cursor:grabbing}
 </style>
 </head>
 <body>
@@ -327,7 +332,7 @@ body.scr .cgrid{pointer-events:none}
 <header class="top"><div class="tl"><button class="btn menu" id="menu" aria-label="Menu">&#9776;</button><h1><span id="ttl">Checklist</span> <button class="tip" id="ttip" data-tip="Marque o que já fez. Cada lista zera sozinha no reset diário, semanal e mensal." aria-label="Ajuda">?</button></h1></div>
 <div class="acct"><span id="sync"></span><span id="who" hidden></span><button class="btn" id="login" hidden>Entrar com Google</button><button class="btn" id="logout" hidden>Sair</button><button class="btn gear" id="gear" title="Configurações" aria-label="Configurações">&#9881;&#xFE0E;</button></div></header>
 <div id="pg-check">
-<nav class="tabs"><button data-tab="today" class="on">Atividades</button><button data-tab="hist">Histórico</button><button data-tab="perm">Personalizado</button></nav>
+<nav class="tabs"><button data-tab="today" class="on">Atividades</button><button data-tab="perm">Personalizado</button><button data-tab="hist">Histórico</button></nav>
 <section id="lun" hidden></section>
 <div id="app"></div>
 <section class="ng" id="newgrp"><details><summary>Novo grupo</summary><div class="add"><input id="ngn" placeholder="Nome do grupo, ex.: Minha meta" maxlength="40"><select id="ngr"><option value="daily">Reseta todo dia</option><option value="weekly">Reseta toda semana</option><option value="monthly">Reseta todo mês</option><option value="season">Reseta na temporada</option><option value="days">Reseta a cada N dias</option><option value="none">Sem reset</option></select><input type="number" id="ngd" min="1" max="365" value="3" title="Dias" hidden><button class="btn" id="ngadd">Criar</button></div></details><div id="restore"></div></section>
@@ -394,13 +399,14 @@ return new Date(y,m,day+1,h)}
 function left(type){var ms=nextReset(type)-Date.now();if(ms<0)ms=0;var min=Math.floor(ms/60000),d=Math.floor(min/1440),h=Math.floor(min%1440/60),m=min%60;
 return(d?d+"d ":"")+h+"h "+p2(m)+"min"}
 function esc(s){return s.replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
-function groupsHtml(tab){var html="";
-S.groups.forEach(function(g){if((g.tab||"act")!==tab)return;var k=gkey(g),c=g.tasks.filter(function(i){return S.done[i.id]===k}).length,n=g.tasks.length,pct=n?Math.round(c*100/n):0;
-html+='<section class="card'+(n&&c===n?" full":"")+'"><div class="head"><h2>'+esc(g.name)+' <span class="reset">'+c+'/'+n+'</span></h2><div class="hr"><span class="reset" data-left="'+g.id+'">'+rlabel(g)+'</span><button class="del gdel" data-gdelg="'+g.id+'" aria-label="Excluir grupo">&times;</button></div></div><div class="bar"><i style="width:'+pct+'%"></i></div><ul>';
+var GRIP='<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>';
+function groupsHtml(tab){var html="",pi=0,ins=false,pa=tab==="per"&&!S.permHidden?Math.max(0,S.permAt||0):-1;
+S.groups.forEach(function(g){if((g.tab||"act")!==tab)return;if(pi===pa){html+=permHtml();ins=true}pi++;var k=gkey(g),c=g.tasks.filter(function(i){return S.done[i.id]===k}).length,n=g.tasks.length,pct=n?Math.round(c*100/n):0;
+html+='<section class="card'+(n&&c===n?" full":"")+'" data-gid="'+g.id+'"><div class="head"><h2><button class="grip" aria-label="Reordenar grupo (arraste ou use as setas)" title="Arraste para reordenar">'+GRIP+'</button>'+esc(g.name)+' <span class="reset">'+c+'/'+n+'</span></h2><div class="hr"><span class="reset" data-left="'+g.id+'">'+rlabel(g)+'</span><button class="del gdel" data-gdelg="'+g.id+'" aria-label="Excluir grupo">&times;</button></div></div><div class="bar"><i style="width:'+pct+'%"></i></div><ul>';
 g.tasks.forEach(function(i){var d=S.done[i.id]===k;
 html+='<li class="'+(d?"done":"")+'"><label><input type="checkbox" data-id="'+i.id+'" data-g="'+g.id+'"'+(d?" checked":"")+'><span>'+esc(i.name)+'</span></label><button class="del" data-del="'+i.id+'" data-g="'+g.id+'" aria-label="Remover '+esc(i.name)+'">&times;</button></li>'});
-html+='</ul><div class="add"><input data-new="'+g.id+'" placeholder="Nova tarefa" maxlength="60"><button class="btn" data-add="'+g.id+'" aria-label="Adicionar tarefa">+</button></div></section>'});return html}
-function render(){document.getElementById("app").innerHTML=groupsHtml("act")||'<section><p class="reset">Nenhum grupo aqui. Crie um novo ou restaure os padrões abaixo.</p></section>';document.getElementById("pgroups").innerHTML=groupsHtml("per");renderRestore()}
+html+='</ul><div class="add"><input data-new="'+g.id+'" placeholder="Nova tarefa" maxlength="60"><button class="btn" data-add="'+g.id+'" aria-label="Adicionar tarefa">+</button></div></section>'});if(pa>=0&&!ins)html+=permHtml();return html}
+function render(){document.getElementById("app").innerHTML=groupsHtml("act")||'<section><p class="reset">Nenhum grupo aqui. Crie um novo ou restaure os padrões abaixo.</p></section>';document.getElementById("pgroups").innerHTML=groupsHtml("per");permNote();renderRestore()}
 function gclick(e){var el=e.target;
 if(el.dataset.id){var g=gget(el.dataset.g),cid=el.dataset.id;if(el.checked)S.done[cid]=gkey(g);else delete S.done[cid];save();render();var nb=document.querySelector('[data-id="'+cid+'"]');if(nb)nb.classList.add("pop")}
 else if(el.dataset.del){var g2=gget(el.dataset.g);g2.tasks=g2.tasks.filter(function(i){return i.id!==el.dataset.del});delete S.done[el.dataset.del];save();render()}
@@ -408,6 +414,32 @@ else if(el.dataset.add)addTask(el.dataset.add);
 else if(el.dataset.gdelg){var g3=gget(el.dataset.gdelg);if(g3)ask('Excluir o grupo "'+g3.name+'" e suas tarefas?',"Excluir",function(){g3.tasks.forEach(function(i){delete S.done[i.id]});S.groups=S.groups.filter(function(x){return x.id!==g3.id});save();render()},true)}}
 function gkeydown(e){if(e.key==="Enter"&&e.target.dataset.new)addTask(e.target.dataset.new)}
 ["app","pgroups"].forEach(function(id){var el=document.getElementById(id);el.addEventListener("click",gclick);el.addEventListener("keydown",gkeydown)});
+/* Reordenar grupos: arrastar pela alça (mouse e toque) ou setas do teclado. A ordem fica salva na conta de cada pessoa. */
+var GDR=null;
+function gRects(box){var m={};[].forEach.call(box.children,function(c){if(c.dataset.gid)m[c.dataset.gid]=c.getBoundingClientRect().top});return m}
+function gPlay(box,old){[].forEach.call(box.children,function(c){var o=old[c.dataset.gid];if(o===undefined)return;clearTimeout(c._ft);
+c.style.transition="none";c.style.transform="";var dy=o-c.getBoundingClientRect().top;
+if(dy)c.style.transform="translateY("+dy+"px)";void c.offsetHeight;
+c.style.transition="transform .24s cubic-bezier(.2,.8,.2,1)";c.style.transform="";c._ft=setTimeout(function(){c.style.transition=""},300)})}
+function gIds(box){return[].filter.call(box.children,function(c){return c.classList.contains("card")}).map(function(c){return c.dataset.gid})}
+function gCommit(box){var tab=box.id==="pgroups"?"per":"act",q=gIds(box),by={};if(tab==="per"){var pp=q.indexOf("__perm");if(pp>=0){S.permAt=pp;q.splice(pp,1)}}S.groups.forEach(function(g){by[g.id]=g});
+var out=S.groups.map(function(g){if((g.tab||"act")!==tab)return g;return by[q.shift()]||g});S.groups=out;save();render()}
+function gStart(e){var h=e.target.closest&&e.target.closest(".grip");if(!h||GDR||(e.button>0))return;var card=h.closest(".card"),box=card.parentNode;e.preventDefault();
+GDR={card:card,box:box,y:e.clientY,before:gIds(box).join()};card.classList.add("drag");document.body.classList.add("gdrag");try{h.setPointerCapture(e.pointerId)}catch(_){}
+document.addEventListener("pointermove",gMove);document.addEventListener("pointerup",gEnd);document.addEventListener("pointercancel",gEnd);gLoop()}
+function gMove(e){if(GDR)GDR.y=e.clientY}
+function gLoop(){var d=GDR;if(!d)return;var y=d.y,vh=window.innerHeight;
+if(y<90)window.scrollBy(0,-Math.min(18,(90-y)/4+4));else if(y>vh-90)window.scrollBy(0,Math.min(18,(y-(vh-90))/4+4));
+var ref=null,cs=d.box.children;for(var i=0;i<cs.length;i++){var c=cs[i];if(c===d.card||!c.classList.contains("card"))continue;var r=c.getBoundingClientRect();if(y<r.top+r.height/2){ref=c;break}}
+if(ref!==d.card.nextElementSibling){var old=gRects(d.box);d.box.insertBefore(d.card,ref);gPlay(d.box,old)}
+d.raf=requestAnimationFrame(gLoop)}
+function gEnd(){var d=GDR;if(!d)return;GDR=null;cancelAnimationFrame(d.raf);
+document.removeEventListener("pointermove",gMove);document.removeEventListener("pointerup",gEnd);document.removeEventListener("pointercancel",gEnd);
+d.card.classList.remove("drag");document.body.classList.remove("gdrag");if(gIds(d.box).join()!==d.before)gCommit(d.box)}
+function gKey(e){var h=e.target.closest&&e.target.closest(".grip");if(!h||(e.key!=="ArrowUp"&&e.key!=="ArrowDown"))return;e.preventDefault();
+var card=h.closest(".card"),box=card.parentNode,up=e.key==="ArrowUp",sib=up?card.previousElementSibling:card.nextElementSibling;if(!sib)return;
+var old=gRects(box);if(up)box.insertBefore(card,sib);else box.insertBefore(sib,card);var id=card.dataset.gid;gCommit(box);gPlay(box,old);var n=box.querySelector('[data-gid="'+id+'"] .grip');if(n)n.focus()}
+["app","pgroups"].forEach(function(id){var el=document.getElementById(id);el.addEventListener("pointerdown",gStart);el.addEventListener("keydown",gKey)});
 function addTask(id){var inp=document.querySelector('[data-new="'+id+'"]'),v=inp.value.trim();if(!v)return;gget(id).tasks.push({id:"t"+(S.n++),name:v});save();render();document.querySelector('[data-new="'+id+'"]').focus()}
 var rh=document.getElementById("rh");rh.value=S.rh;
 rh.addEventListener("change",function(){var v=parseInt(rh.value,10);if(isNaN(v)||v<0||v>23){rh.value=S.rh;return}S.rh=v;save();render()});
@@ -465,16 +497,20 @@ function tickLun(){var i=document.getElementById("lund");if(!i||(document.active
 function lunSet(){var v=parseInt(document.getElementById("lund").value,10);if(v>=1)setLun(v)}
 document.getElementById("lun").addEventListener("click",function(e){if(e.target.id==="lunset")lunSet();else if(e.target.id==="lun30")addLun()});
 document.getElementById("lun").addEventListener("keydown",function(e){if(e.key==="Enter"&&e.target.id==="lund")lunSet()});
-function renderPerm(){var el=document.getElementById("perm"),l=S.perm,c=l.filter(function(i){return i.d}).length,pct=l.length?Math.round(c*100/l.length):0;
-var h='<section class="'+(l.length&&c===l.length?"full":"")+'"><div class="head"><h2>Personalizado <span class="reset">'+c+'/'+l.length+'</span></h2><button class="tip" data-tip="Estas tarefas não têm prazo: ficam marcadas até você desmarcar." aria-label="Ajuda">?</button></div><div class="bar"><i style="width:'+pct+'%"></i></div><ul>';
+function permHtml(){var l=S.perm,c=l.filter(function(i){return i.d}).length,pct=l.length?Math.round(c*100/l.length):0;
+var h='<section class="card'+(l.length&&c===l.length?" full":"")+'" data-gid="__perm"><div class="head"><h2><button class="grip" aria-label="Reordenar lista (arraste ou use as setas)" title="Arraste para reordenar">'+GRIP+'</button>Personalizado <span class="reset">'+c+'/'+l.length+'</span></h2><div class="hr"><button class="tip" data-tip="Estas tarefas não têm prazo: ficam marcadas até você desmarcar." aria-label="Ajuda">?</button><button class="del gdel" data-pdelg="1" aria-label="Excluir lista">&times;</button></div></div><div class="bar"><i style="width:'+pct+'%"></i></div><ul>';
 l.forEach(function(i){h+='<li class="'+(i.d?"done":"")+'"><label><input type="checkbox" data-pid="'+i.id+'"'+(i.d?" checked":"")+'><span>'+esc(i.name)+'</span></label><button class="del" data-pdel="'+i.id+'" aria-label="Remover '+esc(i.name)+'">&times;</button></li>'});
-el.innerHTML=h+'</ul><div class="add"><input id="pnew" placeholder="Nova tarefa" maxlength="80"><button class="btn" id="padd" aria-label="Adicionar tarefa">+</button></div></section>'}
+return h+'</ul><div class="add"><input id="pnew" placeholder="Nova tarefa" maxlength="80"><button class="btn" id="padd" aria-label="Adicionar tarefa">+</button></div></section>'}
+function permNote(){document.getElementById("perm").innerHTML=S.permHidden?'<p class="reset">Restaurar: <button class="btn" data-prest="1">Personalizado</button></p>':""}
+function renderPerm(){document.getElementById("pgroups").innerHTML=groupsHtml("per");permNote()}
 function addPerm(){var v=document.getElementById("pnew").value.trim();if(!v)return;S.perm.push({id:"p"+(S.n++),name:v,d:false});save();renderPerm();document.getElementById("pnew").focus()}
-document.getElementById("perm").addEventListener("click",function(e){var el=e.target;
+document.getElementById("pgroups").addEventListener("click",function(e){var el=e.target;
 if(el.dataset.pid){S.perm.forEach(function(i){if(i.id===el.dataset.pid)i.d=el.checked});var pid=el.dataset.pid;save();renderPerm();var pb=document.querySelector('[data-pid="'+pid+'"]');if(pb)pb.classList.add("pop")}
 else if(el.dataset.pdel){S.perm=S.perm.filter(function(i){return i.id!==el.dataset.pdel});save();renderPerm()}
-else if(el.id==="padd")addPerm()});
-document.getElementById("perm").addEventListener("keydown",function(e){if(e.key==="Enter"&&e.target.id==="pnew")addPerm()});
+else if(el.id==="padd")addPerm();
+else if(el.dataset.pdelg)ask('Excluir a lista "Personalizado" e suas tarefas?',"Excluir",function(){S.perm=[];S.permHidden=true;save();renderPerm()},true)});
+document.getElementById("perm").addEventListener("click",function(e){if(e.target.dataset.prest){S.permHidden=false;save();renderPerm()}});
+document.getElementById("pgroups").addEventListener("keydown",function(e){if(e.key==="Enter"&&e.target.id==="pnew")addPerm()});
 function applyRemote(d){S=migrate(d);if(!S.hist)S.hist={};if(!S.perm)S.perm=[];mem=S;try{localStorage.setItem("wuwa-check",JSON.stringify(S))}catch(e){}document.getElementById("rh").value=S.rh;render();renderLun();if(!document.getElementById("hist").hidden)renderHist();if(!document.getElementById("perm").hidden)renderPerm();applyGlobal()}
 var tp=document.createElement("div");tp.id="tp";tp.setAttribute("role","tooltip");document.body.appendChild(tp);
 function showTip(b){tp.textContent=b.dataset.tip;tp.className="on";var r=b.getBoundingClientRect(),w=tp.offsetWidth;tp.style.left=Math.max(8,Math.min(innerWidth-w-8,r.left+r.width/2-w/2))+"px";tp.style.top=(r.bottom+8)+"px"}
