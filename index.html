@@ -322,7 +322,7 @@ body.scr .cgrid{pointer-events:none}
 <div class="shell"><aside class="side" id="side"><div class="brand">Menu</div><nav class="nav" id="nav"></nav></aside><div class="scrim" id="scrim"></div>
 <div class="modal" id="dmodal" hidden><div class="mbox" role="dialog" aria-modal="true" aria-labelledby="dtitle"><h3 id="dtitle"></h3><p class="reset" id="dsub"></p><div id="dlist"></div><div class="mbtn"><button class="btn" id="dall">Marcar todas</button><button class="btn" id="dno">Cancelar</button><button class="btn on" id="dyes">Salvar</button></div></div></div>
 <div class="modal" id="modal" hidden><div class="mbox" role="dialog" aria-modal="true"><p id="mmsg"></p><div class="mbtn"><button class="btn" id="mno">Cancelar</button><button class="btn on" id="myes">Confirmar</button></div></div></div>
-<div class="modal" id="emodal" hidden><div class="mbox" role="dialog" aria-modal="true" aria-labelledby="efTitle"><h3 id="efTitle">Adicionar</h3><div class="fm"><label>Tipo<select id="efT"><option value="c">Personagem</option><option value="w">Arma</option></select></label><label>Nome<input id="efN" maxlength="40" autocomplete="off"></label><label>Arquivo da imagem<input id="efI" placeholder="ex.: rover.png" maxlength="120" autocomplete="off"></label><label id="efEl">Elemento<select id="efE"></select></label><label>Tipo de arma<select id="efW"></select></label><label>Raridade<select id="efR"></select></label></div><div class="mbtn"><button class="btn" id="eno">Cancelar</button><button class="btn on" id="eyes">Salvar</button></div></div></div>
+<div class="modal" id="emodal" hidden><div class="mbox" role="dialog" aria-modal="true" aria-labelledby="efTitle"><h3 id="efTitle">Adicionar</h3><div class="fm"><label>Tipo<select id="efT"><option value="c">Personagem</option><option value="w">Arma</option></select></label><label>Nome<input id="efN" maxlength="40" autocomplete="off"></label><label>Arquivo da imagem<input id="efI" placeholder="ex.: rover.png" maxlength="120" autocomplete="off"></label><label>Nome alternativo (como vem do jogo)<input id="efA" placeholder="ex.: Chama Gélida (opcional)" maxlength="120" autocomplete="off"></label><label id="efEl">Elemento<select id="efE"></select></label><label>Tipo de arma<select id="efW"></select></label><label>Raridade<select id="efR"></select></label></div><div class="mbtn"><button class="btn" id="eno">Cancelar</button><button class="btn on" id="eyes">Salvar</button></div></div></div>
 <main>
 <header class="top"><div class="tl"><button class="btn menu" id="menu" aria-label="Menu">&#9776;</button><h1><span id="ttl">Checklist</span> <button class="tip" id="ttip" data-tip="Marque o que já fez. Cada lista zera sozinha no reset diário, semanal e mensal." aria-label="Ajuda">?</button></h1></div>
 <div class="acct"><span id="sync"></span><span id="who" hidden></span><button class="btn" id="login" hidden>Entrar com Google</button><button class="btn" id="logout" hidden>Sair</button><button class="btn gear" id="gear" title="Configurações" aria-label="Configurações">&#9881;&#xFE0E;</button></div></header>
@@ -569,12 +569,12 @@ document.getElementById("efEl").hidden=t==="w";
 if(c){document.getElementById("efE").value=c.e||"";document.getElementById("efW").value=c.w||"";document.getElementById("efR").value=String(c.r||rs[0])}}
 function chOpenForm(id,tp){var c=null;if(id)chAll().forEach(function(y){if(y.id===id)c=y});var t=c?chTp(c):(tp==="w"?"w":"c");CH.edit=c?c.id:null;
 document.getElementById("efTitle").textContent=(c?"Editar ":"Adicionar ")+(t==="w"?"arma":"personagem");
-document.getElementById("efT").value=t;chFormFill(t,c);document.getElementById("efN").value=c?c.name:"";document.getElementById("efI").value=c?(c.img||""):"";
+document.getElementById("efT").value=t;chFormFill(t,c);document.getElementById("efN").value=c?c.name:"";document.getElementById("efI").value=c?(c.img||""):"";document.getElementById("efA").value=c?(c.al||""):"";
 document.getElementById("emodal").hidden=false;document.getElementById("efN").focus()}
 function chClose(){document.getElementById("emodal").hidden=true;CH.edit=null}
 function chSave(){var n=document.getElementById("efN").value.trim();if(!n){document.getElementById("efN").focus();return}
 var t=document.getElementById("efT").value==="w"?"w":"c",o={name:n,img:document.getElementById("efI").value.trim(),t:t,r:parseInt(document.getElementById("efR").value,10)||5},
-e=document.getElementById("efE").value,w=document.getElementById("efW").value;if(t==="c"&&e)o.e=e;if(w)o.w=w;
+e=document.getElementById("efE").value,w=document.getElementById("efW").value,al=document.getElementById("efA").value.trim();if(t==="c"&&e)o.e=e;if(w)o.w=w;if(al)o.al=al;
 var l=chAll().slice(),i=-1;if(CH.edit)l.forEach(function(c,k){if(c.id===CH.edit)i=k});
 if(i>=0){o.id=l[i].id;l[i]=o}else{o.id="p"+Date.now().toString(36);l.push(o)}
 CH.tab=t;admSave({chars:l});chClose();renderChars()}
@@ -678,7 +678,9 @@ out.acc[k]={server:o[1].server,lang:o[1].lang,at:o[1].at,pools:pools}});
 if(!out.acc[out.sel])out.sel=Object.keys(out.acc)[0]||"";return out}
 function pullsRemote(c){if(!c||!c.acc)return;var m=mergeP(PL,c),chg=JSON.stringify(m)!==JSON.stringify(c);PL=m;savePullsLocal();if(!document.getElementById("pg-pity").hidden)renderPity();if(chg)pushPulls()}
 var PYM={};
-function pyFind(chars,n){var k=nk(n),m=chars.filter(function(c){return nk(c.name)===k});
+/* Apelidos: nome que vem do jogo (importação) -> nome no seu catálogo. Escreva os dois sem se preocupar com acento ou maiúscula. */
+var PYALIAS={"Chama Gélida":"Chama Congelante"};
+function pyFind(chars,n){var al={};for(var q in PYALIAS)al[nk(q)]=nk(PYALIAS[q]);var k=al[nk(n)]||nk(n),m=chars.filter(function(c){return nk(c.name)===k||String(c.al||"").split(",").some(function(a){return a.trim()&&nk(a)===k})});
 if(!m.length&&k.length>3)m=chars.filter(function(c){return c.img&&nk(String(c.img).split("/").pop().replace(/\.[a-z0-9]+$/i,"")).indexOf(k)>=0});
 return m.filter(function(c){return c.img})[0]||m[0]}
 function nk(s){var t=String(s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]/g,"");return t||String(s).trim().toLowerCase()}
