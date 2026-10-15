@@ -1176,11 +1176,11 @@ const s=A[reg.act]&&A[reg.act].user?reg.act:(Object.values(A).find(a=>a.user)||{
 
 </script>
 <script type="module">
-import{doc,getDoc,setDoc,updateDoc,deleteDoc,onSnapshot,collection,query,where,deleteField}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import{doc,getDoc,setDoc,updateDoc,deleteDoc,onSnapshot,collection,query,where,deleteField,FieldPath}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 /* ===== Amigos: painel lateral direito. Dados privados continuam em users/ e pulls/; amigos so leem shared/{uid} ===== */
 const R=window,$=id=>document.getElementById(id),E=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])),N=v=>Math.max(0,Math.round(+v)||0);
 const KEYS=[["pity","Contador de pity"],["check","Checklist (dias de atividade)"],["chars","Personagens, níveis e talentos"]];
-let X=null,un=[],fu={},F=[],SH={},CODE="",CFG={},FIX="",V=null,TAB="chars",tm=0,g0=0,fx0=0,open=false;
+let X=null,un=[],fu={},F=[],SH={},CODE="",CFG={},SP=[],PF="",V=null,TAB="chars",tm=0,g0=0,sp0=0,open=false;
 const nm=()=>(X&&X.user&&(X.user.displayName||"").trim())||"Jogador";
 const okU=u=>/^https:\/\//.test(u||"")?u:"";
 const ph=()=>X&&X.user?okU(X.user.photoURL):"";
@@ -1193,13 +1193,15 @@ function mkPity(){try{const a=R.PL&&R.PL.acc&&R.PL.acc[R.PL.sel];if(!a)return nu
 function mkCheck(){try{const o={};Object.keys(R.S.hist||{}).forEach(k=>{const h=R.S.hist[k];if(h)o[k]=[h.c|0,h.t|0]});return{h:o}}catch(e){return null}}
 function mkChars(){try{const o={};Object.keys(R.S.chars).forEach(id=>{const x=R.S.chars[id];if(x&&x.o)o[id]={c:x.c||0,lv:x.lv||0,wp:x.wp||"",tl:(x.tl||[]).slice(0,5).map(v=>v||0)}});return o}catch(e){return null}}
 const profs=()=>X&&X.profs?X.profs():[];
-const eff=()=>FIX&&profs().some(p=>p.id===FIX)?FIX:X.pid;
 const pname=id=>{const p=profs().find(x=>x.id===id);return p?p.name:""};
-/* o espelho so e reescrito quando o perfil fixo escolhido esta ativo (os dados dele estao no aparelho/sessao); clear=true limpa os dados ao trocar o perfil fixo */
-function push(force,clear){if(!X)return;const fx=eff();if(fx!==X.pid&&!clear)return;if(!KEYS.some(k=>CFG[k[0]])&&force!==true)return;
-const d={name:nm(),photo:ph(),prof:pname(fx),ts:Date.now(),cfg:CFG},on=!clear;
-d.pity=on&&CFG.pity?(mkPity()||deleteField()):deleteField();d.check=on&&CFG.check?(mkCheck()||deleteField()):deleteField();d.chars=on&&CFG.chars?(mkChars()||deleteField()):deleteField();
-setDoc(doc(X.db,"shared",X.uid),d,{merge:true}).catch(()=>{})}
+/* cada perfil marcado vai para shared/{uid}.profs.{pid}; so o perfil aberto agora tem dados locais, entao so ele e reescrito */
+function push(force){if(!X)return;const pid=X.pid,ids=profs().map(p=>p.id),gone=SP.filter(i=>ids.indexOf(i)<0);
+if(!SP.includes(pid)&&!gone.length)return;if(!KEYS.some(k=>CFG[k[0]])&&force!==true&&!gone.length)return;
+if(gone.length)SP=SP.filter(i=>gone.indexOf(i)<0);
+const d={name:nm(),photo:ph(),cfg:CFG,sp:SP,profs:{},pity:deleteField(),check:deleteField(),chars:deleteField(),prof:deleteField(),ts:deleteField(),fixed:deleteField()},m=["name","photo","cfg","sp","pity","check","chars","prof","ts","fixed"];
+gone.forEach(i=>{d.profs[i]=deleteField();m.push(new FieldPath("profs",i))});
+if(SP.includes(pid)){const o={n:pname(pid),ts:Date.now()};o.pity=CFG.pity?(mkPity()||deleteField()):deleteField();o.check=CFG.check?(mkCheck()||deleteField()):deleteField();o.chars=CFG.chars?(mkChars()||deleteField()):deleteField();d.profs[pid]=o;m.push(new FieldPath("profs",pid))}
+setDoc(doc(X.db,"shared",X.uid),d,{mergeFields:m}).catch(()=>{})}
 const sched=d=>{clearTimeout(tm);tm=setTimeout(push,d||3000)};
 /* --- codigo de amigo unico (so o dono da conta cria/apaga) --- */
 async function mkCode(){const al="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";for(let i=0;i<6;i++){const r=crypto.getRandomValues(new Uint8Array(8)),c="WUWA-"+[...r].slice(0,4).map(x=>al[x%32]).join("")+"-"+[...r].slice(4).map(x=>al[x%32]).join("");
@@ -1220,18 +1222,22 @@ const bar=(l,v,m)=>'<div class="fr-bar"><span>'+l+'</span><i><u style="width:'+M
 function lst(){const me=X.uid,inc=F.filter(f=>f.status==="pending"&&f.from!==me),out=F.filter(f=>f.status==="pending"&&f.from===me),ok=F.filter(f=>f.status==="accepted"),bl=F.filter(f=>f.status==="blocked"&&f.by===me);
 const row=(f,a)=>'<div class="fr-p">'+av(fname(f),fpho(f))+'<div class="fr-i"><b>'+E(fname(f))+'</b></div><div class="fr-ac">'+a+'</div></div>';
 let h='<div class="fr-card"><h4>Seu código de amigo</h4>'+(CODE?'<div class="fr-code"><code>'+E(CODE)+'</code><button class="btn" data-a="copy">Copiar</button></div><button class="fr-lk" data-a="regen" data-c="Gerar um novo código? O código antigo deixa de funcionar (seus amigos atuais continuam).">Gerar novo código</button>':'<p class="fr-m">Não foi possível criar o código. Confira se as regras do Firestore foram publicadas.</p><button class="btn" data-a="regen">Tentar de novo</button>')+'</div>';
-h+='<div class="fr-card"><h4>O que seus amigos veem</h4><p class="fr-m">Só amigos que você aceitou. Tudo começa desligado.</p>'+KEYS.map(k=>'<label class="fr-sw"><input type="checkbox" data-k="'+k[0]+'"'+(CFG[k[0]]?" checked":"")+'><span>'+k[1]+'</span></label>').join("")+'<label class="fr-fx"><span>Perfil mostrado aos amigos</span><select data-fx>'+profs().map(p=>'<option value="'+E(p.id)+'"'+(p.id===eff()?" selected":"")+'>'+E(p.name)+'</option>').join("")+'</select></label>'+(eff()!==X.pid?'<p class="fr-m">Você está em outro perfil. Seus amigos continuam vendo "'+E(pname(eff()))+'"; ele só atualiza quando você entrar nele.</p>':"")+'</div>';
+h+='<div class="fr-card"><h4>Permissões</h4><p class="fr-m"></p>'+KEYS.map(k=>'<label class="fr-sw"><input type="checkbox" data-k="'+k[0]+'"'+(CFG[k[0]]?" checked":"")+'><span>'+k[1]+'</span></label>').join("")+'<h4 class="fr-h2">Perfis que seus amigos veem</h4>'+profs().map(p=>'<label class="fr-sw"><input type="checkbox" data-sp="'+E(p.id)+'"'+(SP.includes(p.id)?" checked":"")+'><span>'+E(p.name)+(p.id===X.pid?'<small>aberto agora</small>':"")+'</span></label>').join("")+(SP.some(i=>i!==X.pid)?'<p class="fr-m"></p>':"")+'</div>';
 h+='<div class="fr-card"><h4>Adicionar amigo</h4><div class="fr-add"><input id="frin" placeholder="WUWA-XXXX-XXXX" maxlength="14" autocomplete="off" spellcheck="false"><button class="btn on" data-a="send">Enviar</button></div></div>';
 if(inc.length)h+='<div class="fr-card"><h4>Pedidos recebidos</h4>'+inc.map(f=>row(f,'<button class="btn on" data-a="acc" data-i="'+f.id+'">Aceitar</button><button class="btn" data-a="del" data-i="'+f.id+'">Recusar</button><button class="btn" data-a="blk" data-i="'+f.id+'" data-c="Bloquear essa pessoa? Ela não poderá enviar novos pedidos.">Bloquear</button>')).join("")+'</div>';
-h+='<div class="fr-card"><h4>Amigos<small>'+ok.length+'</small></h4>'+(ok.length?ok.map(f=>'<button class="fr-p" data-a="open" data-i="'+f.id+'">'+av(fname(f),fpho(f))+'<div class="fr-i"><b>'+E(fname(f))+'</b><small>'+E((SH[fid(f)]||{}).prof||"")+'</small></div></button>').join(""):'<p class="fr-m">Nenhum amigo ainda. Envie seu código ou use o dele.</p>')+'</div>';
+h+='<div class="fr-card"><h4>Amigos<small>'+ok.length+'</small></h4>'+(ok.length?ok.map(f=>'<button class="fr-p" data-a="open" data-i="'+f.id+'">'+av(fname(f),fpho(f))+'<div class="fr-i"><b>'+E(fname(f))+'</b><small>'+E(fpn(SH[fid(f)]))+'</small></div></button>').join(""):'<p class="fr-m">Nenhum amigo ainda. Envie seu código ou use o dele.</p>')+'</div>';
 if(out.length)h+='<div class="fr-card"><h4>Pedidos enviados</h4>'+out.map(f=>row(f,'<button class="btn" data-a="del" data-i="'+f.id+'">Cancelar</button>')).join("")+'</div>';
 if(bl.length)h+='<div class="fr-card"><h4>Bloqueados</h4>'+bl.map(f=>row(f,'<button class="btn" data-a="del" data-i="'+f.id+'">Desbloquear</button>')).join("")+'</div>';
 return h}
 let YR=null;
 const SVS='<svg viewBox="0 0 24 24" aria-hidden="true">';
 const TLS=["Básico","Habilidade","Forte","Liberação","Intro"];
-const since=t=>{t=+t;if(!t)return"";const m=Math.floor((Date.now()-t)/6e4);if(m<2)return"agora há pouco";if(m<60)return"há "+m+" min";const h=Math.floor(m/60);if(h<24)return"há "+h+" h";const d=Math.floor(h/24);return d<30?"há "+d+(d>1?" dias":" dia"):new Date(t).toLocaleDateString("pt-BR")};
-const ftabs=s=>s?[["pity","Contador de Pity"],["check","Checklist"],["chars","Personagens"]].filter(t=>s.cfg&&s.cfg[t[0]]&&s[t[0]]):[];
+const since=t=>{t=+t;if(!t)return"";const m=Math.floor((Date.now()-t)/6e4);if(m<2)return"agora";if(m<60)return"há "+m+" min";const h=Math.floor(m/60);if(h<24)return"há "+h+" h";const d=Math.floor(h/24);return d<30?"há "+d+(d>1?" dias":" dia"):new Date(t).toLocaleDateString("pt-BR")};
+/* perfis que o amigo compartilhou: [[pid,dados],...] na ordem escolhida por ele; le tambem o formato antigo (um perfil so) */
+const fprofs=s=>{if(!s)return[];if(s.profs&&typeof s.profs==="object"){const ids=Object.keys(s.profs),o=Array.isArray(s.sp)?s.sp.filter(i=>ids.indexOf(i)>=0):[];ids.forEach(i=>{if(o.indexOf(i)<0)o.push(i)});return o.map(i=>[i,s.profs[i]]).filter(x=>x[1]&&typeof x[1]==="object")}
+if(s.pity||s.check||s.chars)return[["_",{n:s.prof||"",ts:s.ts,pity:s.pity,check:s.check,chars:s.chars}]];return[]};
+const fpn=s=>fprofs(s).map(p=>p[1].n).filter(Boolean).join(", ");
+const ftabs=(s,D)=>s&&D?[["pity","Contador de Pity"],["check","Atividade"],["chars","Personagens"]].filter(t=>s.cfg&&s.cfg[t[0]]&&D[t[0]]):[];
 const fchars=s=>{const fc=(s&&s.chars)||{};return R.chAll().filter(c=>R.chTp(c)==="c"&&fc[c.id]).sort((a,b)=>(b.r||0)-(a.r||0)||String(a.name).localeCompare(String(b.name),"pt-BR"))};
 /* --- Contador de Pity do amigo: so os 5★ dele, com resultado do 50/50 --- */
 function fbanner(p){const cap=N(p.cap)||80,w=N(p.w),l=N(p.l),wl=w+l,wr=wl?Math.round(w*100/wl):0,avg=N(p.avg),r=Array.isArray(p.r)?p.r:[],n5=N(p.n5)||r.length;
@@ -1258,36 +1264,49 @@ return'<section><h2>'+yk.length+' dias com atividade em '+yr+'</h2><div class="h
 function vChars(s){const fc=s.chars||{},l=fchars(s);
 if(!l.length)return'<section><p class="reset">Nenhum personagem marcado.</p></section>';
 return'<div class="fk-top"><b>'+l.length+'</b> personagens</div><div class="fk-grid">'+l.map(c=>{const n=Math.min(N(fc[c.id].c),6);return'<button class="fk r'+(c.r||0)+'" data-a="char" data-id="'+E(c.id)+'"><span class="fk-p"><span class="ci" data-i="'+E(c.name.charAt(0))+'">'+R.chPic(c,'loading="lazy" decoding="async"')+'</span>'+(n?'<em class="fk-s">S'+n+'</em>':"")+'</span><span class="fk-n">'+E(c.name)+'</span></button>'}).join("")+'</div>'}
-function chDet(id){const f=F.find(y=>y.id===V),s=f&&SH[fid(f)],x=s&&s.chars&&s.chars[id],c=R.chAll().find(y=>y.id===id);if(!x||!c)return;
-const wp=x.wp&&R.chAll().find(y=>y.id===x.wp&&R.chTp(y)==="w"),tl=Array.isArray(x.tl)?x.tl:[],n=Math.min(N(x.c),6),rg=c.r===5?"rgba(251,191,36,.6)":c.r===4?"rgba(192,132,252,.55)":"rgba(255,255,255,.14)";
-$("frmb").innerHTML='<div class="fd-h"><div class="fd-p" style="--rg:'+rg+'"><span class="ci" data-i="'+E(c.name.charAt(0))+'">'+R.chPic(c,"")+'</span></div><div><b>'+E(c.name)+'</b>'+(wp?'<small>Arma: '+E(wp.name)+'</small>':"")+'</div></div>'
-+'<div class="fd-top"><div><b>'+(N(x.lv)||"–")+'</b><span>nível</span></div><div><b>S'+n+'</b><span>constelação</span></div></div>'
-+'<div class="fd-tl">'+TLS.map((t,i)=>{const v=Math.min(N(tl[i]),10);return'<div'+(v===10?' class="mx"':"")+' title="'+E(R.TLN[i]||t)+'"><b>'+(v||"–")+'</b><i><u style="width:'+v*10+'%"></u></i><span>'+t+'</span></div>'}).join("")+'</div><button class="btn" data-a="mclose">Fechar</button>';$("frm").hidden=false}
+function chDet(id){const f=F.find(y=>y.id===V),pl=fprofs(f&&SH[fid(f)]),cu=pl.find(p=>p[0]===PF)||pl[0],D=cu&&cu[1],x=D&&D.chars&&D.chars[id],c=R.chAll().find(y=>y.id===id);if(!x||!c)return;
+const wp=x.wp&&R.chAll().find(y=>y.id===x.wp&&R.chTp(y)==="w"),tl=Array.isArray(x.tl)?x.tl:[],n=Math.min(N(x.c),6),lv=Math.min(N(x.lv),90),el=R.defOf(R.ELS,c.e),wt=R.defOf(R.WTS,c.w),stars=k=>new Array(N(k)+1).join("★");
+$("frmb").innerHTML='<button class="dx" data-a="mclose" aria-label="Fechar">&times;</button>'
++'<div class="dtop"><div class="dleft"><div class="dpic" data-i="'+E(c.name.charAt(0))+'">'+R.chPic(c,"")+'</div><div class="dstars" aria-label="'+N(c.r)+' estrelas">'+stars(c.r)+'</div></div>'
++'<div class="dti"><div class="dnm"><h3>'+E(c.name)+'</h3><div class="dic">'+(el?R.ico(el):"")+(wt?R.ico(wt):"")+'</div></div><span class="fd-cs">Constelação <b>S'+n+'</b></span></div>'
++(wp?'<div class="dwk fd-wk">'+R.wimg(wp,"big")+'<span class="dwkn">'+E(wp.name)+'</span><span class="dwkr">'+stars(wp.r)+'</span></div>':"")+'</div>'
++'<h4 class="dpt">Visão geral</h4><div class="dlvl"><span class="dnv">Nv.</span><span class="fd-lv">'+(lv||"–")+'</span><span class="dmax">/90</span></div><div class="dbar"><i style="width:'+Math.round(lv*100/90)+'%"></i></div>'
++'<h4 class="dpt fd-h2">Talentos</h4><div class="fd-tl">'+TLS.map((t,i)=>{const v=Math.min(N(tl[i]),10);return'<div'+(v===10?' class="mx"':"")+' title="'+E(R.TLN[i]||t)+'"><b>'+(v||"–")+'</b><i><u style="width:'+v*10+'%"></u></i><span>'+t+'</span></div>'}).join("")+'</div>';
+$("frm").hidden=false}
 function rv(){const f=F.find(x=>x.id===V&&x.status==="accepted");if(!f){closeProf();return}
-const s=SH[fid(f)],y=$("frv").scrollTop,tabs=ftabs(s),has=k=>tabs.some(t=>t[0]===k);
+const s=SH[fid(f)],y=$("frv").scrollTop,pl=fprofs(s);
+if(pl.length&&!pl.some(p=>p[0]===PF))PF=pl[0][0];
+const cu=pl.find(p=>p[0]===PF),D=cu?cu[1]:null,tabs=ftabs(s,D),has=k=>tabs.some(t=>t[0]===k);
 if(tabs.length&&!has(TAB))TAB=tabs[0][0];
-const st=[];if(s){if(has("chars"))st.push([fchars(s).length,"personagens"]);if(has("pity")){let n=0;Object.keys(s.pity).forEach(t=>n+=N(s.pity[t].n5));st.push([n,"5★ obtidos"])}if(has("check"))st.push([Object.keys((s.check&&s.check.h)||{}).length,"dias de atividade"])}
-const photo=fpho(f),sub=(s&&s.prof?'<span>Perfil '+E(s.prof)+'</span>':"")+(s&&s.ts?'<span>Atualizado '+since(s.ts)+'</span>':"");
-let h='<div class="fr-vw"><div class="fv-bar"><button class="btn" data-a="vclose">‹ Voltar</button><button class="fr-lk fr-dn" data-a="del" data-i="'+f.id+'" data-c="Remover essa amizade? Vocês deixam de ver o progresso um do outro.">Remover amizade</button></div>'
-+'<header class="fv-hero">'+(okU(photo)?'<img class="fv-bg" src="'+E(photo)+'" alt="" referrerpolicy="no-referrer">':"")+'<div class="fv-id">'+av(fname(f),photo).replace('class="fr-av"','class="fr-av fv-av"')+'<div><p class="fv-nm">'+E(fname(f))+'</p>'+(sub?'<p class="fv-sub">'+sub+'</p>':"")+'</div></div>'
+const st=[];if(D){if(has("chars"))st.push([fchars(D).length,"personagens"]);if(has("pity")){let n=0;Object.keys(D.pity).forEach(t=>n+=N(D.pity[t].n5));st.push([n,"5★ obtidos"])}if(has("check"))st.push([Object.keys((D.check&&D.check.h)||{}).length,"dias de atividade"])}
+const photo=fpho(f),sub=(pl.length===1&&D.n?'<span>Perfil '+E(D.n)+'</span>':"")+(D&&D.ts?'<span>Atualizado '+since(D.ts)+'</span>':""),
+chips=pl.length>1?'<div class="fv-pf" role="group" aria-label="Perfis de '+E(fname(f))+'">'+pl.map(p=>'<button class="'+(p[0]===PF?"on":"")+'" data-a="pf" data-p="'+E(p[0])+'" aria-pressed="'+(p[0]===PF)+'">'+E(p[1].n||"Perfil")+'</button>').join("")+'</div>':"";
+let h='<div class="fr-vw"><div class="fv-bar"><button class="btn" data-a="vclose">‹ Voltar</button></div>'
++'<header class="fv-hero">'+(okU(photo)?'<img class="fv-bg" src="'+E(photo)+'" alt="" referrerpolicy="no-referrer">':"")+'<div class="fv-id">'+av(fname(f),photo).replace('class="fr-av"','class="fr-av fv-av"')+'<div><p class="fv-nm">'+E(fname(f))+'</p>'+(sub?'<p class="fv-sub">'+sub+'</p>':"")+chips+'</div></div>'
 +(st.length?'<div class="fv-st">'+st.map(x=>'<div><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join("")+'</div>':"")+'</header>'
 +(tabs.length>1?'<nav class="tabs">'+tabs.map(t=>'<button class="'+(TAB===t[0]?"on":"")+'" data-a="tab" data-t="'+t[0]+'">'+t[1]+'</button>').join("")+'</nav>':"");
 if(!s)h+='<section><p class="reset">Carregando...</p></section>';
-else if(!tabs.length)h+='<section><p class="reset">'+E(fname(f))+' ainda não compartilhou nada com você.</p></section>';
-else h+=({chars:vChars,pity:vPity,check:vHist})[TAB](s);
+else if(!pl.length)h+='<section><p class="reset">'+E(fname(f))+' ainda não compartilhou nenhum perfil com você.</p></section>';
+else if(!tabs.length)h+='<section><p class="reset">'+E(fname(f))+' não compartilha nada neste perfil (ou ainda não tem dados).</p></section>';
+else h+=({chars:vChars,pity:vPity,check:vHist})[TAB](D);
+h+='<div class="fv-rm"><div><b>Remover amizade</b><small>Vocês deixam de ver o progresso um do outro.</small></div><button class="btn danger" data-a="del" data-i="'+f.id+'" data-l="Remover" data-c="'+E('Remover "'+fname(f)+'" dos seus amigos? Vocês deixam de ver o progresso um do outro.')+'">Remover amizade</button></div>';
 $("frv").innerHTML=h+'</div>';$("frv").scrollTop=y;
-if(TAB==="check"&&s&&s.check){const w=$("frv").querySelector(".hmw"),n=w&&w.querySelector(".now");if(w&&n&&YR===+R.key("daily").slice(0,4))w.scrollLeft=Math.max(0,n.offsetLeft-w.clientWidth/2)}}
-function openProf(i){V=i;TAB="";YR=null;open=false;$("frp").hidden=true;$("frtab").hidden=true;$("frv").hidden=false;$("frv").scrollTop=0;rv()}
-function closeProf(){V=null;$("frv").hidden=true;$("frm").hidden=true;open=true;$("frp").hidden=false;$("frtab").hidden=true;rend()}
+if(TAB==="check"&&D&&D.check){const w=$("frv").querySelector(".hmw"),n=w&&w.querySelector(".now");if(w&&n&&YR===+R.key("daily").slice(0,4))w.scrollLeft=Math.max(0,n.offsetLeft-w.clientWidth/2)}}
+function openProf(i){V=i;TAB="";PF="";YR=null;open=false;$("frp").hidden=true;$("frtab").hidden=false;document.body.classList.add("frv");$("frv").hidden=false;$("frv").scrollTop=0;rv()}
+function closeProf(){V=null;document.body.classList.remove("frv");$("frv").hidden=true;$("frm").hidden=true;open=true;$("frp").hidden=false;$("frtab").hidden=true;rend()}
 function badge(){const n=F.filter(f=>f.status==="pending"&&f.from!==X.uid).length,b=$("frbd");b.hidden=!n;b.textContent=n}
 function rend(){if(!X)return;badge();if(V)rv();if(!open)return;const b=$("frb"),y=b.scrollTop,i=$("frin"),had=i&&document.activeElement===i,v=i?i.value:"";b.innerHTML=lst();const n=$("frin");if(n){n.value=v;if(had)n.focus()}b.scrollTop=y}
 /* --- ligacao com o Firebase da conta ativa --- */
 function sync(){const w={};F.filter(f=>f.status==="accepted").forEach(f=>w[fid(f)]=1);
 Object.keys(fu).forEach(k=>{if(!w[k]){fu[k]();delete fu[k];delete SH[k]}});
 Object.keys(w).forEach(k=>{if(!fu[k])fu[k]=onSnapshot(doc(X.db,"shared",k),s=>{SH[k]=s.exists()?s.data():null;rend()},()=>{SH[k]=null;rend()})})}
-function tear(){clearTimeout(tm);un.forEach(f=>f());Object.keys(fu).forEach(k=>fu[k]());un=[];fu={};F=[];SH={};CODE="";CFG={};FIX="";V=null;$("frv").hidden=true;$("frm").hidden=true;g0=0;fx0=0;X=null}
+function tear(){document.body.classList.remove("frv");clearTimeout(tm);un.forEach(f=>f());Object.keys(fu).forEach(k=>fu[k]());un=[];fu={};F=[];SH={};CODE="";CFG={};SP=[];PF="";V=null;$("frv").hidden=true;$("frm").hidden=true;g0=0;sp0=0;X=null}
 function start(){const d=X.db,u=X.uid;
-un.push(onSnapshot(doc(d,"shared",u),s=>{const x=s.exists()?s.data():{};CFG=x.cfg||{};if(x.fixed)FIX=x.fixed;else if(!s.metadata.fromCache&&!fx0){fx0=1;FIX=X.pid;setDoc(doc(d,"shared",u),{fixed:X.pid},{merge:true}).catch(()=>{})}if(x.code)CODE=x.code;else if(!s.metadata.fromCache&&!g0){g0=1;mkCode().then(c=>{CODE=c;rend()})}rend()},()=>{}));
+un.push(onSnapshot(doc(d,"shared",u),s=>{const x=s.exists()?s.data():{};CFG=x.cfg||{};
+if(Array.isArray(x.sp))SP=x.sp;else if(!s.metadata.fromCache&&!sp0){sp0=1;const fx=x.fixed||X.pid,pr={};SP=[fx];["pity","check","chars"].forEach(k=>{if(x[k]!=null)pr[k]=x[k]});if(x.prof||pname(fx))pr.n=x.prof||pname(fx);if(x.ts)pr.ts=x.ts;
+const m={sp:SP,fixed:deleteField(),pity:deleteField(),check:deleteField(),chars:deleteField(),prof:deleteField(),ts:deleteField()},mf=["sp","fixed","pity","check","chars","prof","ts"];if(pr.pity||pr.check||pr.chars){m.profs={[fx]:pr};mf.push(new FieldPath("profs",fx))}
+setDoc(doc(d,"shared",u),m,{mergeFields:mf}).then(()=>sched(300)).catch(()=>{})}
+if(x.code)CODE=x.code;else if(!s.metadata.fromCache&&!g0){g0=1;mkCode().then(c=>{CODE=c;rend()})}rend()},()=>{}));
 un.push(onSnapshot(query(collection(d,"fr"),where("members","array-contains",u)),s=>{F=s.docs.map(x=>Object.assign({id:x.id},x.data()));sync();rend()},()=>{}));
 sched(2500)}
 R.frUi=function(){const c=R.FR_CTX&&R.FR_CTX();if(!c){if(X){tear();shut();$("frtab").hidden=true}return}
@@ -1309,17 +1328,25 @@ button.fr-p{width:100%;border:0;background:none;color:inherit;font:inherit;text-
 .fr-c b{display:block;font-size:.72rem}.fr-c small{display:block;font-size:.62rem;color:var(--mute)}.fr-c.off{color:var(--mute)}.fr-bar{display:flex;align-items:center;gap:8px;font-size:.7rem;color:var(--mute);margin:6px 0}.fr-bar i{flex:1;height:6px;border-radius:3px;background:var(--line);overflow:hidden}.fr-bar u{display:block;height:100%;background:var(--accg);text-decoration:none}.fr-bar span{width:34px}.fr-bar b{color:var(--ink);font-weight:600;min-width:46px;text-align:right}#frv{position:fixed;inset:0;z-index:36;background:var(--bg);overflow:auto;padding:calc(18px + env(safe-area-inset-top,0px)) 20px calc(40px + env(safe-area-inset-bottom,0px))}#frv[hidden]{display:none}.fr-vw{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:16px}.fr-vw>*{flex:none}.fr-vw section{margin-bottom:0}
 .fr-vh{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:14px 18px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025)}.fr-vh .fr-av{width:52px;height:52px;font-size:1.3rem}.fr-vh .fr-i b{font-size:1.05rem}.fr-vw .tabs{margin:0}
 .fr-pd{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}.fr-top{color:var(--mute);font-size:.8rem}.fr-top b{color:var(--ink);font-size:1rem}.fr-grid{grid-template-columns:repeat(auto-fill,minmax(116px,1fr))}.fr-grid .ch{cursor:pointer}
-.fr-mbx{max-width:400px}.fr-mh{display:flex;align-items:center;gap:14px;margin-bottom:14px}.fr-mh b{display:block;font-size:1.05rem}.fr-mh small{color:var(--mute);font-size:.74rem}.fr-mp{width:64px;height:64px;border-radius:14px;overflow:hidden;background:var(--bg);flex:none}.fr-mp img{width:100%;height:100%;object-fit:cover}.fr-mbx .fr-sum{margin-bottom:10px}
+.fr-mbx{max-width:520px;position:relative}.fr-mh{display:flex;align-items:center;gap:14px;margin-bottom:14px}.fr-mh b{display:block;font-size:1.05rem}.fr-mh small{color:var(--mute);font-size:.74rem}.fr-mp{width:64px;height:64px;border-radius:14px;overflow:hidden;background:var(--bg);flex:none}.fr-mp img{width:100%;height:100%;object-fit:cover}.fr-mbx .fr-sum{margin-bottom:10px}
 .fr-tg{display:flex;flex-direction:column;gap:6px;margin:12px 0 16px}.fr-tg div{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-radius:10px;background:var(--bg);font-size:.78rem}.fr-tg span{color:var(--mute)}.fr-tg b{color:var(--ink)}#tp{z-index:70}
 .fr-ch{display:inline-block;margin:2px 4px 2px 0;padding:2px 8px;border-radius:999px;background:var(--bg);font-size:.66rem}
 button.fr-p:after{content:"›";margin-left:auto;color:var(--mute);font-size:1.3rem;line-height:1}
-.fv-bar{display:flex;align-items:center;justify-content:space-between;gap:12px}.fv-bar .fr-lk{padding:6px 2px}
+.fv-bar{display:flex;align-items:center;gap:12px}
+.fv-rm{display:flex;align-items:center;justify-content:space-between;gap:12px 20px;flex-wrap:wrap;margin-top:8px;padding:16px 20px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.02)}
+.fv-rm b{display:block;font-size:.88rem}.fv-rm small{color:var(--mute);font-size:.74rem}
+body.frv #frtab{z-index:37}body.frv #frp{z-index:38}
+@media (max-width:1240px){body.frv #frv{padding-right:calc(52px + env(safe-area-inset-right,0px))}}
 .fv-hero{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:24px;padding:28px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(125deg,rgba(147,51,234,.24),rgba(99,102,241,.07) 55%,transparent),var(--card)}
 .fv-bg{position:absolute;right:-50px;top:-70px;width:280px;height:280px;object-fit:cover;border-radius:50%;filter:blur(48px) saturate(1.5);opacity:.4;pointer-events:none}
 .fv-id{position:relative;display:flex;align-items:center;gap:20px;min-width:0}
 .fv-id .fv-av{width:88px;height:88px;font-size:2.1rem;box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--acc),0 0 30px rgba(168,85,247,.5)}
 .fv-nm{margin:0;font-size:1.7rem;font-weight:700;letter-spacing:-.02em;line-height:1.15;overflow-wrap:anywhere}
 .fv-sub{display:flex;flex-wrap:wrap;gap:2px 16px;margin:6px 0 0;color:var(--mute);font-size:.8rem}
+.fv-pf{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.fv-pf button{padding:5px 14px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.05);color:var(--mute);font:600 .76rem Poppins,system-ui,sans-serif;cursor:pointer;transition:background .15s,color .15s}
+.fv-pf button:hover{color:var(--ink)}.fv-pf button.on{background:var(--accg);border-color:transparent;color:#fff}
+.fr-card .fr-h2{margin:16px 0 4px;font-weight:600}.fr-sw small{margin-left:8px;color:var(--mute);font-size:.68rem;font-weight:400}
 .fv-st{position:relative;display:flex;flex-wrap:wrap;gap:12px 36px}.fv-st div{min-width:0}
 .fv-st b{display:block;font-size:1.6rem;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}.fv-st span{font-size:.76rem;color:var(--mute)}
 .fp-leg{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--mute);font-size:.76rem}.fp-leg span{display:inline-flex;align-items:center;gap:7px}
@@ -1341,34 +1368,36 @@ button.fr-p:after{content:"›";margin-left:auto;color:var(--mute);font-size:1.3
 .fk{--rg:rgba(255,255,255,.12);display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;padding:0;border:0;background:none;color:inherit;font:inherit;cursor:pointer;text-align:center}
 .fk.r5{--rg:rgba(251,191,36,.6)}.fk.r4{--rg:rgba(192,132,252,.55)}
 .fk-p{position:relative;width:100%;border-radius:16px;box-shadow:0 0 0 1.5px var(--rg);transition:transform .18s,box-shadow .18s}
-.fk-p .ci,.fd-p .ci{aspect-ratio:1;border-radius:16px}
+.fk-p .ci{aspect-ratio:1;border-radius:16px}
 .fk:hover .fk-p,.fk:focus-visible .fk-p{transform:translateY(-3px);box-shadow:0 0 0 2px var(--rg),0 10px 24px -10px var(--rg)}
 .fk:focus-visible{outline:2px solid var(--acc);outline-offset:4px;border-radius:16px}
 .fk-s{position:absolute;right:6px;bottom:6px;padding:2px 7px;border-radius:999px;background:rgba(8,8,15,.88);border:1px solid rgba(255,255,255,.14);font:700 .64rem/1.3 Poppins,system-ui,sans-serif;font-style:normal;color:var(--ink)}
 .fk-n{max-width:100%;font-size:.74rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fd-h{display:flex;align-items:center;gap:14px}.fd-p{width:72px;height:72px;flex:none;border-radius:16px;box-shadow:0 0 0 2px var(--rg,rgba(255,255,255,.14))}
-.fd-h b{display:block;font-size:1.1rem;line-height:1.2}.fd-h small{display:block;margin-top:3px;color:var(--mute);font-size:.76rem}
-.fd-top{display:flex;gap:10px;margin:16px 0 10px}.fd-top div{flex:1;padding:10px;border-radius:12px;background:var(--bg);text-align:center}.fd-top b{display:block;font-size:1.25rem;line-height:1.2}.fd-top span{font-size:.7rem;color:var(--mute)}
-.fd-tl{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:16px}.fd-tl div{min-width:0;padding:9px 2px 8px;border-radius:10px;background:var(--bg);text-align:center}
+.fd-cs{color:var(--mute);font-size:.8rem}.fd-cs b{color:var(--ink)}
+.fd-wk{cursor:default}.fd-wk:hover{transform:none;border-color:rgba(251,191,36,.28)}
+.fd-lv{font:inherit;color:var(--ink)}.fd-h2{margin-top:22px}
+.fd-tl{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.fd-tl div{min-width:0;padding:9px 2px 8px;border-radius:10px;background:var(--bg);text-align:center}
 .fd-tl b{display:block;font-size:1rem;line-height:1.1}.fd-tl i{display:block;height:3px;margin:7px 8px 6px;border-radius:2px;background:var(--line);overflow:hidden}.fd-tl u{display:block;height:100%;background:var(--accg);text-decoration:none}
 .fd-tl span{display:block;font-size:.58rem;color:var(--mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.fd-tl .mx b{color:var(--gold)}.fd-tl .mx u{background:linear-gradient(90deg,#f59e0b,#fde047)}
 @media (max-width:560px){.fv-hero{padding:20px;gap:20px}.fv-id{gap:14px}.fv-id .fv-av{width:68px;height:68px;font-size:1.6rem}.fv-nm{font-size:1.35rem}.fv-st{gap:12px 26px}}
 @media (prefers-reduced-motion:reduce){.fk-p,.fr-vw .fp-t{transition:none}.fk:hover .fk-p,.fr-vw .fp-t:hover{transform:none}}`;
 document.head.appendChild(css);
 document.body.insertAdjacentHTML("beforeend",'<button id="frtab" hidden aria-label="Abrir amigos">Amigos<i id="frbd" hidden></i></button><aside id="frp" hidden role="dialog" aria-label="Amigos"><div class="fr-h"><span>Amigos</span><button class="btn" data-a="close" aria-label="Fechar">&times;</button></div><div id="frb"></div></aside><div id="frv" hidden></div><div class="modal" id="frm" hidden><div class="mbox fr-mbx" id="frmb"></div></div>');
-function shut(){open=false;V=null;$("frp").hidden=true;$("frv").hidden=true;$("frm").hidden=true;$("frtab").hidden=!X}
+function shut(){open=false;V=null;document.body.classList.remove("frv");$("frp").hidden=true;$("frv").hidden=true;$("frm").hidden=true;$("frtab").hidden=!X}
 $("frtab").onclick=()=>{open=true;$("frp").hidden=false;$("frtab").hidden=true;rend()};
-document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;if(!$("frm").hidden)$("frm").hidden=true;else if(V)closeProf();else if(open&&$("modal").hidden)shut()});
+document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;if(!$("frm").hidden)$("frm").hidden=true;else if(open&&V&&$("modal").hidden){open=false;$("frp").hidden=true;$("frtab").hidden=false}else if(V)closeProf();else if(open&&$("modal").hidden)shut()});
 $("frp").addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b||!X)return;const a=b.dataset.a,i=b.dataset.i,run=()=>{
 if(a==="regen")regen();else if(a==="del")fr(i);else if(a==="blk")fr(i,{status:"blocked",by:X.uid})};
-if(a==="close")shut();else if(a==="copy")R.copyText(CODE,b);else if(a==="send")send($("frin").value);else if(a==="acc")fr(i,{status:"accepted"});
+if(a==="close"){if(V){open=false;$("frp").hidden=true;$("frtab").hidden=false}else shut()}else if(a==="copy")R.copyText(CODE,b);else if(a==="send")send($("frin").value);else if(a==="acc")fr(i,{status:"accepted"});
 else if(a==="open")openProf(i);
 else if(b.dataset.c)R.ask(b.dataset.c,"Confirmar",()=>{if(a==="del"&&V===i)V=null;run()},true);else{if(a==="del"&&V===i)V=null;run()}});
 $("frv").addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b||!X)return;const a=b.dataset.a;
-if(a==="vclose")closeProf();else if(a==="tab"){TAB=b.dataset.t;rv()}else if(a==="yr"){YR=+b.dataset.y;rv()}else if(a==="char")chDet(b.dataset.id);
-else if(a==="del"&&b.dataset.c)R.ask(b.dataset.c,"Confirmar",()=>{const i=b.dataset.i;closeProf();fr(i)},true)});
+if(a==="vclose")closeProf();else if(a==="tab"){TAB=b.dataset.t;rv()}else if(a==="yr"){YR=+b.dataset.y;rv()}else if(a==="pf"){PF=b.dataset.p;YR=null;rv()}else if(a==="char")chDet(b.dataset.id);
+else if(a==="del"&&b.dataset.c)R.ask(b.dataset.c,b.dataset.l||"Confirmar",()=>{const i=b.dataset.i;closeProf();fr(i)},true)});
 $("frm").addEventListener("click",e=>{if(e.target.id==="frm"||e.target.closest('[data-a="mclose"]'))$("frm").hidden=true});
-$("frp").addEventListener("change",e=>{if(!X)return;if(e.target.hasAttribute("data-fx")){FIX=e.target.value;setDoc(doc(X.db,"shared",X.uid),{fixed:FIX},{merge:true}).catch(()=>{});push(true,FIX!==X.pid);rend();return}const k=e.target.dataset.k;if(!k)return;CFG=Object.assign({},CFG,{[k]:e.target.checked});push(true)});
+$("frp").addEventListener("change",e=>{if(!X)return;const pid=e.target.dataset.sp;if(pid){const on=e.target.checked,ids=profs().map(p=>p.id);SP=ids.filter(i=>i===pid?on:SP.includes(i));const ref=doc(X.db,"shared",X.uid);
+if(on){if(pid===X.pid)push(true);else setDoc(ref,{sp:SP},{merge:true}).catch(()=>{})}else setDoc(ref,{sp:SP,profs:{[pid]:deleteField()}},{mergeFields:["sp",new FieldPath("profs",pid)]}).catch(()=>{});rend();return}
+const k=e.target.dataset.k;if(!k)return;CFG=Object.assign({},CFG,{[k]:e.target.checked});push(true)});
 $("frp").addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.id==="frin")send(e.target.value)});
 const oS=R.onSaved;R.onSaved=function(){if(oS)oS.apply(this,arguments);sched()};
 const oP=R.pullsPushFn;R.pullsPushFn=function(){const r=oP?oP.apply(this,arguments):null;sched();return r||Promise.resolve()};
