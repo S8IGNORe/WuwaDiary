@@ -26,6 +26,13 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 14.5px/1.55 Poppins
 .scrim{display:none}
 main{flex:1;min-width:0;max-width:760px;margin:0 auto;padding:28px 24px 72px}
 main.wide{max-width:1240px}
+main{display:flex;flex-direction:column}main>*{flex:none}main.hasf{min-height:calc(100vh + 260px)}
+#insp{margin-top:auto;padding-top:56px;font-size:.72rem;line-height:1.65;color:var(--mute)}
+#insp[hidden]{display:none}
+#insp .ib{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:rgba(255,255,255,.02)}
+#insp h4{margin:0 0 8px;font:600 .78rem Poppins,system-ui,sans-serif;color:var(--ink)}
+#insp p{margin:0 0 6px}#insp p:last-child{margin:0}
+#insp a{color:var(--acc);text-decoration:none}#insp a:hover{text-decoration:underline}
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:22px}
 .tl{display:flex;align-items:center;gap:10px}
 .menu{display:none;font-size:1.1rem;line-height:1;padding:7px 10px}
@@ -183,7 +190,26 @@ section{border:1px solid var(--line)}
 .pc{padding:24px;background:linear-gradient(160deg,rgba(255,255,255,.05),transparent 45%),var(--card);transition:box-shadow .25s,border-color .25s}
 .pc:hover{border-color:rgba(192,132,252,.45);box-shadow:0 0 0 1px rgba(192,132,252,.25),0 14px 42px -14px rgba(168,85,247,.6)}
 .pc h2{font-size:1.2rem;letter-spacing:-.02em}
-.ps{margin-top:4px;font-size:.82rem;color:var(--mute)}.ps .y{font-weight:700}
+.ps{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;font-size:.82rem;color:var(--mute)}
+.pst{--cb:rgba(255,255,255,.14);display:inline-flex;align-items:center;gap:8px;padding:6px 13px 6px 9px;border-radius:999px;color:var(--ink);font-size:.8rem;line-height:1;white-space:nowrap;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));border:1px solid var(--cb);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 6px 18px -10px var(--cb)}
+.pst svg{width:16px;height:16px;flex:none}
+.pst b{font-size:1em;font-weight:700}
+.pst small{font-size:1em;font-weight:500;color:var(--mute)}
+.pst.c5{--cb:rgba(251,191,36,.5);background:linear-gradient(180deg,rgba(251,191,36,.16),rgba(251,191,36,.03))}
+.pst.c5 svg{color:var(--gold);fill:currentColor;filter:drop-shadow(0 0 5px rgba(251,191,36,.7))}
+.pst.c5 b{color:#fde68a}
+.pst.av{--cb:rgba(192,132,252,.45)}
+.pst.av b{color:#d8b4fe}
+.pst.av svg{color:#c084fc;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.pst.wr{--wc:#37e6a8;--cb:rgba(55,230,168,.45);background:linear-gradient(180deg,rgba(55,230,168,.13),rgba(55,230,168,.02))}
+.pst.wr.lo{--wc:#ff5d6c;--cb:rgba(255,93,108,.45);background:linear-gradient(180deg,rgba(255,93,108,.13),rgba(255,93,108,.02))}
+.pst.wr b{color:var(--wc)}
+.pst .ring{position:relative;display:grid;place-items:center;flex:none;width:22px;height:22px;border-radius:50%;background:conic-gradient(var(--wc) calc(var(--p)*1%),rgba(255,255,255,.14) 0);box-shadow:0 0 10px -2px var(--wc)}
+.pst .ring:before{content:"";position:absolute;inset:3px;border-radius:50%;background:#10101c}
+.pst .ring svg{position:relative;width:10px;height:10px;color:var(--wc);fill:currentColor}
+.pst.gr{--cb:rgba(168,85,247,.65);color:#ede4ff;font-weight:600;background:linear-gradient(90deg,rgba(168,85,247,.32),rgba(99,102,241,.12))}
+.pst.gr i{width:8px;height:8px;margin:0 2px;border-radius:50%;background:#c084fc;box-shadow:0 0 8px #c084fc;animation:pstp 1.9s ease-out infinite}
+@keyframes pstp{0%{box-shadow:0 0 0 0 rgba(192,132,252,.7)}70%,100%{box-shadow:0 0 0 8px rgba(192,132,252,0)}}
 .wn{color:#37e6a8;font-weight:600}
 .pn{font-size:2.1rem}.pn small{font-size:.64rem}
 .pb{gap:12px;margin:20px 0 4px}
@@ -227,6 +253,7 @@ section{border:1px solid var(--line)}
 .side{margin:12px 0 12px 12px;top:12px;height:calc(100vh - 24px);border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,rgba(168,85,247,.07),transparent 42%),var(--side)}
 .nav button.on{background:linear-gradient(90deg,rgba(168,85,247,.26),rgba(168,85,247,.05));color:#fff;box-shadow:inset 3px 0 0 var(--acc),0 0 24px -8px rgba(168,85,247,.85)}
 .nav button.on svg{color:#c084fc}
+.nic{position:relative;display:grid;place-items:center;width:20px;height:20px;flex:none}.nic img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:.6;transition:opacity .2s}.nav button.on .nic img,.nav button:hover .nic img{opacity:1}
 .top{padding:12px 18px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025);backdrop-filter:blur(8px)}
 .tabs button{border:1px solid var(--line);background:rgba(255,255,255,.03)}
 .tabs button:hover{border-color:rgba(168,85,247,.4)}
@@ -365,7 +392,8 @@ body.gdrag{user-select:none;-webkit-user-select:none;cursor:grabbing}
 .drb.on{opacity:1;border-color:rgba(168,85,247,.9);background:radial-gradient(circle,rgba(168,85,247,.3),rgba(168,85,247,.06) 70%);box-shadow:0 0 18px -2px rgba(168,85,247,.75)}
 .ric{position:relative;display:grid;place-items:center;width:26px;height:26px}
 .ric svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.ric img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.ric img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:.6;transition:opacity .2s}
+.drb.on .ric img,.drb:hover .ric img{opacity:1}
 .dmain{position:relative;flex:1;min-width:0;overflow:auto;padding:22px}
 .dtop{display:flex;gap:14px;align-items:center;margin-bottom:20px;padding-right:30px}
 .dtop{align-items:flex-start}
@@ -446,17 +474,24 @@ body.gdrag{user-select:none;-webkit-user-select:none;cursor:grabbing}
 .dbox:focus{outline:0}
 .dbox .dhint{margin:22px 0 0;font-size:.74rem}
 .dwpane .dwl{margin:20px 0 10px}.dwpane .dwl:first-child{margin-top:0}
+.sw{position:relative}#swbtn{max-width:210px;display:inline-flex;gap:6px;align-items:center}#swlab{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#swmenu{position:absolute;right:0;top:calc(100% + 8px);min-width:250px;max-width:86vw;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px;z-index:60;box-shadow:0 18px 40px -12px #000}
+#swmenu hr{border:0;border-top:1px solid var(--line);margin:6px 0}#swmenu .spf{display:flex;align-items:center;gap:2px}#swmenu .spf .si{flex:1}
+#swmenu .si{display:block;width:100%;text-align:left;padding:9px 12px;border:0;border-radius:10px;background:none;color:var(--ink);font:600 .8rem Poppins,system-ui,sans-serif;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#swmenu .si:hover,#swmenu .mini:hover{background:var(--hover)}#swmenu .si.on{color:var(--acc)}#swmenu .si.sub{padding-left:26px;font-weight:500}#swmenu .si.add{color:var(--mute)}
+#swmenu .mini{border:0;background:none;color:var(--mute);cursor:pointer;border-radius:8px;padding:6px 8px;font:inherit}
+body.lockp main>*:not(.top){pointer-events:none;opacity:.45}
 </style>
 </head>
 <body>
 <div class="shell"><aside class="side" id="side"><div class="brand">Menu</div><nav class="nav" id="nav"></nav></aside><div class="scrim" id="scrim"></div>
 <div class="modal" id="dmodal" hidden><div class="mbox" role="dialog" aria-modal="true" aria-labelledby="dtitle"><h3 id="dtitle"></h3><p class="reset" id="dsub"></p><div id="dlist"></div><div class="mbtn"><button class="btn" id="dall">Marcar todas</button><button class="btn" id="dno">Cancelar</button><button class="btn on" id="dyes">Salvar</button></div></div></div>
 <div class="modal" id="modal" hidden><div class="mbox" role="dialog" aria-modal="true"><p id="mmsg"></p><div class="mbtn"><button class="btn" id="mno">Cancelar</button><button class="btn on" id="myes">Confirmar</button></div></div></div>
-<div class="modal" id="emodal" hidden><div class="mbox" role="dialog" aria-modal="true" aria-labelledby="efTitle"><h3 id="efTitle">Adicionar</h3><div class="fm"><label>Tipo<select id="efT"><option value="c">Personagem</option><option value="w">Arma</option></select></label><label>Nome<input id="efN" maxlength="40" autocomplete="off"></label><label>Arquivo da imagem<input id="efI" placeholder="ex.: rover.png" maxlength="120" autocomplete="off"></label><label>Nome alternativo (como vem do jogo)<input id="efA" placeholder="ex.: Chama Gélida (opcional)" maxlength="120" autocomplete="off"></label><label id="efEl">Elemento<select id="efE"></select></label><label>Tipo de arma<select id="efW"></select></label><label>Raridade<select id="efR"></select></label></div><div class="mbtn"><button class="btn" id="eno">Cancelar</button><button class="btn on" id="eyes">Salvar</button></div></div></div>
+<div class="modal" id="emodal" hidden><div class="mbox" role="dialog" aria-modal="true" aria-labelledby="efTitle"><h3 id="efTitle">Adicionar</h3><div class="fm"><label>Tipo<select id="efT"><option value="c">Personagem</option><option value="w">Arma</option></select></label><label>Nome<input id="efN" maxlength="40" autocomplete="off"></label><label>Arquivo da imagem (opcional)<input id="efI" placeholder="vazio = usa o nome, ex.: aemeath.png" maxlength="120" autocomplete="off"></label><label>Nome alternativo (como vem do jogo)<input id="efA" placeholder="ex.: Chama Gélida (opcional)" maxlength="120" autocomplete="off"></label><label id="efEl">Elemento<select id="efE"></select></label><label>Tipo de arma<select id="efW"></select></label><label>Raridade<select id="efR"></select></label></div><div class="mbtn"><button class="btn" id="eno">Cancelar</button><button class="btn on" id="eyes">Salvar</button></div></div></div>
 <div class="modal dmw" id="cmodal" hidden><div class="mbox dbox" id="dbox" role="dialog" aria-modal="true" aria-labelledby="dtt"></div></div>
 <main>
 <header class="top"><div class="tl"><button class="btn menu" id="menu" aria-label="Menu">&#9776;</button><h1><span id="ttl">Checklist</span> <button class="tip" id="ttip" data-tip="Marque o que já fez. Cada lista zera sozinha no reset diário, semanal e mensal." aria-label="Ajuda">?</button></h1></div>
-<div class="acct"><span id="sync"></span><span id="who" hidden></span><button class="btn" id="login" hidden>Entrar com Google</button><button class="btn" id="logout" hidden>Sair</button><button class="btn gear" id="gear" title="Configurações" aria-label="Configurações">&#9881;&#xFE0E;</button></div></header>
+<div class="acct"><span id="sync"></span><span id="who" hidden></span><button class="btn" id="login" hidden>Entrar com Google</button><button class="btn" id="logout" hidden>Sair</button><span class="sw" id="swwrap" hidden><button class="btn" id="swbtn" aria-haspopup="true"><span id="swlab"></span> &#9662;</button><div id="swmenu" hidden></div></span><button class="btn gear" id="gear" title="Configurações" aria-label="Configurações">&#9881;&#xFE0E;</button></div></header>
 <div id="pg-check">
 <nav class="tabs"><button data-tab="today" class="on">Atividades</button><button data-tab="perm">Personalizado</button><button data-tab="hist">Histórico</button></nav>
 <section id="lun" hidden></section>
@@ -471,15 +506,15 @@ body.gdrag{user-select:none;-webkit-user-select:none;cursor:grabbing}
 <label style="flex:none;padding:0;gap:8px">Hora do reset
 <input type="number" id="rh" min="0" max="23"></label>
 <button class="tip" data-tip="Horário local em que as listas zeram. Servidor América: 4h do servidor = 6h em Brasília." aria-label="Ajuda">?</button>
-<button class="btn" id="exp">Exportar dados</button><button class="btn" id="imp">Importar dados</button><input type="file" id="impf" accept=".json,application/json" hidden><button class="tip" data-tip="Exportar baixa um arquivo com seus dados. Importar lê esse arquivo e substitui os dados atuais." aria-label="Ajuda">?</button>
+<button class="btn" id="exp">Exportar tudo</button><button class="btn" id="imp">Importar tudo</button><input type="file" id="impf" accept=".json,application/json" hidden><button class="tip" data-tip="Exportar baixa um arquivo com tudo: checklist, personagens/armas (tenho/não tenho, níveis) e pity. Importar lê esse arquivo: substitui o checklist e os personagens, e junta o pity ao atual sem apagar nada." aria-label="Ajuda">?</button>
 </div>
 <div class="cfg" id="admrow" hidden style="margin-top:14px"><span id="admst"></span><button class="btn" id="admtg"></button><button class="tip" data-tip="Só aparece para o e-mail do administrador. Desativado, o site funciona como para qualquer pessoa: sem botões de editar, sem painel e sem salvar mudanças globais. Vale só neste navegador." aria-label="Ajuda">?</button></div>
 </section>
 <section id="admsec" hidden></section>
-<section id="about" hidden><div class="abt"><span>Desenvolvido por S8IGNORe</span><span id="ver"></span></div><p>Este site (<a href="https://s8ignore.github.io/WuwaDiary/" target="_blank" rel="noopener">s8ignore.github.io/WuwaDiary</a>) é um projeto independente de fãs e não possui afiliação com a Kuro Games. Wuthering Waves, seu conteúdo e os materiais do jogo são marcas registradas e direitos autorais da Kuro Games.</p><hr class="sep"><p>Projeto inspirado no <a href="https://paimon.moe" target="_blank" rel="noopener">Paimon.moe</a>.</p></section>
+<section id="about" hidden><div class="abt"><span>Desenvolvido por S8IGNORe</span><span id="ver"></span></div><p>Este site (<a href="https://s8ignore.github.io/WuwaDiary/" target="_blank" rel="noopener">s8ignore.github.io/WuwaDiary</a>) é um projeto independente de fãs e não possui afiliação com a Kuro Games. Wuthering Waves, seu conteúdo e os materiais do jogo são marcas registradas e direitos autorais da Kuro Games.</p><hr class="sep"><p>Projeto inspirado no <a href="https://paimon.moe" target="_blank" rel="noopener">Paimon.moe</a> e no <a href="https://trackmypulls.com/en/wuwa/collections" target="_blank" rel="noopener">TrackMyPulls</a>. Agradecimento especial ao TrackMyPulls pela base do layout.</p></section>
 </div>
 <div id="pg-char" hidden>
-<section id="charadm" hidden><div class="head"><h2>Administrador <button class="tip" data-tip="Envie as imagens para a pasta img do repositório no GitHub e informe só o nome do arquivo, por exemplo rover.png. Os ícones de elemento e de arma ficam em img/icons: glacio.png, fusion.png, electro.png, aero.png, spectro.png, havoc.png, broadblade.png, sword.png, pistols.png, gauntlets.png e rectifier.png. Vale para todos os usuários." aria-label="Ajuda">?</button></h2><div class="hr"><button class="btn" data-cnew="c">+ Personagem</button><button class="btn" data-cnew="w">+ Arma</button></div></div></section>
+<section id="charadm" hidden><div class="head"><h2>Administrador <button class="tip" data-tip="Envie as imagens para a pasta img do repositório no GitHub. O campo de arquivo é opcional: se ficar vazio, o site procura img/nome.png (também .webp, .jpg e .jpeg), em minúsculas e sem acento. Ex.: Aemeath → img/aemeath.png; nome com espaço usa hífen (rover-havoc.png). Os ícones de elemento e de arma ficam em img/icons: glacio.png, fusion.png, electro.png, aero.png, spectro.png, havoc.png, broadblade.png, sword.png, pistols.png, gauntlets.png e rectifier.png. Vale para todos os usuários." aria-label="Ajuda">?</button></h2><div class="hr"><button class="btn" data-cnew="c">+ Personagem</button><button class="btn" data-cnew="w">+ Arma</button></div></div></section>
 <div class="ctabs" id="chtabs"></div>
 <section class="cfl" id="chfl"><label class="csr"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="chq" type="search" placeholder="Buscar personagens..." autocomplete="off" maxlength="40"></label><div id="chchips"></div></section>
 <div class="cbar" id="chbar"></div>
@@ -501,15 +536,18 @@ body.gdrag{user-select:none;-webkit-user-select:none;cursor:grabbing}
 <div id="pbar"></div>
 </div>
 </div>
+<footer id="insp"><div class="ib"><h4>Inspirações e agradecimentos</h4>
+<p>Layout e estética inspirados no <a href="https://trackmypulls.com/en/wuwa/collections" target="_blank" rel="noopener">TrackMyPulls</a>, com agradecimento ao criador por um trabalho tão bonito. Coleção inspirada no <a href="https://paimon.moe/characters" target="_blank" rel="noopener">Paimon.moe</a>.</p>
+<p>Projeto independente de fãs, sem afiliação com a Kuro Games.</p></div></footer>
 </main></div>
 <script>
 var TYPES=[["daily","Diárias"],["weekly","Semanais"],["monthly","Mensais"]];
 var DEF={daily:["Missões diárias (100 pts de atividade)","Resgatar recompensas de atividade","Passe de batalha: diárias","Evento de login","Ninho de Pesadelo","Gastar Waveplates"],
 weekly:["Passe de batalha: semanais","Chefe semanal","Desafio semanal"],
 monthly:["Loja mensal","Evento do mês"]};
-var DEFG={daily:["Diárias","daily"],weekly:["Semanais","weekly"],monthly:["Temporada","season"]};var mem=null;
-function load(){try{var s=localStorage.getItem("wuwa-check");if(s)return JSON.parse(s)}catch(e){}return mem}
-function save(){record();S.ts=Date.now();mem=S;try{localStorage.setItem("wuwa-check",JSON.stringify(S))}catch(e){}if(window.onSaved)window.onSaved()}
+var DEFG={daily:["Diárias","daily"],weekly:["Semanais","weekly"],monthly:["Temporada","season"]};var mem=null,CK="wuwa-check",PK="wuwa-pulls";
+function load(){try{var s=localStorage.getItem(CK);if(s)return JSON.parse(s)}catch(e){}return mem}
+function save(){record();S.ts=Date.now();mem=S;try{localStorage.setItem(CK,JSON.stringify(S))}catch(e){}if(window.onSaved)window.onSaved()}
 function fresh(){var g=[],n=0;["daily","weekly","monthly"].forEach(function(t){g.push({id:t,name:DEFG[t][0],reset:DEFG[t][1],tasks:DEF[t].map(function(name){return{id:"t"+(n++),name:name}})})});return{rh:6,n:n,groups:g,done:{},hist:{}}}
 var S=migrate(load()||fresh());if(!S.hist)S.hist={};
 if(!S.perm)S.perm=[{id:"pd1",name:"Explorar o mapa (todas as regiões)",d:false},{id:"pd2",name:"Completar a história principal",d:false},{id:"pd3",name:"Abrir todos os baús do mapa",d:false}];
@@ -653,11 +691,11 @@ function tab(t){var v={today:["app","newgrp"],hist:["hist"],perm:["perm","pgroup
 for(var k in v)v[k].forEach(function(id){document.getElementById(id).hidden=k!==t});
 [].forEach.call(document.querySelectorAll(".tabs button"),function(b){b.classList.toggle("on",b.dataset.tab===t)});
 document.getElementById("gear").classList.toggle("on",t==="cfg");if(!window.isAdmin)document.getElementById("admsec").hidden=true;else if(t==="cfg")renderAdm();
-if(t==="hist")renderHist();if(t==="perm")renderPerm()}
+if(t==="hist")renderHist();if(t==="perm")renderPerm();syncInsp()}
 document.getElementById("gear").onclick=function(){if(PAGE!=="checklist"){go("checklist");tab("cfg");return}tab(document.getElementById("cfgsec").hidden?"cfg":"today")};
-function exportData(){var b=new Blob([JSON.stringify(S,null,1)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="wuwa-checklist-"+dk(new Date())+".json";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)}
-function importData(f){var r=new FileReader();r.onload=function(){var d;try{d=JSON.parse(r.result);if(!d||!(d.groups||d.tasks)||!d.done)throw 0}catch(e){note("Arquivo inválido.");return}
-ask("Importar vai substituir os dados atuais. Continuar?","Importar",function(){d.n=d.n||1000;d.rh=d.rh===undefined?6:d.rh;applyRemote(d);save();note("Dados importados.")})};r.readAsText(f)}
+function exportData(){var nmx=(window.PROF_NAME||"local").replace(/[^\w\-]+/g,"_").slice(0,30),o={wuwa:2,perfil:window.PROF_NAME||"",exportado:new Date().toISOString(),checklist:S,pity:PL},b=new Blob([JSON.stringify(o,null,1)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="wuwa-backup-"+nmx+"-"+dk(new Date())+".json";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)}
+function importData(f){var r=new FileReader();r.onload=function(){var d,p=null;try{d=JSON.parse(r.result);if(d&&d.wuwa===2){p=d.pity&&d.pity.acc?d.pity:null;d=d.checklist}if(!d||!(d.groups||d.tasks)||!d.done)throw 0}catch(e){note("Arquivo inválido.");return}
+ask("Importar vai substituir o checklist e os personagens atuais"+(p?" e juntar o pity do arquivo ao pity atual (nada do pity atual é apagado)":"")+". Continuar?","Importar",function(){d.n=d.n||1000;d.rh=d.rh===undefined?6:d.rh;applyRemote(d);save();if(p){PL=mergeP(PL,p);savePullsLocal();pushPulls();if(!document.getElementById("pg-pity").hidden)renderPity()}note("Dados importados.")})};r.readAsText(f)}
 document.getElementById("exp").onclick=exportData;
 document.getElementById("imp").onclick=function(){document.getElementById("impf").click()};
 document.getElementById("impf").onchange=function(e){if(e.target.files[0])importData(e.target.files[0]);e.target.value=""};
@@ -689,7 +727,7 @@ else if(el.id==="padd")addPerm();
 else if(el.dataset.pdelg)ask('Excluir a lista "Personalizado" e suas tarefas?',"Excluir",function(){S.perm=[];S.permSubs=[];S.permHidden=true;save();renderPerm()},true)});
 document.getElementById("perm").addEventListener("click",function(e){if(e.target.dataset.prest){S.permHidden=false;save();renderPerm()}});
 document.getElementById("pgroups").addEventListener("keydown",function(e){if(e.key==="Enter"&&e.target.id==="pnew")addPerm()});
-function applyRemote(d){S=migrate(d);if(!S.hist)S.hist={};if(!S.perm)S.perm=[];mem=S;try{localStorage.setItem("wuwa-check",JSON.stringify(S))}catch(e){}document.getElementById("rh").value=S.rh;render();renderLun();if(!document.getElementById("hist").hidden)renderHist();if(!document.getElementById("perm").hidden)renderPerm();applyGlobal()}
+function applyRemote(d){S=migrate(d);if(!S.hist)S.hist={};if(!S.perm)S.perm=[];mem=S;try{localStorage.setItem(CK,JSON.stringify(S))}catch(e){}document.getElementById("rh").value=S.rh;render();renderLun();if(!document.getElementById("hist").hidden)renderHist();if(!document.getElementById("perm").hidden)renderPerm();applyGlobal()}
 var tp=document.createElement("div");tp.id="tp";tp.setAttribute("role","tooltip");document.body.appendChild(tp);
 function showTip(b){tp.textContent=b.dataset.tip;tp.className="on";var r=b.getBoundingClientRect(),w=tp.offsetWidth;tp.style.left=Math.max(8,Math.min(innerWidth-w-8,r.left+r.width/2-w/2))+"px";tp.style.top=(r.bottom+8)+"px"}
 function hideTip(){if(tp.className)tp.className=""}
@@ -701,7 +739,12 @@ window.addEventListener("scroll",hideTip,{capture:true,passive:true});
 var scrT,scrOn=false;window.addEventListener("scroll",function(){if(!scrOn){scrOn=true;document.body.classList.add("scr")}clearTimeout(scrT);scrT=setTimeout(function(){scrOn=false;document.body.classList.remove("scr")},140)},{passive:true});
 var G=null;
 function seasonOn(){return!!(G&&G.season&&G.season.end)}
-function persist(){mem=S;try{localStorage.setItem("wuwa-check",JSON.stringify(S))}catch(e){}}
+window.getTs=function(){return S.ts||0};
+window.switchStore=function(ck,pk){CK=ck;PK=pk;mem=null;S=migrate(load()||fresh());if(!S.hist)S.hist={};
+if(!S.perm)S.perm=[{id:"pd1",name:"Explorar o mapa (todas as regiões)",d:false},{id:"pd2",name:"Completar a história principal",d:false},{id:"pd3",name:"Abrir todos os baús do mapa",d:false}];
+PL=loadPulls();mem=S;lastKeys=null;document.getElementById("rh").value=S.rh;
+render();renderLun();renderAbout();renderChars();if(!document.getElementById("hist").hidden)renderHist();if(!document.getElementById("perm").hidden)renderPerm();if(!document.getElementById("pg-pity").hidden)renderPity();applyGlobal()};
+function persist(){mem=S;try{localStorage.setItem(CK,JSON.stringify(S))}catch(e){}}
 function applyGlobal(){var ch=false;if(G&&G.tasks){if(!S.seen)S.seen=[];["daily","weekly","monthly"].forEach(function(t){(G.tasks[t]||[]).forEach(function(g){if(S.seen.indexOf(g.id)<0){S.seen.push(g.id);var gr=gget(t)||addDefGroup(t,false);gr.tasks.push({id:g.id,name:g.name});ch=true}})})}
 if(ch)persist();render();renderLun();renderAbout();renderChars();if(!document.getElementById("pg-pity").hidden)renderPity()}
 function snapEnd(ms){var c=new Date(ms),b=new Date(c.getFullYear(),c.getMonth(),c.getDate(),S.rh),dd=b-c;if(dd>432e5)b.setDate(b.getDate()-1);else if(-dd>432e5)b.setDate(b.getDate()+1);return b.getTime()}
@@ -720,6 +763,19 @@ if(el.id==="gadd"){var n=document.getElementById("gn").value.trim();if(!n)return
 else if(el.dataset.gdel){tk[el.dataset.gt]=tk[el.dataset.gt].filter(function(x){return x.id!==el.dataset.gdel});admSave({tasks:tk})}
 else if(el.id==="sset"||el.id==="snew"){var d=parseInt(document.getElementById("sd").value,10),h=parseInt(document.getElementById("sh").value,10)||0;if(isNaN(d))return;var id=G&&G.season?G.season.id:0;if(el.id==="snew"||!id)id++;admSave({season:{id:id,end:snapEnd(Date.now()+d*864e5+h*36e5)}})}else if(el.id==="vset"){var v=document.getElementById("vin").value.trim();if(!v)return;admSave({version:v})}});
 function chSrc(i){i=i||"";return/^https?:|\//.test(i)?i:"img/"+i}
+/* Imagem automática: se o campo "Arquivo da imagem" estiver vazio, procura img/<nome>.png (e .webp/.jpg/.jpeg).
+   Nome em minúsculas, sem acento, espaços viram hífen (ou _ ou nada). "(Havoc)" entre parênteses é ignorado. */
+var CHX=["png","webp","jpg","jpeg"],CHOK={},CHBAD={};
+function chWords(n){return String(n).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/\(.*?\)/g," ").replace(/[^a-z0-9]+/g," ").trim().split(" ").filter(Boolean)}
+function chCands(c){var l=[];if(c.img)l.push(chSrc(c.img));var w=chWords(c.name||"");if(w.length){var b=[w.join("-"),w.join("_"),w.join("")];b=b.filter(function(v,i){return b.indexOf(v)===i});b.forEach(function(sl){CHX.forEach(function(x){l.push("img/"+sl+"."+x)})})}return l}
+function chPic(c,attrs){var n=c.name||"",a='data-n="'+esc(n)+'" data-s="'+esc(c.img||"")+'" alt="" onload="chOk(this)" onerror="chFb(this)" '+(attrs||"");
+if(CHBAD[n])return'<img src="data:," data-k="9999" '+a+'>';
+var u=CHOK[n];if(u)return'<img src="'+esc(u)+'" data-k="-1" '+a+'>';
+var l=chCands(c);return'<img src="'+esc(l[0]||"data:,")+'" data-k="0" '+a+'>'}
+function chOk(el){var n=el.dataset.n;if(n&&el.getAttribute("src")!=="data:,")CHOK[n]=el.getAttribute("src")}
+function chFb(el){var k=(+el.dataset.k)+1,l=chCands({name:el.dataset.n,img:el.dataset.s});
+if(k<l.length){el.dataset.k=k;el.src=l[k];return}
+el.onerror=null;el.style.visibility="hidden";CHBAD[el.dataset.n]=1;delete CHOK[el.dataset.n];var p=el.parentNode;if(p&&p.hasAttribute("data-i")&&p.className.indexOf(" nf")<0)p.className+=" nf"}
 var ELS=[["glacio","Glacio","#4fc3f7","G"],["fusion","Fusão","#ff7043","F"],["electro","Eletro","#b66bff","E"],["aero","Aero","#2ee6a8","A"],["spectro","Espectro","#f5d94e","S"],["havoc","Havoc","#e6407a","H"]],
 WTS=[["broadblade","Lâmina Larga","#c9b6ff","L"],["sword","Espada","#c9b6ff","E"],["pistols","Pistolas","#c9b6ff","P"],["gauntlets","Manoplas","#c9b6ff","M"],["rectifier","Retificador","#c9b6ff","R"]],
 SORTS=[["name","Nome"],["el","Elemento"],["rar","Raridade"],["wt","Arma"],["lvl","Constelações"]],
@@ -771,7 +827,7 @@ if(CH.q||hasK(CH.el)||hasK(CH.wt)||hasK(CH.ra)||CH.st!=="all")h+='<div class="cg
 document.getElementById("chchips").innerHTML='<div class="cg">'+h+"</div>"}
 function chGrid(){var l=chList(),tot=0,adm=!!window.isAdmin,w=CH.tab==="w",h="";chAll().forEach(function(c){if(chTp(c)===CH.tab)tot++});
 l.forEach(function(c){var x=S.chars[c.id]||{},o=!!x.o,lv=Math.min(x.c||0,w?4:6),badge=w?"R"+(lv+1):"S"+lv,lab=w?"Rank":"Constelação";
-h+='<div class="ch'+(o?" own":"")+" r"+(c.r||0)+'" data-cid="'+c.id+'"><div class="ci" data-i="'+esc(c.name.charAt(0))+'"><img src="'+esc(chSrc(c.img))+'" alt="" loading="lazy" decoding="async" onerror="this.style.visibility=\'hidden\';this.parentNode.className+=\' nf\'">'
+h+='<div class="ch'+(o?" own":"")+" r"+(c.r||0)+'" data-cid="'+c.id+'"><div class="ci" data-i="'+esc(c.name.charAt(0))+'">'+chPic(c,'loading="lazy" decoding="async"')+''
 +(o?'<button class="pill s" data-cb="'+c.id+'" title="'+lab+" "+badge+'" aria-label="'+lab+" "+badge+'">'+badge+"</button>":'<span class="pill">FALTANDO</span>')
 +(w?ico(defOf(WTS,c.w),"tr"):ico(defOf(ELS,c.e),"tr")+ico(defOf(WTS,c.w),"bl"))
 +(adm?'<span class="ca"><button data-cedit="'+c.id+'" aria-label="Editar">&#9998;</button><button data-cdel="'+c.id+'" aria-label="Remover">&times;</button></span>':"")
@@ -823,14 +879,14 @@ function chDetClose(){CH.det=null;document.getElementById("cmodal").hidden=true}
 var RIC={ov:'<svg viewBox="0 0 24 24"><circle cx="12" cy="5.5" r="2.4"/><path d="M4.5 10h15M12 8.5V15M9 21l3-6 3 6"/></svg>',wp:'<svg viewBox="0 0 24 24"><path d="M5 19L18 6M14.5 5.5l4 4M6 20l-1.5-1.5M19 19L6 6M9.5 5.5l-4 4M18 20l1.5-1.5"/></svg>',sk:'<svg viewBox="0 0 24 24"><circle cx="7" cy="17" r="2.6"/><circle cx="17" cy="7" r="2.6"/><path d="M9 15l6-6"/></svg>',cs:'<svg viewBox="0 0 24 24"><path d="M12 3l2.2 6.3L21 12l-6.8 2.7L12 21l-2.2-6.3L3 12l6.8-2.7z"/></svg>'},
 RICF={ov:"overview",wp:"weapon",sk:"skills",cs:"constellations"};
 function ric(k){return'<span class="ric">'+RIC[k]+'<img src="img/icons/'+RICF[k]+'.png" alt="" onload="this.previousSibling.style.display=\'none\'" onerror="this.remove()"></span>'}
-function wimg(y,cls){return'<span class="wimg '+(cls||"")+'" data-i="'+esc(y.name.charAt(0))+'"><img src="'+esc(chSrc(y.img))+'" alt="" loading="lazy" decoding="async" onerror="this.style.visibility=\'hidden\';this.parentNode.className+=\' nf\'"></span>'}
+function wimg(y,cls){return'<span class="wimg '+(cls||"")+'" data-i="'+esc(y.name.charAt(0))+'">'+chPic(y,'loading="lazy" decoding="async"')+'</span>'}
 function chDetHtml(){var c=chById(CH.det),box=document.getElementById("dbox");if(!c){chDetClose();return}
 var mn=box.querySelector(".dmain"),st=mn&&!CH.dscr?mn.scrollTop:0;CH.dscr=0;var w=chTp(c)==="w",x=S.chars[c.id]||{},o=!!x.o,el=defOf(ELS,c.e),wt=defOf(WTS,c.w),n=w?5:7,
 tabs=w?[["ov","Visão Geral"],["cs","Rank"]]:[["ov","Visão Geral"],["wp","Arma"],["sk","Habilidades"],["cs","Constelações"]],tb=CH.dtab,ok=tabs.some(function(t){return t[0]===tb});if(!ok)tb=CH.dtab="ov";
 var eq=!w&&x.wp?chById(x.wp):null;
 var h='<div class="dwrap'+(tb==="wp"?"":" fit")+'"><nav class="drail" aria-label="Seções">'+tabs.map(function(t){return'<button class="drb'+(t[0]===tb?" on":"")+'" data-dtab="'+t[0]+'" title="'+t[1]+'" aria-label="'+t[1]+'" aria-pressed="'+(t[0]===tb?"true":"false")+'">'+ric(t[0])+'</button>'}).join("")+'</nav><div class="dmain">';
 h+='<button class="dx" data-dact="close" aria-label="Fechar">&times;</button>';
-h+='<div class="dtop"><div class="dleft"><div class="dpic" data-i="'+esc(c.name.charAt(0))+'"><img src="'+esc(chSrc(c.img))+'" alt="" onerror="this.style.visibility=\'hidden\';this.parentNode.className+=\' nf\'"></div><div class="dstars" aria-label="'+(c.r||0)+' estrelas">'+new Array((c.r||0)+1).join("★")+'</div></div><div class="dti"><div class="dnm"><h3 id="dtt">'+esc(c.name)+'</h3><div class="dic">'+(!w&&el?ico(el):"")+(wt?ico(wt):"")+'</div></div><div class="dst">'+(o?'<span class="don">✓ Na coleção</span><button class="btn danger" data-dact="rm">Remover</button>':'<span class="dno">Não obtido</span><button class="btn on" data-dact="own">Adicionar à coleção</button>')+'</div></div>'+(w?"":eq?'<button class="dwk" data-dgo="wp" title="Trocar arma equipada" aria-label="Arma equipada: '+esc(eq.name)+'. Trocar"'+(o?"":" inert")+'>'+wimg(eq,"big")+'<span class="dwkn">'+esc(eq.name)+'</span><span class="dwkr">'+new Array((eq.r||0)+1).join("★")+'</span></button>':'<button class="dwk empty" data-dgo="wp" title="Escolher arma equipada" aria-label="Escolher arma equipada"'+(o?"":" inert")+'><span class="dwkp">+</span></button>')+'</div>';
+h+='<div class="dtop"><div class="dleft"><div class="dpic" data-i="'+esc(c.name.charAt(0))+'">'+chPic(c,"")+'</div><div class="dstars" aria-label="'+(c.r||0)+' estrelas">'+new Array((c.r||0)+1).join("★")+'</div></div><div class="dti"><div class="dnm"><h3 id="dtt">'+esc(c.name)+'</h3><div class="dic">'+(!w&&el?ico(el):"")+(wt?ico(wt):"")+'</div></div><div class="dst">'+(o?'<span class="don">✓ Na coleção</span><button class="btn danger" data-dact="rm">Remover</button>':'<span class="dno">Não obtido</span><button class="btn on" data-dact="own">Adicionar à coleção</button>')+'</div></div>'+(w?"":eq?'<button class="dwk" data-dgo="wp" title="Trocar arma equipada" aria-label="Arma equipada: '+esc(eq.name)+'. Trocar"'+(o?"":" inert")+'>'+wimg(eq,"big")+'<span class="dwkn">'+esc(eq.name)+'</span><span class="dwkr">'+new Array((eq.r||0)+1).join("★")+'</span></button>':'<button class="dwk empty" data-dgo="wp" title="Escolher arma equipada" aria-label="Escolher arma equipada"'+(o?"":" inert")+'><span class="dwkp">+</span></button>')+'</div>';
 h+='<h4 class="dpt">'+tabs.filter(function(t){return t[0]===tb})[0][1]+'</h4><div class="dfld"'+(o?"":" inert")+'>';
 if(tb==="ov"){
 var lv=x.lv||0;
@@ -901,13 +957,16 @@ bindNG("","act");bindNG("2","per");
 var NAV=[{id:"checklist",label:"Checklist",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>'},
 {id:"character",label:"Coleção",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>'},{id:"pity",label:"Contador de Pity",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>'}];
 var PAGE="checklist";
-function renderNav(){document.getElementById("nav").innerHTML=NAV.map(function(n){return'<button class="'+(n.id===PAGE?"on":"")+'" data-nav="'+n.id+'">'+n.icon+"<span>"+n.label+"</span></button>"}).join("")}
+function syncInsp(){var f=document.getElementById("insp"),m=document.querySelector("main"),cfg=PAGE==="checklist"&&!document.getElementById("cfgsec").hidden;f.hidden=cfg;m.classList.toggle("hasf",!cfg)}
+syncInsp();
+var NICF={checklist:"checklist",character:"collection",pity:"pity"};
+function renderNav(){document.getElementById("nav").innerHTML=NAV.map(function(n){return'<button class="'+(n.id===PAGE?"on":"")+'" data-nav="'+n.id+'"><span class="nic">'+n.icon+'<img src="img/icons/'+NICF[n.id]+'.png" alt="" onload="this.previousSibling.style.display=\'none\'" onerror="this.remove()"></span><span>'+n.label+"</span></button>"}).join("")}
 function go(p){PAGE=p;var pg={checklist:"pg-check",character:"pg-char",pity:"pg-pity"},tt={checklist:"Checklist",character:"Coleção",pity:"Contador de Pity"},c=p==="checklist";
 for(var k in pg)document.getElementById(pg[k]).hidden=k!==p;
 document.querySelector("main").classList.toggle("wide",p==="pity"||p==="character");
 document.getElementById("ttl").textContent=tt[p];if(p==="character")renderChars();if(p==="pity")renderPity();
 document.getElementById("ttip").style.display=c?"":"none";
-document.getElementById("gear").classList.toggle("on",c&&!document.getElementById("cfgsec").hidden);renderNav();window.scrollTo(0,0)}
+document.getElementById("gear").classList.toggle("on",c&&!document.getElementById("cfgsec").hidden);renderNav();syncInsp();window.scrollTo(0,0)}
 document.getElementById("nav").addEventListener("click",function(e){var b=e.target.closest("button[data-nav]");if(b&&b.dataset.nav!==PAGE)go(b.dataset.nav)});
 document.getElementById("menu").onclick=function(){document.body.classList.toggle("nav-open")};
 document.getElementById("scrim").onclick=document.getElementById("nav").onclick=function(){document.body.classList.remove("nav-open")};
@@ -943,9 +1002,9 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!document.g
 var IMPORT_CMD='iwr -useb "https://raw.githubusercontent.com/S8IGNORe/WuwaDiary/main/import.ps1" | iex';
 var BANN={1:["Ressonador em Destaque",80,10],2:["Arma em Destaque",80,10],3:["Ressonador Padrão",80,10],4:["Arma Padrão",80,10],5:["Iniciante",50,10],6:["Escolha do Iniciante",80,10]};
 var STD5=["verina","encore","calcharo","jianxin","lingyang"];
-function loadPulls(){try{var x=localStorage.getItem("wuwa-pulls");if(x){var o=JSON.parse(x);if(o&&o.acc)return o}}catch(e){}return{rs:0,sel:"",acc:{}}}
+function loadPulls(){try{var x=localStorage.getItem(PK);if(x){var o=JSON.parse(x);if(o&&o.acc)return o}}catch(e){}return{rs:0,sel:"",acc:{}}}
 var PL=loadPulls();
-function savePullsLocal(){try{localStorage.setItem("wuwa-pulls",JSON.stringify(PL))}catch(e){}}
+function savePullsLocal(){try{localStorage.setItem(PK,JSON.stringify(PL))}catch(e){}}
 function pushPulls(){if(window.pullsPushFn)window.pullsPushFn(JSON.stringify(PL)).catch(function(){})}
 function pullsHas(){return Object.keys(PL.acc).length>0||PL.rs>0}
 function mergePool(S,N){if(!S||!S.length)return N||[];if(!N||!N.length)return S;var t0=N[0][0],t1=N[N.length-1][0];return S.filter(function(r){return r[0]<t0}).concat(N,S.filter(function(r){return r[0]>t1}))}
@@ -971,10 +1030,13 @@ list.push({n:r[2],p:c5,t:r[0],res:res});sum+=c5;c5=0;c4=0}else if(r[1]===4)c4=0}
 return{total:recs.length,p5:c5,p4:c4,list:list,avg:list.length?Math.round(sum/list.length):0,w:w,l:l,guar:guar}}
 function pityCard(t,recs,chars){var b=BANN[t]||["Banner especial (tipo "+t+")",80,10],cap=b[1],st=stats(t,recs,cap),n5=st.list.length,wl=st.w+st.l,
 p5=Math.min(100,Math.round(st.p5*100/cap)),p4=Math.min(100,Math.round(st.p4*100/b[2]));
-var sub='<b class="y">'+n5+'</b> × <b class="y">5★</b>'+(n5?" · pity médio "+st.avg:"")+(wl?' · <span class="wn">♛ '+Math.round(st.w*100/wl)+"% ganhou</span>":"")+(st.guar?' · <span class="wn">próximo 5★ garantido</span>':"");
+var wr=wl?Math.round(st.w*100/wl):0,sub='<span class="pst c5" title="5★ obtidos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.2 6.8.8-5 4.7 1.3 6.8L12 17.6 6 21l1.3-6.8-5-4.7 6.8-.8z"/></svg><b>'+n5+'</b><small>obtidos</small></span>'
++(n5?'<span class="pst av"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg><small>pity médio</small><b>'+st.avg+'</b></span>':"")
++(wl?'<span class="pst wr'+(wr<50?" lo":"")+'" style="--p:'+wr+'"><span class="ring"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 19h20l-2-11-5 5-3-8-3 8-5-5z"/></svg></span><b>'+wr+'%</b><small>ganhou o 50/50</small></span>':"")
++(st.guar?'<span class="pst gr"><i></i>próximo 5★ garantido</span>':"");
 var rec=st.list.slice(-10).reverse().map(function(x){var ch=pyFind(chars,x.n),col=x.p<=cap*.45?"g":x.p<=cap*.7?"y":"r";
-if(!ch||!ch.img)PYM[x.n]=1;
-return'<div class="pr" tabindex="0" aria-label="'+esc(x.n)+", pity "+x.p+'" data-n="'+esc(x.n)+'" data-p="'+x.p+'" data-c="'+cap+'" data-r="'+(x.res||"")+'" data-t="'+esc(x.t)+'"><div class="pa">'+(ch?'<img src="'+esc(chSrc(ch.img))+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':"")+"<i>"+esc(x.n.charAt(0))+"</i>"+(x.res==="w"?'<u class="cr">♛</u>':"")+'</div><b class="pp '+col+'">'+x.p+"</b></div>"}).join("");
+if(!ch)PYM[x.n]=1;
+return'<div class="pr" tabindex="0" aria-label="'+esc(x.n)+", pity "+x.p+'" data-n="'+esc(x.n)+'" data-p="'+x.p+'" data-c="'+cap+'" data-r="'+(x.res||"")+'" data-t="'+esc(x.t)+'"><div class="pa">'+(ch?chPic(ch,'loading="lazy"'):"")+"<i>"+esc(x.n.charAt(0))+"</i>"+(x.res==="w"?'<u class="cr">♛</u>':"")+'</div><b class="pp '+col+'">'+x.p+"</b></div>"}).join("");
 return'<section class="pc"><div class="head"><div><h2>'+esc(b[0])+'</h2><div class="ps">'+sub+'</div></div><div class="pn">'+st.total+"<small>giros</small></div></div>"+'<div class="pb"><div class="bx"><div class="bt"><span class="y">5★ PITY</span><span>faltam '+Math.max(0,cap-st.p5)+'</span></div><div class="bn">'+st.p5+"<small>/"+cap+'</small></div><div class="bar"><i class="'+(cap>=80&&st.p5>=65?"hot":"")+'" style="width:'+p5+'%"></i></div></div><div class="bx p4"><div class="bt"><span class="v">4★ PITY</span><span>faltam '+Math.max(0,b[2]-st.p4)+'</span></div><div class="bn">'+st.p4+"<small>/"+b[2]+'</small></div><div class="bar"><i style="width:'+p4+'%"></i></div></div></div><div class="rt">5★ RECENTES</div><div class="rl">'+(rec||'<span class="reset">Nenhum 5★ ainda</span>')+"</div></section>"}
 function renderPity(){var d=document.getElementById("pdash"),bar=document.getElementById("pbar"),ids=Object.keys(PL.acc),det=document.getElementById("pimpd");
 document.getElementById("pcmd").textContent=IMPORT_CMD;
@@ -984,7 +1046,7 @@ var a=PL.acc[PL.sel],sel=ids.length>1?'<select id="pacc">'+ids.map(function(k){r
 var sv=a.server==="cn"?"CN":a.server==="global"?"Global":a.server?String(a.server).charAt(0).toUpperCase()+String(a.server).slice(1):"",
 when=new Date(a.at).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}).replace(", "," às ");
 bar.innerHTML='<div class="pf"><div class="pfi"><span class="pch"><small>UID</small>'+sel+"</span>"+(sv?'<span class="pch sv"><small>Servidor</small><b>'+esc(sv)+"</b></span>":"")+'<span class="pfd"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Importado em '+when+'</span></div><button class="btn" id="pdel">Apagar dados</button></div>';
-var h="",chars=(G&&G.chars)||[];PYM={};Object.keys(a.pools).forEach(function(t){h+=pityCard(+t,a.pools[t],chars);a.pools[t].forEach(function(r){if(r[1]>=4){var c0=pyFind(chars,r[2]);if(!c0||!c0.img)PYM[r[2]]=1}})});var ms=Object.keys(PYM);if(window.isAdmin&&ms.length)h+='<section><p class="reset">Itens 4★/5★ dos seus giros sem imagem no catálogo (confira o nome ou o arquivo): '+ms.map(esc).join(", ")+"</p></section>";d.innerHTML=h}
+var h="",chars=(G&&G.chars)||[];PYM={};Object.keys(a.pools).forEach(function(t){h+=pityCard(+t,a.pools[t],chars);a.pools[t].forEach(function(r){if(r[1]>=4){var c0=pyFind(chars,r[2]);if(!c0)PYM[r[2]]=1}})});var ms=Object.keys(PYM);if(window.isAdmin&&ms.length)h+='<section><p class="reset">Itens 4★/5★ dos seus giros que não estão no catálogo (confira o nome): '+ms.map(esc).join(", ")+"</p></section>";d.innerHTML=h}
 function importPulls(){var d;try{d=JSON.parse(document.getElementById("ptxt").value.trim())}catch(e){note("O texto colado não é um JSON válido. Rode o comando e cole o resultado completo.");return}
 if(!d||d.format!=="wuwa-diary-pulls"||!d.pools||!d.player){note("Formato não reconhecido. Use o comando desta página.");return}
 var pools={},n=0;d.pools.forEach(function(p){var r=(p.records||[]).map(function(x){return[String(x.time),+x.qualityLevel,String(x.name),String(x.resourceType||"").charAt(0)]});if(!r.length)return;if(r.length>1&&r[0][0]>=r[r.length-1][0])r.reverse();pools[p.type]=r;n+=r.length});
@@ -1012,36 +1074,105 @@ document.addEventListener("visibilitychange",function(){if(!document.hidden){che
 record();renderNav();render();renderLun();renderAbout();renderChars();
 </script>
 <script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import{initializeApp,deleteApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import{getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import{getFirestore,doc,setDoc,onSnapshot}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-// COLE AQUI os dados do seu projeto Firebase (Configurações do projeto > Seus apps > Web)
 const firebaseConfig={apiKey:"AIzaSyCbLaERuO5MhIc_4aLPZSNRzua-I-sBzR4",authDomain:"wuthering-diary.firebaseapp.com",projectId:"wuthering-diary",appId:"1:261406568195:web:03ea2c488aabd7271dc336"};
 const ADMIN_EMAIL="joaovitorarantescoelho@gmail.com";
 const $=id=>document.getElementById(id),sync=t=>{$("sync").textContent=t};
 if(firebaseConfig.apiKey.startsWith("COLE")){sync("Modo local (nuvem não configurada)")}else{
-const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
-let ref=null,timer=null,unsub=null,punsub=null,pref=null;
-onSnapshot(doc(db,"config","global"),snap=>{window.G=snap.exists()?snap.data():null;applyGlobal();if(window.isAdmin&&!$("admsec").hidden)renderAdm()},()=>{});
-window.adminSave=p=>window.isAdmin?setDoc(doc(db,"config","global"),p,{merge:true}):Promise.reject(new Error("admin off"));
-window.pullsPushFn=j=>pref?setDoc(pref,{json:j,ts:Date.now()}):Promise.resolve();
-const push=async()=>{if(!ref)return;try{await setDoc(ref,{json:JSON.stringify(window.S),ts:window.S.ts||0});sync("Sincronizado")}catch(e){sync("Erro ao salvar")}};
-window.onSaved=()=>{if(!ref)return;sync("Salvando...");clearTimeout(timer);timer=setTimeout(push,800)};
-$("login").hidden=false;sync("Entre para sincronizar");
-$("login").onclick=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(()=>sync("Login cancelado"));
-$("logout").onclick=()=>signOut(auth);
-onAuthStateChanged(auth,u=>{
-if(unsub){unsub();unsub=null}if(punsub){punsub();punsub=null}pref=null;
-ref=null;window.isAdminUser=!!u&&!!u.email&&u.email.toLowerCase()===ADMIN_EMAIL.toLowerCase();admEval();renderAdmRow();if(window.renderChars)renderChars();if(!$("cfgsec").hidden){$("admsec").hidden=!window.isAdmin;if(window.isAdmin)renderAdm()}$("login").hidden=!!u;$("logout").hidden=!u;$("who").hidden=!u;
-if(!u){sync("Entre para sincronizar");return}
-$("who").textContent=u.displayName||u.email;ref=doc(db,"users",u.uid);sync("Conectando...");pref=doc(db,"pulls",u.uid);punsub=onSnapshot(pref,snap=>{if(snap.metadata.hasPendingWrites)return;if(snap.exists()){try{window.pullsRemote(JSON.parse(snap.data().json))}catch(e){}}else if(window.pullsHas())window.pushPulls()},()=>{});
-unsub=onSnapshot(ref,snap=>{
-if(snap.metadata.hasPendingWrites)return;
-if(!snap.exists()){push();return}
-const c=JSON.parse(snap.data().json),l=window.S.ts||0;
-if((c.ts||0)>l){applyRemote(c);sync("Sincronizado")}else if((c.ts||0)<l)push();else sync("Sincronizado")
-},()=>sync("Erro de conexão"))
-})}
+/* ===== Contas e perfis =====
+ Conta = um app Firebase proprio (login persistente por conta). Perfil = conjunto separado de diarias+pity dentro da conta.
+ Perfil "main" usa EXATAMENTE os documentos antigos (users/{uid}, pulls/{uid}); perfis extras ficam em users/{uid}/perfis/{id}.
+ Cada (conta,perfil) tem seu proprio cache local; nada e compartilhado em memoria entre eles. */
+const LS=localStorage,J=JSON;
+const rd=(k,d)=>{try{const v=LS.getItem(k);return v?J.parse(v):d}catch(e){return d}};
+const wr=(k,v)=>{try{LS.setItem(k,J.stringify(v))}catch(e){}};
+let reg=rd("wuwa-accts",null)||{list:[],act:"main",prof:{}};if(!reg.prof)reg.prof={};
+const saveReg=()=>wr("wuwa-accts",reg),A={};let AC=null,seq=0,started=false;
+const nm=a=>a.user.displayName||a.user.email||"Conta";
+const owner=uid=>{let o=LS.getItem("wuwa-owner");if(!o){o=uid;try{LS.setItem("wuwa-owner",o)}catch(e){}}return o};
+const keys=(uid,pid)=>owner(uid)===uid&&pid==="main"?["wuwa-check","wuwa-pulls"]:["wuwa-check::"+uid+"::"+pid,"wuwa-pulls::"+uid+"::"+pid];
+const pkey=u=>"wuwa-profs::"+u;
+const plist=u=>{const o=rd(pkey(u),null);let l=(o&&o.list)||[];if(!l.some(p=>p.id==="main"))l=[{id:"main",name:"Principal"}].concat(l);return{list:l,ts:(o&&o.ts)||0}};
+const mergeList=(a,b)=>{const m={};[a,b].forEach((x,i)=>x.list.forEach(p=>{const q=m[p.id];if(!q)m[p.id]=Object.assign({},p);else{if(p.del)q.del=true;if(i===1&&b.ts>a.ts&&p.name)q.name=p.name}}));return{list:Object.values(m),ts:Math.max(a.ts||0,b.ts||0)}};
+const lref=(db,u)=>doc(db,"users",u,"perfis","_lista");
+const cloudList=(c,l)=>setDoc(lref(c.db,c.uid),{json:J.stringify(l)},{merge:true}).catch(()=>{});
+const bak=(c,s)=>{const k="wuwa-bak::"+c.uid+"::"+c.pid,a=rd(k,[]);if(a.length&&a[0].s===s)return;a.unshift({t:Date.now(),s});wr(k,a.slice(0,3))};
+/* config global (admin/temporada) */
+const cfgL=db=>onSnapshot(doc(db,"config","global"),snap=>{window.G=snap.exists()?snap.data():null;applyGlobal();if(window.isAdmin&&!$("admsec").hidden)renderAdm()},()=>{});
+window.adminSave=p=>window.isAdmin&&AC?setDoc(doc(AC.db,"config","global"),p,{merge:true}):Promise.reject(new Error("admin off"));
+/* envio: sempre usa o contexto ATIVO e so depois da 1a leitura do servidor */
+function push(c){if(c!==AC||!c.sy)return;clearTimeout(c.tm);c.dirty=false;const d={json:J.stringify(window.S),ts:window.S.ts||0};sync("Salvando...");
+(c.pid==="main"?setDoc(c.r,d):setDoc(c.r,d,{merge:true})).then(()=>{if(c===AC)sync("Sincronizado")}).catch(()=>{if(c===AC)sync("Erro ao salvar")})}
+window.onSaved=()=>{const c=AC;if(!c)return;c.dirty=true;if(!c.sy)return;sync("Salvando...");clearTimeout(c.tm);c.tm=setTimeout(()=>push(c),800)};
+window.pullsPushFn=j=>{const c=AC;if(!c||!c.py)return Promise.resolve();return c.pid==="main"?setDoc(c.p,{json:j,ts:Date.now()}):setDoc(c.r,{pj:j,pts:Date.now()},{merge:true})};
+const onS=c=>snap=>{if(c!==AC||snap.metadata.hasPendingWrites)return;const sv=!snap.metadata.fromCache,d=snap.exists()?snap.data():null;
+if(sv){c.sy=true;if(c.pid!=="main")c.py=true}
+if(d&&d.json){let r;try{r=J.parse(d.json)}catch(e){return}const l=window.getTs();
+if((r.ts||0)>l){bak(c,J.stringify(window.S));window.applyRemote(r)}else if(sv&&(r.ts||0)<l){bak(c,d.json);push(c)}}
+else if(sv&&window.getTs()>0)push(c);
+if(c.pid!=="main"&&(sv||d)){if(d&&d.pj){try{window.pullsRemote(J.parse(d.pj))}catch(e){}}else if(sv&&window.pullsHas())window.pushPulls()}
+if(sv){document.body.classList.remove("lockp");sync("Sincronizado")}};
+const onP=c=>snap=>{if(c!==AC||snap.metadata.hasPendingWrites)return;const sv=!snap.metadata.fromCache;if(sv)c.py=true;
+if(snap.exists()){try{window.pullsRemote(J.parse(snap.data().json))}catch(e){}}else if(sv&&window.pullsHas())window.pushPulls()};
+function stop(){const c=AC;if(!c)return;if(c.dirty&&c.sy)push(c);clearTimeout(c.tm);c.un.forEach(f=>f());AC=null}
+function activate(slot,pid){stop();document.body.classList.remove("lockp");const a=A[slot];
+if(!a||!a.user){window.isAdminUser=false;window.switchStore("wuwa-check","wuwa-pulls");adm();ui();return}
+const uid=a.user.uid,pl=plist(uid).list.filter(p=>!p.del);
+if(!pl.some(p=>p.id===pid))pid=pl.some(p=>p.id===reg.prof[uid])?reg.prof[uid]:"main";
+reg.act=slot;reg.prof[uid]=pid;saveReg();
+const k=keys(uid,pid),isNew=LS.getItem(k[0])===null,main=pid==="main";
+const c={slot,uid,pid,db:a.db,r:main?doc(a.db,"users",uid):doc(a.db,"users",uid,"perfis",pid),p:main?doc(a.db,"pulls",uid):null,un:[],sy:false,py:false,dirty:false,tm:0};
+AC=c;window.switchStore(k[0],k[1]);if(isNew)document.body.classList.add("lockp");sync("Conectando...");
+c.un.push(onSnapshot(c.r,onS(c),()=>sync("Erro de conexão")));
+if(c.p)c.un.push(onSnapshot(c.p,onP(c),()=>{}));
+c.un.push(onSnapshot(lref(a.db,uid),s=>{if(c!==AC)return;let r={list:[],ts:0};try{if(s.exists())r=J.parse(s.data().json)}catch(e){}
+const m=mergeList(plist(uid),{list:r.list||[],ts:r.ts||0});wr(pkey(uid),m);
+if(m.list.some(p=>p.id===c.pid&&p.del)){activate(slot,"main");return}
+if(!s.metadata.fromCache&&J.stringify(m.list)!==J.stringify(r.list||[]))cloudList(c,m);ui()},()=>{}));
+if(slot!=="main")c.un.push(cfgL(a.db));
+adm();ui()}
+function adm(){const u=AC&&A[AC.slot].user;window.isAdminUser=!!u&&!!u.email&&u.email.toLowerCase()===ADMIN_EMAIL.toLowerCase();admEval();renderAdmRow();if(window.renderChars)renderChars();if(!$("cfgsec").hidden){$("admsec").hidden=!window.isAdmin;if(window.isAdmin)renderAdm()}}
+function ui(){const has=Object.values(A).some(a=>a.user);$("login").hidden=has;$("logout").hidden=true;$("who").hidden=true;$("swwrap").hidden=!has;
+if(AC){const a=A[AC.slot],pl=plist(AC.uid).list.filter(p=>!p.del),cur=pl.find(p=>p.id===AC.pid)||pl[0];$("who").textContent=nm(a);window.PROF_NAME=nm(a)+(cur&&cur.id!=="main"?"-"+cur.name:"");$("swlab").textContent=nm(a)+(pl.length>1?" · "+cur.name:"")}
+else if(!has){window.PROF_NAME="";sync("Entre para sincronizar")}else $("swlab").textContent="Escolher conta";
+if(!$("swmenu").hidden)menu()}
+function menu(){let h="";Object.values(A).filter(a=>a.user).forEach(a=>{const on=AC&&AC.slot===a.slot;
+h+='<button class="si'+(on?" on":"")+'" data-sw="a:'+a.slot+'">'+(on?"✓ ":"")+esc(nm(a))+'</button>';
+if(on){plist(a.user.uid).list.filter(p=>!p.del).forEach(p=>{const cu=p.id===AC.pid;h+='<div class="spf"><button class="si sub'+(cu?" on":"")+'" data-sw="p:'+p.id+'">'+(cu?"✓ ":"")+esc(p.name)+'</button><button class="mini" data-sw="r:'+p.id+'" title="Renomear">✎</button>'+(p.id!=="main"?'<button class="mini" data-sw="h:'+p.id+'" title="Remover da lista (os dados continuam salvos)">×</button>':"")+'</div>'});
+h+='<button class="si sub add" data-sw="np">+ Novo perfil (outro UID)</button>'}});
+$("swmenu").innerHTML=h+'<hr><button class="si add" data-sw="na">+ Adicionar conta Google</button><button class="si" data-sw="out">Sair desta conta</button>'}
+async function dropSlot(a){try{await signOut(a.auth)}catch(e){}a.user=null;reg.list=reg.list.filter(x=>x.slot!==a.slot);saveReg();if(a.slot!=="main"){try{await deleteApp(a.app)}catch(e){}delete A[a.slot]}}
+const prov=()=>{const p=new GoogleAuthProvider();p.setCustomParameters({prompt:"select_account"});return p};
+async function addAcct(){const a=A.main.user?mk("a"+Date.now().toString(36)):A.main;
+try{const u=(await signInWithPopup(a.auth,prov())).user,dup=Object.values(A).find(x=>x!==a&&x.user&&x.user.uid===u.uid);
+if(dup){await dropSlot(a);window.note("Essa conta já está na lista.");activate(dup.slot);return}
+a.user=u;reg.list=reg.list.filter(x=>x.slot!==a.slot).concat({slot:a.slot,uid:u.uid,name:nm(a)});saveReg();activate(a.slot)}
+catch(e){if(!a.user)await dropSlot(a);ui();window.note("Login cancelado.")}}
+function mk(slot){if(A[slot])return A[slot];const app=slot==="main"?initializeApp(firebaseConfig):initializeApp(firebaseConfig,slot),auth=getAuth(app),a=A[slot]={slot,app,auth,db:getFirestore(app),user:null};
+a.rd=new Promise(res=>{let f=1;onAuthStateChanged(auth,u=>{a.user=u;if(f){f=0;res();return}if(!started)return;
+if(!u&&AC&&AC.slot===slot){const n=Object.values(A).find(x=>x.user);activate(n&&n.slot)}else ui()})});return a}
+function prof(id,op){const c=AC;if(!c)return;const l=plist(c.uid),p=l.list.find(x=>x.id===id);
+if(op==="p"){activate(c.slot,id);return}
+if(op==="r"){const n=(prompt("Novo nome do perfil:",p.name)||"").trim().slice(0,30);if(!n)return;p.name=n;l.ts=Date.now();wr(pkey(c.uid),l);cloudList(c,l);ui();return}
+if(op==="h")window.ask('Remover "'+p.name+'" da lista? Os dados dele continuam salvos.',"Remover",()=>{p.del=true;l.ts=Date.now();wr(pkey(c.uid),l);cloudList(c,l);if(c.pid===id)activate(c.slot,"main");else ui()},true)}
+$("login").onclick=()=>addAcct();
+$("swbtn").onclick=e=>{e.stopPropagation();$("swmenu").hidden=!$("swmenu").hidden;if(!$("swmenu").hidden)menu()};
+document.addEventListener("click",e=>{if(!e.target.closest("#swwrap"))$("swmenu").hidden=true});
+$("swmenu").onclick=e=>{const b=e.target.closest("[data-sw]");if(!b)return;const v=b.dataset.sw,k=v.split(":");
+if(k[0]==="a"){$("swmenu").hidden=true;if(!AC||AC.slot!==k[1])activate(k[1])}
+else if(k[0]==="na"||v==="na"){$("swmenu").hidden=true;addAcct()}
+else if(v==="np"){$("swmenu").hidden=true;const c=AC;if(!c)return;const l=plist(c.uid);if(l.list.filter(p=>!p.del).length>=10){window.note("Limite de 10 perfis.");return}
+const n=(prompt("Nome do novo perfil (ex.: UID ou apelido):")||"").trim().slice(0,30);if(!n)return;const id="p"+Date.now().toString(36);l.list.push({id,name:n});l.ts=Date.now();wr(pkey(c.uid),l);cloudList(c,l);activate(c.slot,id)}
+else if(v==="out"){$("swmenu").hidden=true;const c=AC;if(!c)return;const a=A[c.slot];window.ask('Sair de "'+nm(a)+'"? Os dados continuam salvos na conta e neste aparelho.',"Sair",async()=>{stop();await dropSlot(a);const n=Object.values(A).find(x=>x.user);activate(n&&n.slot)},true)}
+else prof(k[1],k[0])};
+/* inicio */
+cfgL(mk("main").db);reg.list.forEach(x=>mk(x.slot));sync("Entre para sincronizar");
+Promise.all(Object.values(A).map(a=>a.rd)).then(()=>{started=true;
+Object.values(A).forEach(a=>{if(a.user&&!reg.list.some(x=>x.slot===a.slot))reg.list.push({slot:a.slot,uid:a.user.uid,name:nm(a)})});saveReg();
+const s=A[reg.act]&&A[reg.act].user?reg.act:(Object.values(A).find(a=>a.user)||{}).slot;activate(s)})}
+
 </script>
 </body>
 </html>
