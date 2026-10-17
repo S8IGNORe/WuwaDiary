@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
 <style>
-:root{color-scheme:dark;--bg:#07070d;--side:#0a0a14;--card:#0f0f1a;--ink:#f4f4fb;--mute:#8d8fa8;--line:rgba(255,255,255,.08);--hover:rgba(168,85,247,.10);--acc:#a855f7;--accg:linear-gradient(90deg,#9333ea,#6366f1);--gold:#fbbf24;--l0:rgba(255,255,255,.06);--l1:#2e1f66;--l2:#5a35b5;--l3:#8b4cf0;--l4:#c084fc;
+:root{color-scheme:dark;--bg:#07070d;--side:#0a0a14;--card:#0f0f1a;--ink:#f4f4fb;--mute:#8d8fa8;--line:rgba(255,255,255,.08);--hover:rgba(168,85,247,.10);--acc:#a855f7;--accg:linear-gradient(90deg,#9333ea,#6366f1);--gold:#fbbf24;--cr:#f0abfc;--co:#7dd3fc;--l0:rgba(255,255,255,.06);--l1:#2e1f66;--l2:#5a35b5;--l3:#8b4cf0;--l4:#c084fc;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *,*:before,*:after{box-sizing:border-box}
@@ -304,7 +304,7 @@ body:before{background-image:radial-gradient(900px 520px at 88% -8%,rgba(139,92,
 .pych button.on[data-pyf="3"]{background:rgba(255,255,255,.1);color:#cbd2ea}
 #pyq{width:190px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.03);color:var(--ink);font:400 .82rem Poppins,system-ui,sans-serif}
 #pyq:focus{outline:0;border-color:rgba(192,132,252,.6)}
-.pyr,.pyth{display:grid;grid-template-columns:62px minmax(0,1fr) 64px 170px;align-items:center;gap:10px;padding:10px 12px}
+.pyr,.pyth{display:grid;grid-template-columns:62px minmax(0,1fr) 130px 64px 170px;align-items:center;gap:10px;padding:10px 12px}
 .pyth{font-size:.68rem;font-weight:700;letter-spacing:.07em;color:var(--mute);border-bottom:1px solid var(--line);padding-top:6px}
 .pyr{border-bottom:1px solid var(--line);transition:background .2s;animation:pyin .3s ease both}
 .pyr:hover{background:rgba(168,85,247,.08)}
@@ -322,10 +322,26 @@ body:before{background-image:radial-gradient(900px 520px at 88% -8%,rgba(139,92,
 .pyr .bd.g{color:#fde047;background:rgba(253,224,71,.1);border:1px solid rgba(253,224,71,.4)}
 .pp2{font-weight:700;font-size:.9rem;text-align:center}.pp2.g{color:#37e6a8}.pp2.y{color:#fde047}.pp2.r{color:#ff5d6c}.pp2.n{color:var(--mute);font-weight:400}
 .pyr .dt{text-align:right;font-size:.8rem;color:var(--mute)}.pyr .dm{display:none;font-size:.7rem;color:var(--mute)}
+.pyth span:nth-child(3){text-align:center}
+.cor{display:flex;align-items:center;justify-content:center;gap:10px;font-weight:600;font-size:.86rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cor.n{color:var(--mute);font-weight:400}
+.cor .cv{display:inline-flex;align-items:center;gap:5px}
+.cor .cv.r{color:var(--cr)}.cor .cv.o{color:var(--co)}
+.cico{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;flex:none;font-size:.78rem;line-height:1}
+.cico img{width:100%;height:100%;object-fit:contain;display:block}
+.pycor{display:flex;align-items:center;gap:6px 16px;flex-wrap:wrap;margin:0 0 10px;padding:7px 12px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.025)}
+.pycor .lb{font-size:.64rem;font-weight:700;letter-spacing:.07em;color:var(--mute)}
+.pycor .v{display:inline-flex;align-items:center;gap:6px;font-size:.86rem;font-weight:700;font-variant-numeric:tabular-nums}
+.pycor .v.r{color:var(--cr)}.pycor .v.o{color:var(--co)}
+.pycor .v small{font-size:.72rem;font-weight:400;color:var(--mute)}
+.pycor .ac{margin-left:auto;font-size:.72rem;color:var(--mute);display:inline-flex;align-items:center;gap:10px}
+.pycor .ac .cv{display:inline-flex;align-items:center;gap:4px;font-weight:600}
+.pycor .ac .cv.r{color:var(--cr)}.pycor .ac .cv.o{color:var(--co)}
+@media (max-width:620px){.pycor .ac{margin-left:0}}
 .pyf{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;font-size:.8rem;color:var(--mute)}
 .pyf .pg{display:inline-flex;align-items:center;gap:10px}.pyf .pg b{color:var(--ink);font-variant-numeric:tabular-nums}
 .pyf .btn:disabled{opacity:.35;cursor:default}
-@media (max-width:620px){.pyr,.pyth{grid-template-columns:44px minmax(0,1fr) 44px}.pyr .dt,.pyth span:last-child{display:none}.pyr .dm{display:block}#pyq{width:100%}}
+@media (max-width:620px){.pyr,.pyth{grid-template-columns:44px minmax(0,1fr) 66px 44px}.pyr .dt,.pyth span:last-child{display:none}.pyr .dm{display:block}#pyq{width:100%}}
 
 .pf{display:flex;align-items:center;justify-content:space-between;gap:14px 20px;flex-wrap:wrap;padding:16px 20px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(160deg,rgba(255,255,255,.05),transparent 55%),var(--card)}
 .pfi{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-width:0}
@@ -1114,6 +1130,10 @@ document.getElementById("dmodal").addEventListener("click",function(e){if(e.targ
 document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!document.getElementById("dmodal").hidden)closeDay()});
 var IMPORT_CMD='iwr -useb "https://raw.githubusercontent.com/S8IGNORe/WuwaDiary/main/import.ps1" | iex';
 var BANN={1:["Ressonador em Destaque",80,10],2:["Arma em Destaque",80,10],3:["Ressonador Padrão",80,10],4:["Arma Padrão",80,10],5:["Iniciante",50,10],6:["Escolha do Iniciante",80,10]};
+/* Corais: nomes dos arquivos em img/icons/ (sem .png). Se a imagem não existir, aparece um símbolo no lugar. */
+var CORALF={r:"coral-resplandecente",o:"coral-oscilado"},CORALN={r:"Coral Resplandecente",o:"Coral Oscilado"},CORALG={r:"◆",o:"◇"},PYCO=null;
+/* Banners que NÃO dão corais (tipo do banner: 1). Ex.: {5:1,6:1}. Vazio = todos dão. */
+var CORAL_OFF={};
 var STD5=["verina","encore","calcharo","jianxin","lingyang"];
 function loadPulls(){try{var x=localStorage.getItem(PK);if(x){var o=JSON.parse(x);if(o&&o.acc)return o}}catch(e){}return{rs:0,sel:"",acc:{}}}
 var PL=loadPulls();
@@ -1169,8 +1189,35 @@ function pyPct(n,t){return t?(n*100/t).toFixed(1).replace(".",","):"0"}
 function pyCol(p,c){return p<=c*.45?"g":p<=c*.7?"y":"r"}
 function pyDate(t){var d=new Date(String(t).replace(" ","T"));return isNaN(d)?String(t):d.toLocaleDateString("pt-BR",{day:"numeric",month:"long",year:"numeric"})}
 function pyAv(ch,n){return'<div class="pa">'+(ch?chPic(ch,'loading="lazy"'):"")+"<i>"+esc(n.charAt(0))+"</i></div>"}
+/* ---- Corais: calculados sempre a partir do histórico inteiro (nada é somado a cada importação, então importar de novo não duplica) ---- */
+function pyLoss(recs){var g=false,l={};recs.forEach(function(r,i){if(r[1]===5&&r[3]==="R"){if(g)g=false;else if(STD5.indexOf(nk(r[2]))>=0){l[i]=1;g=true}}});return l}
+function pyCoral(a){var all=[],out={},seen={},cp={},tot={},sum={r:0,o:0};
+Object.keys(a.pools).forEach(function(t){out[t]=[];tot[t]={r:0,o:0};a.pools[t].forEach(function(r,i){all.push({t:+t,i:i,r:r})})});
+all.sort(function(x,y){return x.r[0]<y.r[0]?-1:x.r[0]>y.r[0]?1:(x.t-y.t)||(x.i-y.i)});
+var loss=a.pools[1]?pyLoss(a.pools[1]):{};
+all.forEach(function(e){var r=e.r,q=r[1],res=r[3]==="R",g={r:0,o:0,n:0,f:0,x:0};
+if(res&&q>=4){var k=nk(r[2]),n=seen[k]=(seen[k]||0)+1;g.n=n;cp[k]={name:r[2],n:n,q:q};
+if(!CORAL_OFF[e.t]){var b=q===5?[15,40]:[3,8];g.r=n>=8?b[1]:b[0];if(n>=2&&n<=7)g.f=1;if(q===5&&e.t===1&&loss[e.i]){g.x=30;g.r+=30}}}
+else if(!CORAL_OFF[e.t]){if(!res&&q===4)g.r=3;else if(!res&&q===3)g.o=15}
+out[e.t][e.i]=g;tot[e.t].r+=g.r;tot[e.t].o+=g.o;sum.r+=g.r;sum.o+=g.o});
+return{out:out,tot:tot,all:sum,cp:cp}}
+function coIc(k){return'<span class="cico" title="'+esc(CORALN[k])+'">'+CORALG[k]+'<img src="img/icons/'+CORALF[k]+'.png" alt="" onload="this.previousSibling.nodeValue=\'\'" onerror="this.remove()"></span>'}
+function pyCoTip(g){var s=[];if(g.n)s.push(g.n===1?"Primeira vez (novo)":g.n+"ª cópia"+(g.n<=7?" (S"+(g.n-1)+")":" (já estava no S6)"));
+if(g.r)s.push(CORALN.r+" ×"+g.r+(g.x?" ("+(g.r-g.x)+" + "+g.x+" por não ser o destacado)":""));if(g.o)s.push(CORALN.o+" ×"+g.o);if(g.f)s.push("+1 Faixa de Ondas");return s.join(" · ")}
+function pyCoCell(g){if(!g||(!g.r&&!g.o))return'<span class="cor n">—</span>';
+return'<span class="cor" title="'+esc(pyCoTip(g))+'">'+(g.r?'<span class="cv r">'+coIc("r")+g.r+"</span>":"")+(g.o?'<span class="cv o">'+coIc("o")+g.o+"</span>":"")+"</span>"}
+function pyCoHtml(t){if(!PYCO)return"";var T=PYCO.tot[t]||{r:0,o:0},A=PYCO.all;
+return'<div class="pycor"><span class="lb">TOTAL NESTE BANNER</span><span class="v r" title="'+CORALN.r+'">'+coIc("r")+pyN(T.r)+'</span><span class="v o" title="'+CORALN.o+'">'+coIc("o")+pyN(T.o)+'</span><span class="ac">Todos os banners<span class="cv r">'+coIc("r")+pyN(A.r)+'</span><span class="cv o">'+coIc("o")+pyN(A.o)+"</span></span></div>"}
+/* Coleção: marca como obtido e sobe a constelação (até S6) conforme o histórico. Só sobe, nunca diminui o que você já marcou. */
+function syncCharsFromPulls(a){if(!a||!G||!G.chars)return"";var chars=chAll().filter(function(c){return chTp(c)==="c"}),co=pyCoral(a),nw=0,up=0,miss=[];
+Object.keys(co.cp).forEach(function(k){var e=co.cp[k],ch=pyFind(chars,e.name);if(!ch){miss.push(e.name);return}
+var x=S.chars[ch.id]||(S.chars[ch.id]={o:0,c:0}),t=Math.min(6,e.n-1);
+if(!x.o){x.o=1;nw++;if((x.c||0)<t)x.c=t}else if((x.c||0)<t){x.c=t;up++}});
+if(nw||up){save();try{renderChars()}catch(e){}}
+var m=[];if(nw)m.push(nw+(nw===1?" personagem novo":" personagens novos")+" na coleção");if(up)m.push(up+(up===1?" constelação atualizada":" constelações atualizadas"));if(miss.length)m.push("fora do catálogo: "+miss.slice(0,4).join(", ")+(miss.length>4?"…":""));
+return m.length?" "+m.join(" · ")+".":""}
 function pyRows(type,recs){var c5=0,c4=0,guar=false,rows=[];
-recs.forEach(function(r,i){c5++;c4++;var q=r[1],row={i:i+1,q:q,n:r[2],t:r[0],p:0,res:null};
+recs.forEach(function(r,i){c5++;c4++;var q=r[1],row={i:i+1,q:q,n:r[2],t:r[0],p:0,res:null,co:PYCO&&PYCO.out[type]?PYCO.out[type][i]:null};
 if(q===5){row.p=c5;if(type===1&&r[3]==="R"){if(guar){row.res="g";guar=false}else if(STD5.indexOf(nk(r[2]))>=0){row.res="l";guar=true}else row.res="w"}c5=0;c4=0}
 else if(q===4){row.p=c4;c4=0}
 rows.push(row)});return rows}
@@ -1182,11 +1229,11 @@ var body=part.map(function(r){var ch=pyFind(chars,r.n),
 bd=r.res==="w"?'<em class="bd w">♛ Ganhou 50/50</em>':r.res==="l"?'<em class="bd l">Perdeu 50/50</em>':r.res==="g"?'<em class="bd g">Garantido</em>':"",
 pv=r.q===5?'<b class="pp2 '+pyCol(r.p,b[1])+'">'+r.p+"</b>":r.q===4?'<b class="pp2 '+pyCol(r.p,b[2])+'">'+r.p+"</b>":'<b class="pp2 n">—</b>',
 dt=esc(pyDate(r.t));
-return'<div class="pyr q'+r.q+'"><span class="rn">#'+r.i+'</span><span class="it">'+pyAv(ch,r.n)+'<span class="nm"><span><strong>'+esc(r.n)+"</strong>"+bd+'</span><small class="dm">'+dt+"</small></span></span>"+pv+'<span class="dt" title="'+esc(String(r.t))+'">'+dt+"</span></div>"}).join("");
-return'<div class="pyth"><span>GIRO</span><span>ITEM</span><span>PITY</span><span>DATA</span></div>'+(body||'<p class="reset" style="padding:26px 12px">Nenhum giro com esses filtros.</p>')
+return'<div class="pyr q'+r.q+'"><span class="rn">#'+r.i+'</span><span class="it">'+pyAv(ch,r.n)+'<span class="nm"><span><strong>'+esc(r.n)+"</strong>"+bd+'</span><small class="dm">'+dt+"</small></span></span>"+pyCoCell(r.co)+pv+'<span class="dt" title="'+esc(String(r.t))+'">'+dt+"</span></div>"}).join("");
+return'<div class="pyth"><span>GIRO</span><span>ITEM</span><span>CORAIS</span><span>PITY</span><span>DATA</span></div>'+(body||'<p class="reset" style="padding:26px 12px">Nenhum giro com esses filtros.</p>')
 +'<div class="pyf"><span>'+(list.length?(s+1)+"–"+(s+part.length):0)+" de "+pyN(list.length)+' giros</span><span class="pg"><button class="btn" data-pyg="-1"'+(PYP<=1?" disabled":"")+'>‹</button><b>'+PYP+" / "+pages+'</b><button class="btn" data-pyg="1"'+(PYP>=pages?" disabled":"")+">›</button></span></div>"}
 function pyHist(){var el=document.getElementById("pyhist");if(el)el.innerHTML=pyHistHtml()}
-function pityDetail(a,chars){var t=PYD,recs=a.pools[t],b=BANN[t]||["Banner especial (tipo "+t+")",80,10],cap=b[1],c4=b[2],st=stats(t,recs,cap),rows=pyRows(t,recs);PYR=rows;
+function pityDetail(a,chars){var t=PYD,recs=a.pools[t],b=BANN[t]||["Banner especial (tipo "+t+")",80,10],cap=b[1],c4=b[2],st=stats(t,recs,cap),rows=(PYCO=pyCoral(a),pyRows(t,recs));PYR=rows;
 var n5=st.list.length,n4=0,s4=0,tot=recs.length;rows.forEach(function(r){if(r.q===4){n4++;s4+=r.p}});
 var n3=Math.max(0,tot-n5-n4),avg4=n4?Math.round(s4/n4):0,wl=st.w+st.l,wr=wl?Math.round(st.w*100/wl):0,
 p5=Math.min(100,Math.round(st.p5*100/cap)),p4=Math.min(100,Math.round(st.p4*100/c4)),
@@ -1206,7 +1253,7 @@ return'<div class="pyd"><div class="pytop"><button class="btn" id="pyback">← V
 +'<div class="pyg2"><div class="pycol"><section><div class="pyhd"><h3>Distribuição de giros</h3><span class="reset">'+pyN(tot)+' giros</span></div><div class="pydist"><i style="width:'+pyPct(n5,tot).replace(",",".")+'%;background:#fbbf24"></i><i style="width:'+pyPct(n4,tot).replace(",",".")+'%;background:#a855f7"></i><i style="width:'+pyPct(n3,tot).replace(",",".")+'%;background:#4b5170"></i></div>'
 +dr("#fbbf24","5★",n5,tot)+dr("#a855f7","4★",n4,tot)+dr("#4b5170","3★",n3,tot)+"</section>"
 +'<section><div class="pyhd"><h3>Pity médio</h3></div><div class="pyav"><span>5★ (de '+cap+')</span><div class="pyz"><i class="gd" style="width:'+Math.min(100,Math.round(st.avg*100/cap))+'%"></i></div><b>'+st.avg+'</b></div><div class="pyav"><span>4★ (de '+c4+')</span><div class="pyz"><i class="vi" style="width:'+Math.min(100,Math.round(avg4*100/c4))+'%"></i></div><b>'+avg4+"</b></div></section></div>"
-+'<section><div class="pyhh"><h3>Histórico de giros</h3><div class="pyft"><div class="pych"><button data-pyf="5"'+(PYF[5]?' class="on"':"")+'>5★</button><button data-pyf="4"'+(PYF[4]?' class="on"':"")+'>4★</button><button data-pyf="3"'+(PYF[3]?' class="on"':"")+'>3★</button></div><input id="pyq" type="search" placeholder="Buscar giros..." autocomplete="off" maxlength="40" value="'+esc(PYQ)+'"></div></div><div id="pyhist">'+pyHistHtml()+"</div></section></div></div>"}
++'<section><div class="pyhh"><h3>Histórico de giros</h3><div class="pyft"><div class="pych"><button data-pyf="5"'+(PYF[5]?' class="on"':"")+'>5★</button><button data-pyf="4"'+(PYF[4]?' class="on"':"")+'>4★</button><button data-pyf="3"'+(PYF[3]?' class="on"':"")+'>3★</button></div><input id="pyq" type="search" placeholder="Buscar giros..." autocomplete="off" maxlength="40" value="'+esc(PYQ)+'"></div></div>'+pyCoHtml(t)+'<div id="pyhist">'+pyHistHtml()+"</div></section></div></div>"}
 document.getElementById("pg-pity").addEventListener("click",function(e){var t=e.target,x;
 if(x=t.closest("[data-pyb]")){PYD=+x.dataset.pyb;PYP=1;renderPity();return}
 if(t.closest("#pyback")){PYD=null;renderPity();pyAn();window.scrollTo(0,0);return}
@@ -1219,7 +1266,7 @@ if(!d||d.format!=="wuwa-diary-pulls"||!d.pools||!d.player){note("Formato não re
 var pools={},n=0;d.pools.forEach(function(p){var r=(p.records||[]).map(function(x){return[String(x.time),+x.qualityLevel,String(x.name),String(x.resourceType||"").charAt(0)]});if(!r.length)return;if(r.length>1&&r[0][0]>=r[r.length-1][0])r.reverse();pools[p.type]=r;n+=r.length});
 if(!n){note("Nenhum giro encontrado no texto.");return}
 var uid=String(d.player.uid),inc={rs:0,sel:uid,acc:{}};inc.acc[uid]={server:String(d.server||""),lang:String(d.language||""),at:Date.now(),pools:pools};
-PL=mergeP(PL,inc);PL.sel=uid;savePullsLocal();pushPulls();document.getElementById("ptxt").value="";document.getElementById("pimpd").open=false;renderPity();note(n+" giros importados.")}
+PL=mergeP(PL,inc);PL.sel=uid;savePullsLocal();pushPulls();document.getElementById("ptxt").value="";document.getElementById("pimpd").open=false;renderPity();note(n+" giros importados."+syncCharsFromPulls(PL.acc[uid]))}
 function copyText(x,btn){var ok=function(){var o=btn.textContent;btn.textContent="Copiado";setTimeout(function(){btn.textContent=o},1500)},bad=function(){note("Não foi possível copiar. Selecione o comando e copie manualmente.")};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(x).then(ok,bad);else bad()}
 document.getElementById("pg-pity").addEventListener("click",function(e){var t=e.target;
 if(t.id==="pcopy")copyText(IMPORT_CMD,t);
@@ -1387,7 +1434,7 @@ import{doc,getDoc,setDoc,updateDoc,deleteDoc,onSnapshot,collection,query,where,d
 /* ===== Amigos: painel lateral direito. Dados privados continuam em users/ e pulls/; amigos so leem shared/{uid} ===== */
 const R=window,$=id=>document.getElementById(id),E=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])),N=v=>Math.max(0,Math.round(+v)||0);
 const KEYS=[["pity","Contador de pity"],["check","Checklist (dias de atividade)"],["chars","Personagens, níveis e talentos"]];
-let X=null,un=[],fu={},F=[],SH={},CODE="",CFG={},SP=[],PF="",V=null,TAB="chars",tm=0,g0=0,sp0=0,open=false;
+let X=null,un=[],fu={},rt={},F=[],SH={},CODE="",CFG={},SP=[],PF="",V=null,TAB="chars",tm=0,g0=0,sp0=0,open=false;
 const nm=()=>(X&&X.user&&(X.user.displayName||"").trim())||"Jogador";
 const okU=u=>/^https:\/\//.test(u||"")?u:"";
 const ph=()=>X&&X.user?okU(X.user.photoURL):"";
@@ -1506,8 +1553,8 @@ function rend(){if(!X)return;badge();if(V)rv();if(!open)return;const b=$("frb"),
 /* --- ligacao com o Firebase da conta ativa --- */
 function sync(){const w={};F.filter(f=>f.status==="accepted").forEach(f=>w[fid(f)]=1);
 Object.keys(fu).forEach(k=>{if(!w[k]){fu[k]();delete fu[k];delete SH[k]}});
-Object.keys(w).forEach(k=>{if(!fu[k])fu[k]=onSnapshot(doc(X.db,"shared",k),s=>{SH[k]=s.exists()?s.data():null;rend()},()=>{SH[k]=null;rend()})})}
-function tear(){document.body.classList.remove("frv");clearTimeout(tm);un.forEach(f=>f());Object.keys(fu).forEach(k=>fu[k]());un=[];fu={};F=[];SH={};CODE="";CFG={};SP=[];PF="";V=null;$("frv").hidden=true;$("frm").hidden=true;g0=0;sp0=0;X=null}
+Object.keys(w).forEach(k=>{if(!fu[k])fu[k]=onSnapshot(doc(X.db,"shared",k),s=>{rt[k]=0;SH[k]=s.exists()?s.data():null;rend()},()=>{SH[k]=null;delete fu[k];rend();if((rt[k]=(rt[k]||0)+1)<=6)setTimeout(()=>{if(X)sync()},800*rt[k])})})}
+function tear(){document.body.classList.remove("frv");clearTimeout(tm);un.forEach(f=>f());Object.keys(fu).forEach(k=>fu[k]());un=[];fu={};rt={};F=[];SH={};CODE="";CFG={};SP=[];PF="";V=null;$("frv").hidden=true;$("frm").hidden=true;g0=0;sp0=0;X=null}
 function start(){const d=X.db,u=X.uid;
 un.push(onSnapshot(doc(d,"shared",u),s=>{const x=s.exists()?s.data():{};CFG=x.cfg||{};
 if(Array.isArray(x.sp))SP=x.sp;else if(!s.metadata.fromCache&&!sp0){sp0=1;const fx=x.fixed||X.pid,pr={};SP=[fx];["pity","check","chars"].forEach(k=>{if(x[k]!=null)pr[k]=x[k]});if(x.prof||pname(fx))pr.n=x.prof||pname(fx);if(x.ts)pr.ts=x.ts;
