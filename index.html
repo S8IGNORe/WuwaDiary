@@ -6,6 +6,8 @@
 <meta name="theme-color" content="#07070d">
 <meta name="color-scheme" content="dark">
 <title>Checklist WuWa</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23a855f7'/%3E%3Cpath d='M16 6l2.6 7.4L26 16l-7.4 2.6L16 26l-2.6-7.4L6 16l7.4-2.6z' fill='white'/%3E%3C/svg%3E">
+<script>(function(){var l=null;try{l=localStorage.getItem("wuwa-lite")}catch(e){}if(l===null){try{var c=document.createElement("canvas"),g=c.getContext("webgl")||c.getContext("experimental-webgl");if(!g)l="1";else{var x=g.getExtension("WEBGL_debug_renderer_info"),r=x?String(g.getParameter(x.UNMASKED_RENDERER_WEBGL)):"";if(/swiftshader|llvmpipe|softpipe|software|basic render/i.test(r))l="1"}}catch(e){l="1"}}if(l==="1")document.documentElement.classList.add("lite")})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
@@ -372,7 +374,7 @@ body:before{background-image:radial-gradient(900px 520px at 88% -8%,rgba(139,92,
 .nav button.on{background:linear-gradient(90deg,rgba(168,85,247,.26),rgba(168,85,247,.05));color:#fff;box-shadow:inset 3px 0 0 var(--acc),0 0 24px -8px rgba(168,85,247,.85)}
 .nav button.on svg{color:#c084fc}
 .nic{position:relative;display:grid;place-items:center;width:20px;height:20px;flex:none}.nic img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:.6;transition:opacity .2s}.nav button.on .nic img,.nav button:hover .nic img{opacity:1}
-.top{padding:12px 18px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025);backdrop-filter:blur(8px)}
+.top{padding:12px 18px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025)}
 .tabs button{border:1px solid var(--line);background:rgba(255,255,255,.03)}
 .tabs button:hover{border-color:rgba(168,85,247,.4)}
 .btn{background:rgba(255,255,255,.035)}
@@ -611,6 +613,17 @@ section{background:linear-gradient(160deg,rgba(139,92,246,.09),transparent 50%),
 .side{background:linear-gradient(180deg,rgba(168,85,247,.07),transparent 42%),var(--sidet)}
 /* seguranca: o atributo hidden sempre esconde (CSS com display:flex/grid nao pode anular) */
 [hidden]{display:none!important}
+/* ===== Modo leve: menos efeitos para PCs sem aceleracao de hardware ===== */
+.lite body:before,.lite #stars,.lite .fv-bg{display:none}
+.lite .top,.lite .modal{backdrop-filter:none}
+.lite .ch,.lite .ci img{transition:none}
+.lite .ch:hover{transform:none;box-shadow:none}
+.lite .ch:not(.own) .ci img{filter:none;opacity:.35}
+.lite .ch:not(.own):hover .ci img{opacity:1}
+.lite .ch:hover .ci img{transform:none}
+.lite .ei,.lite .pill.s,.lite .cb,.lite .pst.gr i{box-shadow:none;animation:none}
+.lite .pst.c5 svg{filter:none}
+.lite #app,.lite #hist,.lite #perm,.lite #pgroups,.lite #lun,.lite #cfgsec,.lite .ng,.lite .mbox,.lite .modal,.lite .sb.op{animation:none}
 </style>
 </head>
 <body>
@@ -638,7 +651,8 @@ section{background:linear-gradient(160deg,rgba(139,92,246,.09),transparent 50%),
 <button class="tip" data-tip="Horário local em que as listas zeram. Servidor América: 4h do servidor = 6h em Brasília." aria-label="Ajuda">?</button>
 <button class="btn" id="exp">Exportar tudo</button><button class="btn" id="imp">Importar tudo</button><input type="file" id="impf" accept=".json,application/json" hidden><button class="tip" data-tip="Exportar baixa um arquivo com tudo: checklist, personagens/armas (tenho/não tenho, níveis) e pity. Importar lê esse arquivo: substitui o checklist e os personagens, e junta o pity ao atual sem apagar nada." aria-label="Ajuda">?</button>
 </div>
-<div class="cfg" id="admrow" hidden style="margin-top:14px"><span id="admst"></span><button class="btn" id="admtg"></button><button class="tip" data-tip="Só aparece para o e-mail do administrador. Desativado, o site funciona como para qualquer pessoa: sem botões de editar, sem painel e sem salvar mudanças globais. Vale só neste navegador." aria-label="Ajuda">?</button></div>
+<div class="cfg" id="admrow" hidden style="margin-top:14px"><span id="admst"></span><button class="btn" id="admtg"></button><button class="tip" data-tip="Só aparece para o administrador. Desativado, o site funciona como para qualquer pessoa: sem botões de editar, sem painel e sem salvar mudanças globais. Vale só neste navegador." aria-label="Ajuda">?</button></div>
+<div class="cfg" style="margin-top:14px"><button class="btn" id="litetg"></button><button class="tip" data-tip="Modo leve: desliga estrelas, desfoque, brilhos e animações, e deixa personagens que você não tem escuros em vez de cinza. Ajuda em computadores sem aceleração de hardware. Vale só neste navegador." aria-label="Ajuda">?</button></div>
 </section>
 <section id="admsec" hidden></section>
 <section id="about" hidden><div class="abt"><span>Desenvolvido por S8IGNORe</span><span id="ver"></span></div><p>Este site (<a href="https://s8ignore.github.io/WuwaDiary/" target="_blank" rel="noopener">s8ignore.github.io/WuwaDiary</a>) é um projeto independente de fãs e não possui afiliação com a Kuro Games. Wuthering Waves, seu conteúdo e os materiais do jogo são marcas registradas e direitos autorais da Kuro Games.</p><hr class="sep"><p>Projeto inspirado no <a href="https://paimon.moe" target="_blank" rel="noopener">Paimon.moe</a> e no <a href="https://trackmypulls.com/en/wuwa/collections" target="_blank" rel="noopener">TrackMyPulls</a>. Agradecimento especial ao TrackMyPulls pela base do layout.</p></section>
@@ -898,7 +912,7 @@ function chSrc(i){i=i||"";return/^https?:|\//.test(i)?i:"img/"+i}
 var CHX=["png","webp","jpg","jpeg"],CHOK={},CHBAD={};
 function chWords(n){return String(n).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/\(.*?\)/g," ").replace(/[^a-z0-9]+/g," ").trim().split(" ").filter(Boolean)}
 function chCands(c){var l=[];if(c.img)l.push(chSrc(c.img));var w=chWords(c.name||"");if(w.length){var b=[w.join("-"),w.join("_"),w.join("")];b=b.filter(function(v,i){return b.indexOf(v)===i});b.forEach(function(sl){CHX.forEach(function(x){l.push("img/"+sl+"."+x)})})}return l}
-function chPic(c,attrs){var n=c.name||"",a='data-n="'+esc(n)+'" data-s="'+esc(c.img||"")+'" alt="" onload="chOk(this)" onerror="chFb(this)" '+(attrs||"");
+function chPic(c,attrs){var n=c.name||"",a='data-n="'+esc(n)+'" data-s="'+esc(c.img||"")+'" alt="" loading="lazy" decoding="async" onload="chOk(this)" onerror="chFb(this)" '+(attrs||"");
 if(CHBAD[n])return'<img src="data:," data-k="9999" '+a+'>';
 var u=CHOK[n];if(u)return'<img src="'+esc(u)+'" data-k="-1" '+a+'>';
 var l=chCands(c);return'<img src="'+esc(l[0]||"data:,")+'" data-k="0" '+a+'>'}
@@ -1097,8 +1111,9 @@ var NAV=[{id:"checklist",label:"Checklist",icon:'<svg width="20" height="20" vie
 var PAGE="checklist";
 function syncInsp(){var f=document.getElementById("insp"),m=document.querySelector("main"),cfg=PAGE==="checklist"&&!document.getElementById("cfgsec").hidden;f.hidden=cfg;m.classList.toggle("hasf",!cfg)}
 syncInsp();
-var NICF={checklist:"checklist",character:"collection",pity:"pity"};
-function renderNav(){document.getElementById("nav").innerHTML=NAV.map(function(n){return'<button class="'+(n.id===PAGE?"on":"")+'" data-nav="'+n.id+'"><span class="nic">'+n.icon+'<img src="img/icons/'+NICF[n.id]+'.png" alt="" onload="this.previousSibling.style.display=\'none\'" onerror="this.remove()"></span><span>'+n.label+"</span></button>"}).join("")}
+var NICF={checklist:"checklist",character:"collection",pity:"pity"},NICBAD={};
+function nicImg(id){return NICBAD[id]?"":'<img src="img/icons/'+NICF[id]+'.png" alt="" onload="this.previousSibling.style.display=\'none\'" onerror="NICBAD.'+id+'=1;this.remove()">'}
+function renderNav(){document.getElementById("nav").innerHTML=NAV.map(function(n){return'<button class="'+(n.id===PAGE?"on":"")+'" data-nav="'+n.id+'"><span class="nic">'+n.icon+''+nicImg(n.id)+'</span><span>'+n.label+"</span></button>"}).join("")}
 function go(p){if(p==="pity"&&PAGE==="pity")PYD=null;PAGE=p;var pg={checklist:"pg-check",character:"pg-char",pity:"pg-pity"},tt={checklist:"Checklist",character:"Coleção",pity:"Contador de Pity"},c=p==="checklist";
 for(var k in pg)document.getElementById(pg[k]).hidden=k!==p;
 document.querySelector("main").classList.toggle("wide",p==="pity"||p==="character");
@@ -1184,7 +1199,7 @@ function renderPity(){var d=document.getElementById("pdash"),bar=document.getEle
 document.getElementById("pcmd").textContent=IMPORT_CMD;
 if(!ids.length){PYD=null;d.className="";bar.innerHTML="";d.innerHTML='<section><p class="reset">Nenhum giro importado ainda. Use "Importar giros" abaixo.</p></section>';det.open=true;return}
 if(!PL.acc[PL.sel])PL.sel=ids[0];
-var a=PL.acc[PL.sel],sel=ids.length>1?'<select id="pacc">'+ids.map(function(k){return'<option value="'+esc(k)+'"'+(k===PL.sel?" selected":"")+">"+esc(k)+"</option>"}).join("")+"</select>":"<b>"+esc(PL.sel)+"</b>";
+var a=PL.acc[PL.sel],sel=ids.length>1?'<select id="pacc">'+ids.map(function(k){return'<option value="'+esc(k)+'"'+(k===PL.sel?" selected":"")+">"+esc(maskUid(k))+"</option>"}).join("")+"</select>":'<b data-uidv="'+esc(PL.sel)+'" data-m="1" title="Clique para mostrar ou ocultar" style="cursor:pointer">'+esc(maskUid(PL.sel))+"</b>";
 var sv=a.server==="cn"?"CN":a.server==="global"?"Global":a.server?String(a.server).charAt(0).toUpperCase()+String(a.server).slice(1):"",
 when=new Date(a.at).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}).replace(", "," às ");
 bar.innerHTML='<div class="pf"><div class="pfi"><span class="pch"><small>UID</small>'+sel+"</span>"+(sv?'<span class="pch sv"><small>Servidor</small><b>'+esc(sv)+"</b></span>":"")+'<span class="pfd"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Importado em '+when+'</span></div><button class="btn" id="pdel">Apagar dados</button></div>';
@@ -1270,6 +1285,8 @@ if(x=t.closest("[data-pyf]")){var k=x.dataset.pyf;PYF[k]=PYF[k]?0:1;PYP=1;x.clas
 if(x=t.closest("[data-pyg]")){PYP+=+x.dataset.pyg;pyHist();return}
 if(PYD===null&&(x=t.closest(".pc"))&&!t.closest(".pr")&&x.dataset.bn){PYD=+x.dataset.bn;PYP=1;renderPity();window.scrollTo(0,0)}});
 document.getElementById("pg-pity").addEventListener("input",function(e){if(e.target.id==="pyq"){PYQ=e.target.value;PYP=1;pyHist()}});
+function maskUid(k){k=String(k);return k.length>4?"•".repeat(k.length-4)+k.slice(-4):k}
+document.addEventListener("click",function(e){var t=e.target.closest&&e.target.closest("[data-uidv]");if(!t)return;var m=t.dataset.m==="1";t.dataset.m=m?"0":"1";t.textContent=m?t.dataset.uidv:maskUid(t.dataset.uidv)});
 function importPulls(){var d;try{d=JSON.parse(document.getElementById("ptxt").value.trim())}catch(e){note("O texto colado não é um JSON válido. Rode o comando e cole o resultado completo.");return}
 if(!d||d.format!=="wuwa-diary-pulls"||!d.pools||!d.player){note("Formato não reconhecido. Use o comando desta página.");return}
 var pools={},n=0;d.pools.forEach(function(p){var r=(p.records||[]).map(function(x){return[String(x.time),+x.qualityLevel,String(x.name),String(x.resourceType||"").charAt(0)]});if(!r.length)return;if(r.length>1&&r[0][0]>=r[r.length-1][0])r.reverse();pools[p.type]=r;n+=r.length});
@@ -1291,6 +1308,7 @@ document.addEventListener("mouseout",function(e){if(e.target.closest&&e.target.c
 document.addEventListener("focusin",function(e){var b=e.target.closest&&e.target.closest(".pr");if(b)showPr(b)});
 document.addEventListener("focusout",function(e){if(e.target.closest&&e.target.closest(".pr"))hideTip()});
 document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest(".pr");if(b)showPr(b)});
+(function(){var b=document.getElementById("litetg");if(b){var lab=function(){var on=document.documentElement.classList.contains("lite");b.textContent="Modo leve: "+(on?"ligado":"desligado");b.classList.toggle("on",on)};b.onclick=function(){var on=!document.documentElement.classList.contains("lite");document.documentElement.classList.toggle("lite",on);try{localStorage.setItem("wuwa-lite",on?"1":"0")}catch(e){}lab()};lab()}})();
 (function(){if(window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches)return;
 /* MODO: "aleatorio" = cada estrela anda devagar em um caminho curvo aleatório; "parado" = só aparecem e somem */
 var MODO="aleatorio";
@@ -1304,7 +1322,7 @@ s={L:L,r:rnd(P[0],P[1]),v:rnd(P[2]*.6,P[2]*1.2),a:rnd(P[3],P[4]),life:rnd(3,8),t
 if(init)s.t=rnd(0,s.life);return s}
 function size(){W=innerWidth;H=innerHeight;var d=Math.min(window.devicePixelRatio||1,1.5);c.width=Math.round(W*d);c.height=Math.round(H*d);x.setTransform(d,0,0,d,0,0);
 var n=Math.max(80,Math.min(360,Math.round(W*H/5500)));while(S.length<n)S.push(mk(true));S.length=n}
-function frame(ts){raf=requestAnimationFrame(frame);if(ts-last<32)return;var dt=Math.min(.1,(ts-last)/1000);last=ts;
+function frame(ts){raf=requestAnimationFrame(frame);if(ts-last<32||document.documentElement.classList.contains("lite"))return;var dt=Math.min(.1,(ts-last)/1000);last=ts;
 x.clearRect(0,0,W,H);
 for(var i=0;i<S.length;i++){var s=S[i];s.t+=dt;if(s.t>=s.life){S[i]=s=mk(false)}
 if(MODO==="aleatorio"){s.g+=s.k*dt;s.x+=Math.cos(s.g)*s.v*dt;s.y+=Math.sin(s.g)*s.v*dt;if(s.x<-6)s.x=W+6;else if(s.x>W+6)s.x=-6;if(s.y<-6)s.y=H+6;else if(s.y>H+6)s.y=-6}
@@ -1339,9 +1357,11 @@ if(location.hash)apply();fix();
 <script type="module">
 import{initializeApp,deleteApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import{getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import{getFirestore,doc,setDoc,onSnapshot}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import{getFirestore,doc,getDoc,setDoc,onSnapshot}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import{initializeAppCheck,ReCaptchaV3Provider}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check.js";
 const firebaseConfig={apiKey:"AIzaSyCbLaERuO5MhIc_4aLPZSNRzua-I-sBzR4",authDomain:"wuthering-diary.firebaseapp.com",projectId:"wuthering-diary",appId:"1:261406568195:web:03ea2c488aabd7271dc336"};
-const ADMIN_EMAIL="joaovitorarantescoelho@gmail.com";
+/* App Check (anti-abuso): cole aqui a chave de site do reCAPTCHA v3. Vazio = desligado. A chave de SITE e publica por natureza. */
+const APPCHECK_KEY="";
 const $=id=>document.getElementById(id),sync=t=>{$("sync").textContent=t};
 if(firebaseConfig.apiKey.startsWith("COLE")){sync("Modo local (nuvem não configurada)")}else{
 /* ===== Contas e perfis =====
@@ -1397,7 +1417,10 @@ if(m.list.some(p=>p.id===c.pid&&p.del)){activate(slot,"main");return}
 if(!s.metadata.fromCache&&J.stringify(m.list)!==J.stringify(r.list||[]))cloudList(c,m);ui()},()=>{}));
 if(slot!=="main")c.un.push(cfgL(a.db));
 adm();ui()}
-function adm(){const u=AC&&A[AC.slot].user;window.isAdminUser=!!u&&!!u.email&&u.email.toLowerCase()===ADMIN_EMAIL.toLowerCase();admEval();renderAdmRow();if(window.renderChars)renderChars();if(!$("cfgsec").hidden){$("admsec").hidden=!window.isAdmin;if(window.isAdmin)renderAdm()}}
+const ADMC={};let admSeq=0;
+function admApply(){admEval();renderAdmRow();if(window.renderChars)renderChars();if(!$("cfgsec").hidden){$("admsec").hidden=!window.isAdmin;if(window.isAdmin)renderAdm()}}
+function adm(){const c=AC,u=c&&A[c.slot].user,my=++admSeq;window.isAdminUser=!!u&&ADMC[u.uid]===true;admApply();if(!u)return;
+getDoc(doc(c.db,"admins",u.uid)).then(sn=>{if(my!==admSeq)return;const v=sn.exists();ADMC[u.uid]=v;if(v!==window.isAdminUser){window.isAdminUser=v;admApply()}}).catch(()=>{})}
 function ui(){if(window.frUi)window.frUi();const has=Object.values(A).some(a=>a.user);$("login").hidden=has;$("logout").hidden=true;$("who").hidden=true;$("swwrap").hidden=!has;
 if(AC){const a=A[AC.slot],pl=plist(AC.uid).list.filter(p=>!p.del),cur=pl.find(p=>p.id===AC.pid)||pl[0];$("who").textContent=nm(a);window.PROF_NAME=nm(a)+(cur&&cur.id!=="main"?"-"+cur.name:"");$("swlab").textContent=nm(a)+(pl.length>1?" · "+cur.name:"")}
 else if(!has){window.PROF_NAME="";sync("Entre para sincronizar")}else $("swlab").textContent="Escolher conta";
@@ -1414,7 +1437,7 @@ try{const u=(await signInWithPopup(a.auth,prov())).user,dup=Object.values(A).fin
 if(dup){await dropSlot(a);window.note("Essa conta já está na lista.");activate(dup.slot);return}
 a.user=u;reg.list=reg.list.filter(x=>x.slot!==a.slot).concat({slot:a.slot,uid:u.uid,name:nm(a)});saveReg();activate(a.slot)}
 catch(e){if(!a.user)await dropSlot(a);ui();window.note("Login cancelado.")}}
-function mk(slot){if(A[slot])return A[slot];const app=slot==="main"?initializeApp(firebaseConfig):initializeApp(firebaseConfig,slot),auth=getAuth(app),a=A[slot]={slot,app,auth,db:getFirestore(app),user:null};
+function mk(slot){if(A[slot])return A[slot];const app=slot==="main"?initializeApp(firebaseConfig):initializeApp(firebaseConfig,slot);if(APPCHECK_KEY){try{initializeAppCheck(app,{provider:new ReCaptchaV3Provider(APPCHECK_KEY),isTokenAutoRefreshEnabled:true})}catch(e){}}const auth=getAuth(app),a=A[slot]={slot,app,auth,db:getFirestore(app),user:null};
 a.rd=new Promise(res=>{let f=1;onAuthStateChanged(auth,u=>{a.user=u;if(f){f=0;res();return}if(!started)return;
 if(!u&&AC&&AC.slot===slot){const n=Object.values(A).find(x=>x.user);activate(n&&n.slot)}else ui()})});return a}
 function prof(id,op){const c=AC;if(!c)return;const l=plist(c.uid),p=l.list.find(x=>x.id===id);
@@ -1428,7 +1451,7 @@ $("swmenu").onclick=e=>{const b=e.target.closest("[data-sw]");if(!b)return;const
 if(k[0]==="a"){$("swmenu").hidden=true;if(!AC||AC.slot!==k[1])activate(k[1])}
 else if(k[0]==="na"||v==="na"){$("swmenu").hidden=true;addAcct()}
 else if(v==="np"){$("swmenu").hidden=true;const c=AC;if(!c)return;const l=plist(c.uid);if(l.list.filter(p=>!p.del).length>=10){window.note("Limite de 10 perfis.");return}
-const n=(prompt("Nome do novo perfil (ex.: UID ou apelido):")||"").trim().slice(0,30);if(!n)return;const id="p"+Date.now().toString(36);l.list.push({id,name:n});l.ts=Date.now();wr(pkey(c.uid),l);cloudList(c,l);activate(c.slot,id)}
+const n=(prompt("Nome do novo perfil (ex.: UID ou apelido).\nNúmeros longos, como o UID, ficam ocultos para seus amigos:")||"").trim().slice(0,30);if(!n)return;const id="p"+Date.now().toString(36);l.list.push({id,name:n});l.ts=Date.now();wr(pkey(c.uid),l);cloudList(c,l);activate(c.slot,id)}
 else if(v==="out"){$("swmenu").hidden=true;const c=AC;if(!c)return;const a=A[c.slot];window.ask('Sair de "'+nm(a)+'"? Os dados continuam salvos na conta e neste aparelho.',"Sair",async()=>{stop();await dropSlot(a);const n=Object.values(A).find(x=>x.user);activate(n&&n.slot)},true)}
 else prof(k[1],k[0])};
 /* inicio */
@@ -1445,7 +1468,8 @@ const R=window,$=id=>document.getElementById(id),E=s=>String(s==null?"":s).repla
 const KEYS=[["pity","Contador de pity"],["check","Checklist (dias de atividade)"],["chars","Personagens, níveis e talentos"]];
 let X=null,un=[],fu={},rt={},F=[],SH={},CODE="",CFG={},SP=[],PF="",V=null,TAB="chars",tm=0,g0=0,sp0=0,open=false;
 const nm=()=>(X&&X.user&&(X.user.displayName||"").trim())||"Jogador";
-const okU=u=>/^https:\/\//.test(u||"")?u:"";
+const okU=u=>/^https:\/\/[a-z0-9-]+\.googleusercontent\.com\//.test(u||"")&&String(u).length<=600?u:"";
+const mkU=s=>String(s==null?"":s).replace(/\d{6,}/g,"•••");
 const ph=()=>X&&X.user?okU(X.user.photoURL):"";
 const av=(n,u)=>'<span class="fr-av">'+(okU(u)?'<img src="'+E(u)+'" alt="" referrerpolicy="no-referrer">':E((n||"?").charAt(0).toUpperCase()))+'</span>';
 const fid=f=>f.a===X.uid?f.b:f.a;
@@ -1456,7 +1480,7 @@ function mkPity(){try{const a=R.PL&&R.PL.acc&&R.PL.acc[R.PL.sel];if(!a)return nu
 function mkCheck(){try{const o={};Object.keys(R.S.hist||{}).forEach(k=>{const h=R.S.hist[k];if(h)o[k]=[h.c|0,h.t|0]});return{h:o}}catch(e){return null}}
 function mkChars(){try{const o={};Object.keys(R.S.chars).forEach(id=>{const x=R.S.chars[id];if(x&&x.o)o[id]={c:x.c||0,lv:x.lv||0,wp:x.wp||"",tl:(x.tl||[]).slice(0,5).map(v=>v||0)}});return o}catch(e){return null}}
 const profs=()=>X&&X.profs?X.profs():[];
-const pname=id=>{const p=profs().find(x=>x.id===id);return p?p.name:""};
+const pname=id=>{const p=profs().find(x=>x.id===id);return p?mkU(p.name):""};
 /* cada perfil marcado vai para shared/{uid}.profs.{pid}; so o perfil aberto agora tem dados locais, entao so ele e reescrito */
 function push(force){if(!X)return;const pid=X.pid,ids=profs().map(p=>p.id),gone=SP.filter(i=>ids.indexOf(i)<0);
 if(!SP.includes(pid)&&!gone.length)return;if(!KEYS.some(k=>CFG[k[0]])&&force!==true&&!gone.length)return;
@@ -1499,7 +1523,7 @@ const since=t=>{t=+t;if(!t)return"";const m=Math.floor((Date.now()-t)/6e4);if(m<
 /* perfis que o amigo compartilhou: [[pid,dados],...] na ordem escolhida por ele; le tambem o formato antigo (um perfil so) */
 const fprofs=s=>{if(!s)return[];if(s.profs&&typeof s.profs==="object"){const ids=Object.keys(s.profs),o=Array.isArray(s.sp)?s.sp.filter(i=>ids.indexOf(i)>=0):[];ids.forEach(i=>{if(o.indexOf(i)<0)o.push(i)});return o.map(i=>[i,s.profs[i]]).filter(x=>x[1]&&typeof x[1]==="object")}
 if(s.pity||s.check||s.chars)return[["_",{n:s.prof||"",ts:s.ts,pity:s.pity,check:s.check,chars:s.chars}]];return[]};
-const fpn=s=>fprofs(s).map(p=>p[1].n).filter(Boolean).join(", ");
+const fpn=s=>fprofs(s).map(p=>mkU(p[1].n)).filter(Boolean).join(", ");
 const ftabs=(s,D)=>s&&D?[["pity","Contador de Pity"],["check","Atividade"],["chars","Personagens"]].filter(t=>s.cfg&&s.cfg[t[0]]&&D[t[0]]):[];
 const fchars=s=>{const fc=(s&&s.chars)||{};return R.chAll().filter(c=>R.chTp(c)==="c"&&fc[c.id]).sort((a,b)=>(b.r||0)-(a.r||0)||String(a.name).localeCompare(String(b.name),"pt-BR"))};
 /* --- Contador de Pity do amigo: so os 5★ dele, com resultado do 50/50 --- */
@@ -1536,14 +1560,15 @@ $("frmb").innerHTML='<button class="dx" data-a="mclose" aria-label="Fechar">&tim
 +'<h4 class="dpt">Visão geral</h4><div class="dlvl"><span class="dnv">Nv.</span><span class="fd-lv">'+(lv||"–")+'</span><span class="dmax">/90</span></div><div class="dbar"><i style="width:'+Math.round(lv*100/90)+'%"></i></div>'
 +'<h4 class="dpt fd-h2">Talentos</h4><div class="fd-tl">'+TLS.map((t,i)=>{const v=Math.min(N(tl[i]),10);return'<div'+(v===10?' class="mx"':"")+' title="'+E(R.TLN[i]||t)+'"><b>'+(v||"–")+'</b><i><u style="width:'+v*10+'%"></u></i><span>'+t+'</span></div>'}).join("")+'</div>';
 $("frm").hidden=false}
-function rv(){const f=F.find(x=>x.id===V&&x.status==="accepted");if(!f){closeProf();return}
+function rv(){try{rv0()}catch(e){try{$("frv").innerHTML='<div class="fr-vw"><div class="fv-bar"><button class="btn" data-a="vclose">‹ Voltar</button></div><section><p class="reset">Não foi possível exibir os dados deste amigo.</p></section></div>'}catch(x){}}}
+function rv0(){const f=F.find(x=>x.id===V&&x.status==="accepted");if(!f){closeProf();return}
 const s=SH[fid(f)],y=$("frv").scrollTop,pl=fprofs(s);
 if(pl.length&&!pl.some(p=>p[0]===PF))PF=pl[0][0];
 const cu=pl.find(p=>p[0]===PF),D=cu?cu[1]:null,tabs=ftabs(s,D),has=k=>tabs.some(t=>t[0]===k);
 if(tabs.length&&!has(TAB))TAB=tabs[0][0];
 const st=[];if(D){if(has("chars"))st.push([fchars(D).length,"personagens"]);if(has("pity")){let n=0;Object.keys(D.pity).forEach(t=>n+=N(D.pity[t].n5));st.push([n,"5★ obtidos"])}if(has("check"))st.push([Object.keys((D.check&&D.check.h)||{}).length,"dias de atividade"])}
-const photo=fpho(f),sub=(pl.length===1&&D.n?'<span>Perfil '+E(D.n)+'</span>':"")+(D&&D.ts?'<span>Atualizado '+since(D.ts)+'</span>':""),
-chips=pl.length>1?'<div class="fv-pf" role="group" aria-label="Perfis de '+E(fname(f))+'">'+pl.map(p=>'<button class="'+(p[0]===PF?"on":"")+'" data-a="pf" data-p="'+E(p[0])+'" aria-pressed="'+(p[0]===PF)+'">'+E(p[1].n||"Perfil")+'</button>').join("")+'</div>':"";
+const photo=fpho(f),sub=(pl.length===1&&D.n?'<span>Perfil '+E(mkU(D.n))+'</span>':"")+(D&&D.ts?'<span>Atualizado '+since(D.ts)+'</span>':""),
+chips=pl.length>1?'<div class="fv-pf" role="group" aria-label="Perfis de '+E(fname(f))+'">'+pl.map(p=>'<button class="'+(p[0]===PF?"on":"")+'" data-a="pf" data-p="'+E(p[0])+'" aria-pressed="'+(p[0]===PF)+'">'+E(mkU(p[1].n)||"Perfil")+'</button>').join("")+'</div>':"";
 let h='<div class="fr-vw"><div class="fv-bar"><button class="btn" data-a="vclose">‹ Voltar</button></div>'
 +'<header class="fv-hero">'+(okU(photo)?'<img class="fv-bg" src="'+E(photo)+'" alt="" referrerpolicy="no-referrer">':"")+'<div class="fv-id">'+av(fname(f),photo).replace('class="fr-av"','class="fr-av fv-av"')+'<div><p class="fv-nm">'+E(fname(f))+'</p>'+(sub?'<p class="fv-sub">'+sub+'</p>':"")+chips+'</div></div>'
 +(st.length?'<div class="fv-st">'+st.map(x=>'<div><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join("")+'</div>':"")+'</header>'
